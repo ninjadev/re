@@ -7,6 +7,13 @@
     }
   },
   {
+    "id": "bars",
+    "type": "bars",
+    "options": {
+      "camera": "res/bars.camera.json"
+    }
+  },
+  {
     "id": "intro",
     "type": "IntroNode",
     "connected": {
@@ -41,6 +48,7 @@
     "connected": {
       "A": "intro.render",
       "C": "isoscroller.render",
+      "D": "bars.render",
       "E": "umbrellas.render",
       "F": "kaleidoscope.render",
       "I": "piano.render"

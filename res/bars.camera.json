@@ -1,0 +1,43 @@
+{
+  "position": [
+    {
+      "startFrame": 1500,
+      "endFrame": 2000,
+      "points": [0, 300, 0]
+    },
+    {
+      "startFrame": 2160,
+      "endFrame": 2400,
+      "easing": "easeIn",
+      "points": [
+        [0, 300, 0],
+        [0, 0, 250]
+      ]
+    },
+    {
+      "startFrame": 2501,
+      "endFrame": 3000,
+      "type": "circle",
+      "radius": 250,
+      "center": [0, 0, 0],
+      "length": 0.75
+    }
+  ],
+  "lookAt": [
+    {
+      "startFrame": 1500,
+      "endFrame": 2500,
+      "points": [0, 0, 0]
+    }
+  ],
+  "roll": [
+    {
+      "startFrame": 3001,
+      "endFrame": 3100,
+      "points": [
+        0,
+        1.57
+      ]
+    }
+  ]
+}
