@@ -1,0 +1,14 @@
+{
+  "title": "re",
+  "authors": [
+    "Your demoscene handle"
+  ],
+  "description": "",
+  "previewImage": "https://raw.githubusercontent.com/ninjadev/nin/master/nin/frontend/app/images/nin-dark.png",
+  "music": {
+    "path": "res/music.mp3",
+    "bpm": 125,
+    "subdivision": 4
+  },
+  "googleAnalyticsID": "Your GA ID"
+}
