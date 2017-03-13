@@ -1,9 +1,15 @@
 {
   "title": "re",
   "authors": [
-    "Your demoscene handle"
+    "capitalism",
+    "cristea",
+    "iverjo",
+    "julie",
+    "run",
+    "sigveseb",
+    "stiaje"
   ],
-  "description": "",
+  "description": "Glorious Ninjadev Revision Submission",
   "previewImage": "https://raw.githubusercontent.com/ninjadev/nin/master/nin/frontend/app/images/nin-dark.png",
   "music": {
     "path": "res/music.mp3",
