@@ -4,10 +4,17 @@
     "type": "NIN.RootNode"
   },
   {
-    "id": "spinningCube",
-    "type": "spinningCube",
+    "id": "intro",
+    "type": "IntroNode",
     "connectedTo": {
-      "render": "root.screen"
+      "render": "sceneselector.A"
+    }
+  },
+  {
+    "id": "sceneselector",
+    "type": "TextureMultiplexerNode",
+    "connectedTo": {
+      "selected": "root.screen"
     }
   }
 ]
