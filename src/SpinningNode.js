@@ -1,0 +1,100 @@
+(function(global) {
+  class Supersphere {
+    constructor() {
+      this.mesh = new THREE.Object3D();
+      const radius = 100;
+      const segmentsPerHalf = 25;
+
+      const triangleSize = Math.PI * radius / segmentsPerHalf / 4;
+
+      for (let i=0; i<=segmentsPerHalf; i++) {
+        const angle = Math.PI * i / segmentsPerHalf;
+        const radiusOfPlane = Math.sin(angle) * radius;
+        const trianglesInPlane = Math.PI * radiusOfPlane / triangleSize;
+        const x = Math.cos(angle) * radius;
+
+        const trianglesOfPlane = new THREE.Object3D();
+
+        for (let j=0; j<trianglesInPlane; j++) {
+          const radiansIntoPlane = 2 * Math.PI * j / trianglesInPlane;
+          const y = Math.cos(radiansIntoPlane) * radiusOfPlane;
+          const z = Math.sin(radiansIntoPlane) * radiusOfPlane;
+
+          const square = new THREE.Mesh(
+            new THREE.SphereGeometry(triangleSize),
+            new THREE.MeshBasicMaterial({
+              color: 0xeeeeee,
+            }));
+
+          square.position.set(x, y, z);
+          trianglesOfPlane.add(square);
+        }
+
+        this.mesh.add(trianglesOfPlane);
+      }
+    }
+  }
+
+  class SpinningNode extends NIN.Node {
+    constructor(id) {
+      super(id, {
+        outputs: {
+          render: new NIN.TextureOutput()
+        }
+      });
+
+      this.scene = new THREE.Scene();
+      this.renderTarget = new THREE.WebGLRenderTarget(640, 360, {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBFormat
+      });
+
+      const ninTexture = Loader.loadTexture('res/nin.png');
+
+      this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 10000);
+      this.cube = new THREE.Mesh(new THREE.BoxGeometry(50, 50, 50),
+                                 new THREE.MeshBasicMaterial({
+                                   transparent: true,
+                                   map: ninTexture,
+                                   side: THREE.FrontSide,
+                                   color: 0xffffff,
+                                 }));
+
+      var light = new THREE.PointLight( 0xffffff, 1, 100 );
+      light.position.set( -50, -50, -50 );
+      this.scene.add(light);
+
+      var pointLight = new THREE.PointLight(0xFFFFFF);
+      pointLight.position.x = 10;
+      pointLight.position.y = 50;
+      pointLight.position.z = 130;
+      this.scene.add(pointLight);
+
+      this.s = new Supersphere();
+      this.scene.add(this.s.mesh);
+      this.camera.position.x = 100;
+    }
+
+    update(frame) {
+      this.cube.rotation.y = frame / 100;
+
+      for (const [i, circle] of this.s.mesh.children.entries()) {
+        circle.rotation.x = frame / 40 / (20.1 - i);
+      }
+
+      this.camera.rotation.y = Math.PI / 2;
+    }
+
+    resize() {
+      this.renderTarget.setSize(16 * GU, 9 * GU);
+    }
+
+    render(renderer) {
+      renderer.render(this.scene, this.camera, this.renderTarget, true);
+      this.outputs.render.setValue(this.renderTarget.texture);
+    }
+  }
+
+  global.SpinningNode = SpinningNode;
+})(this);

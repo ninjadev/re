@@ -18,6 +18,13 @@
     }
   },
   {
+    "id": "spinning",
+    "type": "SpinningNode",
+    "connectedTo": {
+      "render": "sceneselector.G"
+    }
+  },
+  {
     "id": "sceneselector",
     "type": "TextureMultiplexerNode",
     "connectedTo": {
