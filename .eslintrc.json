@@ -34,6 +34,7 @@
       "BEAN_FOR_FRAME": true,
       "FRAME_FOR_BEAN": true,
       "Loader": true,
-      "SHADERS": true
+      "SHADERS": true,
+      "clamp": true
     }
 }
