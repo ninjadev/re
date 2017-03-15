@@ -55,12 +55,11 @@
           this.squares.pop(i);
         }
       }
-      if(BEAT && BEAN <= bar) {
-        this.noteCount = 0;
-      }
       if(BEAT) {
         switch((BEAN - bar) % (bar * 8)) {
           case 0:
+            this.noteCount = 0;
+            /* no break */
           case 2.5 * beat:
           case 3.5 * beat:
           case bar + 2.5 * beat:
@@ -86,7 +85,7 @@
               this.fire(5);
             } else if(this.noteCount < 12) {
               this.fire(6);
-            } else {
+            } else if(this.noteCount > 12) {
               this.fire(3);
             }
             this.circleThrob = 1;
