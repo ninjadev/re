@@ -11,6 +11,13 @@
     }
   },
   {
+    "id": "isoscroller",
+    "type": "IsoscrollerNode",
+    "connectedTo": {
+      "render": "sceneselector.C"
+    }
+  },
+  {
     "id": "sceneselector",
     "type": "TextureMultiplexerNode",
     "connectedTo": {
