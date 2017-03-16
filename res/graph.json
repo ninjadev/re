@@ -11,6 +11,34 @@
     }
   },
   {
+    "id": "intro2",
+    "type": "IntroNode",
+    "connectedTo": {
+      "render": "isoscroller.texture"
+    }
+  },
+  {
+    "id": "percolator",
+    "type": "PercolatorThrobNode",
+    "connectedTo": {
+      "percolator": "intro.percolator"
+    }
+  },
+  {
+    "id": "percolator2",
+    "type": "PercolatorThrobNode",
+    "connectedTo": {
+      "percolator": "isoscroller.percolator"
+    }
+  },
+  {
+    "id": "percolator3",
+    "type": "PercolatorThrobNode",
+    "connectedTo": {
+      "percolator": "intro2.percolator"
+    }
+  },
+  {
     "id": "isoscroller",
     "type": "IsoscrollerNode",
     "connectedTo": {
