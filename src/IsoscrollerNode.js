@@ -3,8 +3,7 @@
     constructor(id, options) {
       super(id, {
         inputs: {
-          percolator: new NIN.Input(),
-          texture: new NIN.TextureInput(),
+          percolator: new NIN.Input()
         },
         outputs: {
           render: new NIN.TextureOutput()
@@ -87,10 +86,7 @@
     update(frame) {
       this.cube.scale.x = 1 + 0.02 * this.leadAnalysis.getValue(frame);
 
-      BEAT && console.log(BEAN);
-
       if(BEAT && BEAN == 433) {
-        console.log('el resetto');
         this.noteNumbers = 0;
         for(let i = 0; i < this.boxes.length; i++) {
           this.boxes[i].position.z = -i * 2;
@@ -102,7 +98,6 @@
 
       for(let i = 0; i < this.boxes.length; i++) {
         const box = this.boxes[i];
-        box.material.map = this.inputs.texture.getValue();
         this.scene.remove(box);
         box.position.z += 0.035;
         if(i <= this.noteNumbers) {
