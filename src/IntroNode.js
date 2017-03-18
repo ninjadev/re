@@ -2,6 +2,9 @@
   class IntroNode extends NIN.Node {
     constructor(id, options) {
       super(id, {
+        inputs: {
+          percolator: new NIN.Input()
+        },
         outputs: {
           render: new NIN.TextureOutput()
         }
@@ -55,42 +58,21 @@
           this.squares.pop(i);
         }
       }
-      if(BEAT) {
-        switch((BEAN - bar) % (bar * 8)) {
-          case 0:
-            this.noteCount = 0;
-            /* no break */
-          case 2.5 * beat:
-          case 3.5 * beat:
-          case bar + 2.5 * beat:
-          case bar + 3.5 * beat:
-          case 2 * bar + 1.5 * beat:
-          case 2 * bar + 3.5 * beat:
-          case 3 * bar + 2.5 * beat:
-          case 3 * bar + 3.5 * beat:
-          case 4 * bar + 2.5 * beat:
-          case 4 * bar + 3.5 * beat:
-          case 5 * bar + 2.5 * beat:
-          case 6 * bar:
-          case 6 * bar + 1.5 * beat:
-          case 6 * bar + 2 * beat:
-          case 6 * bar + 2.5 * beat:
-          case 6 * bar + 3 * beat:
-          case 6 * bar + 3.5 * beat:
-          case 7 * bar + 1.5 * beat:
-          case 7 * bar + 3 * beat:
-            if(this.noteCount < 7) {
-              this.fire(4);
-            } else if(this.noteCount < 11) {
-              this.fire(5);
-            } else if(this.noteCount < 12) {
-              this.fire(6);
-            } else if(this.noteCount > 12) {
-              this.fire(3);
-            }
-            this.circleThrob = 1;
-            this.noteCount++;
+      if(BEAT && (BEAN - bar) % (bar * 8) == 0) {
+        this.noteCount = 0;
+      }
+      if(this.inputs.percolator.getValue()) {
+        if(this.noteCount < 7) {
+          this.fire(4);
+        } else if(this.noteCount < 11) {
+          this.fire(5);
+        } else if(this.noteCount < 12) {
+          this.fire(6);
+        } else if(this.noteCount > 12) {
+          this.fire(3);
         }
+        this.circleThrob = 1;
+        this.noteCount++;
       }
       this.rotation = -frame / 30;
       this.frame = frame;

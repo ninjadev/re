@@ -1,34 +1,40 @@
 [
   {
     "id": "root",
-    "type": "NIN.RootNode"
+    "type": "NIN.RootNode",
+    "connected": {
+        "screen": "sceneselector.selected"
+    }
   },
   {
     "id": "intro",
     "type": "IntroNode",
-    "connectedTo": {
-      "render": "sceneselector.A"
+    "connected": {
+      "percolator": "percolator.percolator"
     }
+  },
+  {
+    "id": "percolator",
+    "type": "PercolatorThrobNode"
   },
   {
     "id": "isoscroller",
     "type": "IsoscrollerNode",
-    "connectedTo": {
-      "render": "sceneselector.C"
+    "connected": {
+      "percolator": "percolator.percolator"
     }
   },
   {
     "id": "spinning",
-    "type": "SpinningNode",
-    "connectedTo": {
-      "render": "sceneselector.G"
-    }
+    "type": "SpinningNode"
   },
   {
     "id": "sceneselector",
     "type": "TextureMultiplexerNode",
-    "connectedTo": {
-      "selected": "root.screen"
+    "connected": {
+      "A": "intro.render",
+      "C": "isoscroller.render",
+      "F": "spinning.render"
     }
   }
 ]
