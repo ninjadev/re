@@ -1,6 +1,7 @@
 (function(global) {
   class Supersphere {
-    constructor() {
+    constructor(defaultColor) {
+      this.defaultColor = defaultColor;
       this.mesh = new THREE.Object3D();
       const radius = 100;
       const segmentsPerHalf = 25;
@@ -23,7 +24,7 @@
           const square = new THREE.Mesh(
             new THREE.SphereGeometry(triangleSize),
             new THREE.MeshBasicMaterial({
-              color: 0xeeeeee,
+              color: this.defaultColor,
             }));
 
           square.position.set(x, y, z);
@@ -33,11 +34,36 @@
         this.mesh.add(trianglesOfPlane);
       }
     }
+
+    push(newColor) {
+      let prevColor = undefined;
+      for (const circles of this.mesh.children) {
+        if (circles.children.length === 0) continue;
+
+        prevColor = circles.children[0].material.color;
+
+        for (const circle of circles.children) {
+          circle.material.color = newColor;
+        }
+
+        newColor = prevColor;
+      }
+    }
+
+    update(frame) {
+      this.push(this.defaultColor);
+      for (const [i, circles] of this.mesh.children.entries()) {
+        circles.rotation.x = frame / 40 / (20.1 - i);
+      }
+    }
   }
 
   class SpinningNode extends NIN.Node {
     constructor(id) {
       super(id, {
+        inputs: {
+          percolator: new NIN.Input()
+        },
         outputs: {
           render: new NIN.TextureOutput()
         }
@@ -71,16 +97,29 @@
       pointLight.position.z = 130;
       this.scene.add(pointLight);
 
-      this.s = new Supersphere();
+      this.colorIdx = 0;
+      this.colors = [
+        new THREE.Color(0x94e700),
+        new THREE.Color(0xc2e700),
+        new THREE.Color(0xeaa500),
+        new THREE.Color(0xf06d00),
+        new THREE.Color(0xb04700),
+      ];
+      this.s = new Supersphere(new THREE.Color(0xeeeeee));
       this.scene.add(this.s.mesh);
-      this.camera.position.x = 100;
+      this.camera.position.x = 200;
     }
 
     update(frame) {
-      this.cube.rotation.y = frame / 100;
-
-      for (const [i, circle] of this.s.mesh.children.entries()) {
-        circle.rotation.x = frame / 40 / (20.1 - i);
+      if (this.inputs.percolator.getValue()) {
+        const c = this.colors[this.colorIdx++ % this.colors.length];
+        this.s.push(c);
+        this.s.push(c);
+        this.s.push(c);
+        this.s.push(c);
+        this.s.push(c);
+      } else if (frame % 2 == 0) {
+        this.s.update(frame);
       }
 
       this.camera.rotation.y = Math.PI / 2;

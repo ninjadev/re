@@ -26,7 +26,10 @@
   },
   {
     "id": "spinning",
-    "type": "SpinningNode"
+    "type": "SpinningNode",
+    "connected": {
+      "percolator": "percolator.percolator"
+    }
   },
   {
     "id": "sceneselector",
