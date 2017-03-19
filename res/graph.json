@@ -25,6 +25,10 @@
     }
   },
   {
+    "id": "piano",
+    "type": "PianoGraphNode"
+  },
+  {
     "id": "spinning",
     "type": "SpinningNode"
   },
@@ -34,7 +38,8 @@
     "connected": {
       "A": "intro.render",
       "C": "isoscroller.render",
-      "F": "spinning.render"
+      "F": "spinning.render",
+      "I": "piano.render"
     }
   }
 ]

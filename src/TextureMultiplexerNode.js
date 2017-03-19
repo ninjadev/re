@@ -10,7 +10,8 @@
           E: new NIN.TextureInput(),
           F: new NIN.TextureInput(),
           G: new NIN.TextureInput(),
-          H: new NIN.TextureInput()
+          H: new NIN.TextureInput(),
+          I: new NIN.TextureInput()
         },
         outputs: {
           selected: new NIN.TextureOutput(),
@@ -29,6 +30,7 @@
       this.inputs.F.enabled = false;
       this.inputs.G.enabled = false;
       this.inputs.H.enabled = false;
+      this.inputs.I.enabled = false;
       if(BEAN < offset + bar * 7 + 12 * 2 - 6) {
         this.inputs.A.enabled = true;
         this.outputs.selected.setValue(this.inputs.A.getValue());
@@ -44,16 +46,19 @@
       } else if(BEAN < offset + bar * 32) {
         this.inputs.E.enabled = true;
         this.outputs.selected.setValue(this.inputs.E.getValue());
-      } else if(BEAN < offset + bar * 40){
+      } else if(BEAN < offset + bar * 40) {
         this.inputs.F.enabled = true;
         this.outputs.selected.setValue(this.inputs.F.getValue());
         // Bass starts here again
-      } else if(BEAN < offset + bar * 48){
+      } else if(BEAN < offset + bar * 48) {
         this.inputs.G.enabled = true;
         this.outputs.selected.setValue(this.inputs.G.getValue());
-      } else if(BEAN < offset + bar * 56){
+      } else if(BEAN < offset + bar * 56) {
         this.inputs.H.enabled = true;
         this.outputs.selected.setValue(this.inputs.H.getValue());
+      } else if(BEAN < offset + bar * 65 /* extra bar */) {
+        this.inputs.I.enabled = true;
+        this.outputs.selected.setValue(this.inputs.I.getValue());
       }
     }
   }
