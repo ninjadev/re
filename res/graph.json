@@ -41,6 +41,7 @@
     "connected": {
       "A": "intro.render",
       "C": "isoscroller.render",
+      "E": "umbrellas.render",
       "F": "kaleidoscope.render",
       "I": "piano.render"
     }
@@ -51,5 +52,9 @@
     "connected": {
       "tDiffuse": "spinning.render"
     }
+  },
+  {
+    "id": "umbrellas",
+    "type": "umbrellas"
   }
 ]
