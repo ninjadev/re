@@ -58,34 +58,24 @@
     }
   }
 
-  class SpinningNode extends NIN.Node {
+  class SpinningNode extends NIN.THREENode {
     constructor(id) {
       super(id, {
         inputs: {
           percolator: new NIN.Input()
-        },
-        outputs: {
-          render: new NIN.TextureOutput()
         }
-      });
-
-      this.scene = new THREE.Scene();
-      this.renderTarget = new THREE.WebGLRenderTarget(640, 360, {
-        minFilter: THREE.LinearFilter,
-        magFilter: THREE.LinearFilter,
-        format: THREE.RGBFormat
       });
 
       const ninTexture = Loader.loadTexture('res/nin.png');
 
-      this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 10000);
-      this.cube = new THREE.Mesh(new THREE.BoxGeometry(50, 50, 50),
-                                 new THREE.MeshBasicMaterial({
-                                   transparent: true,
-                                   map: ninTexture,
-                                   side: THREE.FrontSide,
-                                   color: 0xffffff,
-                                 }));
+      this.cube = new THREE.Mesh(
+        new THREE.BoxGeometry(50, 50, 50),
+        new THREE.MeshBasicMaterial({
+          transparent: true,
+          map: ninTexture,
+          side: THREE.FrontSide,
+          color: 0xffffff,
+        }));
 
       var light = new THREE.PointLight( 0xffffff, 1, 100 );
       light.position.set( -50, -50, -50 );
@@ -111,6 +101,8 @@
     }
 
     update(frame) {
+      super.update(frame);
+
       if (this.inputs.percolator.getValue()) {
         const c = this.colors[this.colorIdx++ % this.colors.length];
         this.s.push(c);
@@ -123,15 +115,6 @@
       }
 
       this.camera.rotation.y = Math.PI / 2;
-    }
-
-    resize() {
-      this.renderTarget.setSize(16 * GU, 9 * GU);
-    }
-
-    render(renderer) {
-      renderer.render(this.scene, this.camera, this.renderTarget, true);
-      this.outputs.render.setValue(this.renderTarget.texture);
     }
   }
 
