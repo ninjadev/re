@@ -13,6 +13,7 @@
       this.leadAnalysis = new audioAnalysisSanitizer('stem_kick.wav', 'spectral_energy', 1);
       this.circleThrob = 0;
       this.noteNumbers = 0;
+      this.boxBoomScale = 1;
 
       this.renderTarget = new THREE.WebGLRenderTarget(640, 360, {
         minFilter: THREE.LinearFilter,
@@ -109,6 +110,18 @@
         if(i <= this.noteNumbers) {
           this.scene.add(boxShadow);
         }
+
+        box.rotation.y = smoothstep(0, Math.PI / 2, (frame - 1529 + 40 - i * 3) / 10);
+        if(frame == 1527) {
+          this.boxBoomScale = 2;
+        }
+        this.boxBoomScale *= 0.999;
+        if(this.boxBoomScale < 1) {
+          this.boxBoomScale = 1;
+        }
+        box.scale.x = 1 / this.boxBoomScale;
+        box.scale.y = this.boxBoomScale;
+        box.scale.z = 1 / this.boxBoomScale;
       }
 
       this.circleThrob *= 0.93;
@@ -120,7 +133,7 @@
         this.noteNumbers++;
       }
 
-      const frameOffset = 1557;
+      const frameOffset = 1637;
       const frameOffset2 = 1882;
       const transitionTime = 60 * 60 / 130;
       const transitionTime2 = 60 * 60 / 130 / 2;
