@@ -3,7 +3,7 @@
     "id": "root",
     "type": "NIN.RootNode",
     "connected": {
-        "screen": "sceneselector.selected"
+        "screen": "kaleidoscope.render"
     }
   },
   {
@@ -39,5 +39,9 @@
       "C": "isoscroller.render",
       "F": "spinning.render"
     }
+  },
+  {
+    "id": "kaleidoscope",
+    "type": "KaleidoscopeNode"
   }
 ]
