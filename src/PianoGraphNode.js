@@ -2,10 +2,131 @@
 
   const MAX_POINTS = 1024 * 8;
   const MAX_LIFE = 100;
+  const DISTANCE_THRESHOLD = 5;
 
   const easeOutExpo = function (t, b, c, d) {
       return c * ( -Math.pow( 2, -10 * t/d ) + 1 ) + b;
   };
+
+  const MAX_OBJECTS = 6;
+  const RADIUS = Math.sqrt(1 / DISTANCE_THRESHOLD);
+
+  class QuadTree {
+
+    constructor(level, x, y, w, h) {
+      this.objects = [];
+      this.level = level;
+      this.x = x;
+      this.y = y;
+      this.w = w;
+      this.h = h;
+      this.nodes = [];
+    }
+
+    debugRender(ctx) {
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = 'red';
+      ctx.strokeRect(this.x * GU, this.y * GU, this.w * GU, this.h * GU);
+      for(let node of this.nodes) {
+        node.debugRender(ctx);
+      }
+      ctx.strokeStyle = 'green';
+      for(let obj of this.objects) {
+        ctx.beginPath();
+        ctx.ellipse(obj.x * GU, obj.y * GU, RADIUS * GU, RADIUS * GU, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    traverse(fn, objects=[]) {
+      for(let objA of objects) {
+        for(let objB of this.objects) {
+          let x = objA.x - objB.x;
+          let y = objA.y - objB.y;
+          let lengthSquared = x * x + y * y;
+          if(lengthSquared < 1 / DISTANCE_THRESHOLD) {
+            fn(objA, objB, lengthSquared);
+          }
+        }
+      }
+      for(let i = 0; i < this.objects.length; i++) {
+        for(let j = i + 1; j < this.objects.length; j++) {
+          const objA = this.objects[i];
+          const objB = this.objects[j];
+          let x = objA.x - objB.x;
+          let y = objA.y - objB.y;
+          let lengthSquared = x * x + y * y;
+          if(lengthSquared < 1 / DISTANCE_THRESHOLD) {
+            fn(objA, objB, lengthSquared);
+          }
+        }
+      }
+      for(let node of this.nodes) {
+        node.traverse(fn, objects.concat(this.objects));
+      }
+    }
+
+    clear() {
+      this.objects = []; 
+      for(let node of this.nodes) {
+        node.clear();
+      }
+    }
+
+    split() {
+      const halfWidth = this.w / 2;
+      const halfHeight = this.h / 2;
+      const x = this.x;
+      const y = this.y;
+      this.nodes[0] = new QuadTree(this.level + 1,
+                                   x, y,
+                                   halfWidth, halfHeight);
+      this.nodes[1] = new QuadTree(this.level + 1,
+                                   x + halfWidth, y,
+                                   halfWidth, halfHeight);
+      this.nodes[2] = new QuadTree(this.level + 1,
+                                   x + halfWidth, y + halfHeight,
+                                   halfWidth, halfHeight);
+      this.nodes[3] = new QuadTree(this.level + 1,
+                                   x, y + halfHeight,
+                                   halfWidth, halfHeight);
+    }
+
+    getIndex(obj) {
+      for(let i = 0; i < 4; i++) {
+        const x = obj.x - RADIUS;
+        const y = obj.y - RADIUS;
+        const w = RADIUS * 2;
+        const h = RADIUS * 2;
+        if(x >= this.nodes[i].x && x + w < this.nodes[i].x + this.nodes[i].w &&
+           y >= this.nodes[i].y && y + h < this.nodes[i].y + this.nodes[i].w) {
+          return i;
+        }
+      }
+      return -1;
+    }
+
+
+    insert(obj) {
+      if(this.nodes[0]) {
+        const index = this.getIndex(obj);
+        if(index != -1) {
+          this.nodes[index].insert(obj);
+          return;
+        }
+      }
+
+      this.objects.push(obj);
+      if(this.objects.length >= MAX_OBJECTS && !this.nodes[0]) {
+        this.split();
+        const objects = this.objects;
+        this.objects = [];
+        for(let object of objects) {
+          this.insert(object);
+        }
+      }
+    }
+  }
 
   class PianoGraphNode extends NIN.Node {
     constructor(id, options) {
@@ -121,6 +242,10 @@
     }
 
     render(renderer) {
+      const quadTree = new QuadTree(0, -16 / 2, -9 / 2, 16 * 2, 9 * 2);
+      for(let i = 0; i < this.activePoints; i++) {
+        quadTree.insert(this.points[i]);
+      }
       this.ctx.save();
       this.ctx.fillStyle = '#0d1d38';
       this.ctx.globalAlpha = 1;
@@ -137,22 +262,15 @@
         const size = 0.02 * GU * point.lifeScaled;
         this.ctx.ellipse(point.x * GU, point.y * GU, size,  size, 0, 0, Math.PI * 2);
         this.ctx.fill();
-
-        for(let j = 0; j < this.activePoints; j++) {
-          const pointB = this.points[j];
-          const x = point.x - pointB.x;
-          const y = point.y - pointB.y;
-          const lengthSquared = x * x + y * y;
-          const threshold = 5;
-          if(lengthSquared < 1 / threshold) {
-            this.ctx.globalAlpha =  (1 - lengthSquared * threshold) * point.lifeScaled * pointB.lifeScaled;
-            this.ctx.beginPath();
-            this.ctx.moveTo(point.x * GU, point.y * GU);
-            this.ctx.lineTo(pointB.x * GU, pointB.y * GU);
-            this.ctx.stroke();
-          }
-        }
       }
+      quadTree.traverse((a, b, lengthSquared) => {
+        this.ctx.globalAlpha =  (1 - lengthSquared * DISTANCE_THRESHOLD) * a.lifeScaled * b.lifeScaled;
+        this.ctx.beginPath();
+        this.ctx.moveTo(a.x * GU, a.y * GU);
+        this.ctx.lineTo(b.x * GU, b.y * GU);
+        this.ctx.stroke();
+      });
+      //quadTree.debugRender(this.ctx);
       if(this.frame > 6983) {
         const scale = 2;
         const image = this.inputs.logo.getValue().image;
