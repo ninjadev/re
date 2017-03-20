@@ -10,6 +10,9 @@
   class PianoGraphNode extends NIN.Node {
     constructor(id, options) {
       super(id, {
+        inputs: {
+          logo: new NIN.TextureInput()
+        },
         outputs: {
           render: new NIN.TextureOutput()
         }
@@ -54,6 +57,8 @@
     }
 
     update(frame) {
+
+      this.frame = frame;
 
       if(frame == 6313) {
         this.activePoints = 0;
@@ -148,11 +153,19 @@
           }
         }
       }
+      if(this.frame > 6983) {
+        const scale = 2;
+        const image = this.inputs.logo.getValue().image;
+        this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+        this.ctx.scale(scale, scale);
+        this.ctx.globalAlpha = 1;
+        this.ctx.drawImage(image, -image.width / 4, -image.height / 4);
+      }
       this.ctx.restore();
       if(this.beatorama)  {
-      this.ctx.globalAlpha = 1;
-      this.ctx.fillStyle = 'white';
-      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.globalAlpha = 1;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       }
       this.outputTexture.needsUpdate = true;
       this.outputs.render.setValue(this.outputTexture);
