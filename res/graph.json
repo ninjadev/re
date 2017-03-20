@@ -33,7 +33,10 @@
   },
   {
     "id": "piano",
-    "type": "PianoGraphNode"
+    "type": "PianoGraphNode",
+    "connected": {
+      "logo": "logo.texture"
+    }
   },
   {
     "id": "spinning",
@@ -53,6 +56,10 @@
       "F": "kaleidoscope.render",
       "I": "piano.render"
     }
+  },
+  {
+    "id": "logo",
+    "type": "NinjadevLogoNode"
   },
   {
     "id": "kaleidoscope",
