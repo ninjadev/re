@@ -3,7 +3,8 @@
     constructor(id, options) {
       super(id, {
         outputs: {
-          texture: new NIN.TextureOutput()
+          texture: new NIN.TextureOutput(),
+          polygons: new NIN.Output(),
         }
       });
 
@@ -99,10 +100,32 @@
         ]
       };
 
+
+      this.polygons.lineLength = 0;
+      const keys = Object.keys(this.polygons);
+      for(let key of keys) {
+        const polygon = this.polygons[key];
+        if(typeof polygon == 'number') {
+          continue;
+        }
+        polygon.lineLength = 0;
+        for(let i = 0; i < polygon.length - 1; i++) {
+          const lineStart = polygon[i];
+          const lineEnd = polygon[i + 1];
+          const x = lineStart[0] - lineEnd[0];
+          const y = lineStart[1] - lineEnd[1];
+          lineStart.lineLength = Math.sqrt(x * x + y * y);
+          polygon.lineLength += lineStart.lineLength;
+        }
+        polygon[polygon.length - 1].lineLength = 0;
+        this.polygons.lineLength += polygon.lineLength;
+      }
+
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
       this.texture = new THREE.Texture(this.canvas);
       this.outputs.texture.setValue(this.texture);
+      this.outputs.polygons.setValue(this.polygons);
       this.resize();
     }
 
@@ -114,7 +137,6 @@
       this.ctx.scale(scale, scale);
       for(let letter of 'NIMJADEV') {
         let polygon = this.polygons[letter];
-        console.log(letter, polygon);
         this.ctx.beginPath();
         this.ctx.moveTo(...polygon[0]);
         for(let i = 1; i < polygon.length; i++) {

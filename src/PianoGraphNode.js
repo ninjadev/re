@@ -1,14 +1,14 @@
 (function(global) {
 
-  const MAX_POINTS = 1024 * 8;
-  const MAX_LIFE = 100;
+  const MAX_POINTS = 1024 * 8 * 8;
+  const MAX_LIFE = 90;
   const DISTANCE_THRESHOLD = 5;
 
   const easeOutExpo = function (t, b, c, d) {
       return c * ( -Math.pow( 2, -10 * t/d ) + 1 ) + b;
   };
 
-  const MAX_OBJECTS = 6;
+  const MAX_OBJECTS = 10;
   const RADIUS = Math.sqrt(1 / DISTANCE_THRESHOLD);
 
   class QuadTree {
@@ -132,7 +132,8 @@
     constructor(id, options) {
       super(id, {
         inputs: {
-          logo: new NIN.TextureInput()
+          logo: new NIN.TextureInput(),
+          polygons: new NIN.Input(),
         },
         outputs: {
           render: new NIN.TextureOutput()
@@ -160,15 +161,60 @@
       this.activePoints = 0;
     }
 
-    spawnPoint(x, y) {
+    loadPolygons() {
+      this.oldPolygonValue = this.inputs.polygons.getValue();
+      this.polygons = [];
+      const keys = Object.keys(this.oldPolygonValue);
+      for(let key of keys) {
+        const polygon = this.oldPolygonValue[key];
+        if(typeof polygon == 'number') {
+          continue;
+        }
+        this.polygons.push(polygon);
+      }
+    }
+
+    spawnPointsAroundPolygon() {
+      let dice = Math.random() * this.oldPolygonValue.lineLength;
+      let lineIndex;
+      let chosenPolygon;
+      outer:
+      for(let polygon of this.polygons) {
+        if(dice - polygon.lineLength <= 0) {
+          chosenPolygon = polygon;
+          for(let i = 0; i < polygon.length; i++) {
+            const line = polygon[i];
+            if(dice - line.lineLength <= 0) {
+              lineIndex = i;
+              break outer;    
+            }
+            dice -= line.lineLength;
+          }
+        }
+        dice -= polygon.lineLength;
+      }
+      const x0 = chosenPolygon[lineIndex][0];
+      const y0 = chosenPolygon[lineIndex][1];
+      const x1 = chosenPolygon[(lineIndex + 1) % chosenPolygon.length][0];
+      const y1 = chosenPolygon[(lineIndex + 1) % chosenPolygon.length][1];
+      const w = x1 - x0;
+      const h = y1 - y0;
+      const random = Math.random();
+      this.spawnPoint((x0 + w * random) * 8 / 64 * 4 + 0.75,
+                      (y0 + h * random) * 8 / 64 * 4 + 2,
+      0.003);
+    }
+
+    spawnPoint(x, y, speed=0.005) {
       if(this.activePoints == MAX_POINTS) {
         return;
       }
+      const angle = Math.random() * Math.PI * 2;
       const point = this.points[this.activePoints++];
       point.x = x;
       point.y = y;
-      point.dx = 0.01 * (Math.random() - .5);
-      point.dy = 0.01 * (Math.random() - .5);
+      point.dx = speed * Math.cos(angle);
+      point.dy = speed * Math.sin(angle);
       point.life = MAX_LIFE;
     }
 
@@ -180,6 +226,10 @@
     update(frame) {
 
       this.frame = frame;
+
+      if(this.oldPolygonValue != this.inputs.polygons.getValue()) {
+        this.loadPolygons();
+      }
 
       if(frame == 6313) {
         this.activePoints = 0;
@@ -210,18 +260,32 @@
           case 11.5 * 12:
             for(let i = 0; i < 32; i++) {
               this.spawnPoint(
-                8 + (Math.random() - 0.5) * 8 * 2 / this.zoom,
-                4.5 + (Math.random() - 0.5) * 4.5 * 2 / this.zoom);
+                8 + (Math.random() - 0.5) * 8 * 2 / this.zoom * 1.1,
+                4.5 + (Math.random() - 0.5) * 4.5 * 2 / this.zoom * 1.1);
             }
         }
       }
 
       let analysisValue = this.pianoAnalysis.getValue(frame);
-      while(analysisValue > 0) {
-        this.spawnPoint(
-          8 + (Math.random() - 0.5) * 8 * 2 / this.zoom,
-          4.5 + (Math.random() - 0.5) * 4.5 * 2 / this.zoom);
-        analysisValue -= 0.05;
+      if(frame < 7000) {
+        while(analysisValue > 0) {
+          this.spawnPoint(
+            8 + (Math.random() - 0.5) * 8 * 2 / this.zoom * 1.1,
+            4.5 + (Math.random() - 0.5) * 4.5 * 2 / this.zoom * 1.1);
+          if(frame > 6800 && frame < 7000) {
+            this.spawnPointsAroundPolygon();
+            this.spawnPointsAroundPolygon();
+            analysisValue -= 0.1;
+          } else {
+            analysisValue -= 0.05;
+          }
+        }
+      } else {
+        for(let i = 0; i < 4; i++) {
+          this.spawnPoint(
+            8 + (Math.random() - 0.5) * 8 * 2 / this.zoom * 1.1,
+            4.5 + (Math.random() - 0.5) * 4.5 * 2 / this.zoom * 1.1);
+        }
       }
 
       for(let i = 0; i < this.activePoints; i++) {
@@ -246,6 +310,8 @@
       for(let i = 0; i < this.activePoints; i++) {
         quadTree.insert(this.points[i]);
       }
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.globalCompositeOperation = 'lighter';
       this.ctx.save();
       this.ctx.fillStyle = '#0d1d38';
       this.ctx.globalAlpha = 1;
@@ -259,7 +325,10 @@
         const point = this.points[i];
         this.ctx.globalAlpha = point.lifeScaled;
         this.ctx.beginPath();
-        const size = 0.02 * GU * point.lifeScaled;
+        let size = 0.03 * GU * point.lifeScaled;
+        if(point.lifeScaled > 0.995) {
+          size += easeOut(0.05 * GU, 0, 1 - (point.lifeScaled - 0.995) * 200);
+        }
         this.ctx.ellipse(point.x * GU, point.y * GU, size,  size, 0, 0, Math.PI * 2);
         this.ctx.fill();
       }
@@ -268,22 +337,43 @@
         this.ctx.beginPath();
         this.ctx.moveTo(a.x * GU, a.y * GU);
         this.ctx.lineTo(b.x * GU, b.y * GU);
+        this.ctx.lineWidth = GU * 0.01;
         this.ctx.stroke();
       });
       //quadTree.debugRender(this.ctx);
-      if(this.frame > 6983) {
+      if(this.frame > 6979) {
         const scale = 2;
         const image = this.inputs.logo.getValue().image;
         this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
         this.ctx.scale(scale, scale);
-        this.ctx.globalAlpha = 1;
+        this.ctx.globalAlpha = lerp(0, 1, (this.frame - 6979) / 100);
+        this.ctx.save();
+        this.ctx.globalCompositeOperation = 'lighter';
         this.ctx.drawImage(image, -image.width / 4, -image.height / 4);
+        this.ctx.restore();
       }
       this.ctx.restore();
       if(this.beatorama)  {
         this.ctx.globalAlpha = 1;
         this.ctx.fillStyle = 'white';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      }
+
+      if(this.frame > 7235 - 20) {
+        this.globalAlpha = 1;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillRect(0, 0, easeIn(0, 16, (this.frame - 7235 + 20) / 20) * GU, 2.5 * GU);
+      }
+      if(this.frame > 7282 - 20) {
+        this.globalAlpha = 1;
+        this.ctx.fillStyle = 'white';
+        const value = easeIn(0, 16, (this.frame - 7282 + 20) / 20);
+        this.ctx.fillRect((16 - value) * GU, (9 - 2.5) * GU, 16 * GU, 2.5 * GU);
+      }
+      if(this.frame > 7310 - 20) {
+        this.globalAlpha = 1;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillRect(0, 2 * GU, easeIn(0, 16, (this.frame - 7310 + 20) / 20) * GU, 5 * GU);
       }
       this.outputTexture.needsUpdate = true;
       this.outputs.render.setValue(this.outputTexture);

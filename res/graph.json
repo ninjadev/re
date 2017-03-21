@@ -35,7 +35,8 @@
     "id": "piano",
     "type": "PianoGraphNode",
     "connected": {
-      "logo": "logo.texture"
+      "logo": "logo.texture",
+      "polygons": "logo.polygons"
     }
   },
   {
