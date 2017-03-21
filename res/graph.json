@@ -3,7 +3,7 @@
     "id": "root",
     "type": "NIN.RootNode",
     "connected": {
-        "screen": "sceneselector.selected"
+      "screen": "add.render"
     }
   },
   {
@@ -72,5 +72,36 @@
   {
     "id": "umbrellas",
     "type": "umbrellas"
+  },
+  {
+    "id": "blurX",
+    "type": "BlurPassNode",
+    "options": {
+      "direction": "x"
+    },
+    "connected": {
+      "tDiffuse": "blurY.render"
+    }
+  },
+  {
+    "id": "blurY",
+    "type": "BlurPassNode",
+    "options": {
+      "direction": "y"
+    },
+    "connected": {
+      "tDiffuse": "sceneselector.selected"
+    }
+  },
+  {
+    "id": "add",
+    "type": "AddNode",
+    "options": {
+      "opacity": 0.3
+    },
+    "connected": {
+      "A": "sceneselector.selected",
+      "B": "blurX.render"
+    }
   }
 ]
