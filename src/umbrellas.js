@@ -24,7 +24,7 @@
       }
 
       this.twombrellas = [];
-      for (let i=0; i < 24; i++) {
+      for (let i=0; i < 28; i++) {
         this.twombrellas[i] = {
           progress: 0,
           x: 8,
@@ -33,7 +33,7 @@
       }
 
       this.threembrellas = [];
-      for (let i=0; i < 16; i++) {
+      for (let i=0; i < 24; i++) {
         this.threembrellas[i] = {
           progress: 0,
           x: 8,
@@ -42,7 +42,7 @@
       }
 
       this.fourmbrellas = [];
-      for (let i=0; i < 8; i++) {
+      for (let i=0; i < 20; i++) {
         this.fourmbrellas[i] = {
           progress: 0,
           x: 8,
@@ -67,7 +67,7 @@
       }
 
       for (const [i, umbrella] of this.twombrellas.entries()) {
-        const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12 + 8 * 12);
+        const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12 + 4 * 12);
         umbrella.progress = clamp(0, (frame - startFrame) / 2, Math.PI*2);
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
@@ -75,7 +75,7 @@
       }
 
       for (const [i, umbrella] of this.threembrellas.entries()) {
-        const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12 + 16 * 12);
+        const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12 + 8 * 12);
         umbrella.progress = clamp(0, (frame - startFrame) / 2, Math.PI*2);
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
@@ -83,14 +83,14 @@
       }
 
       for (const [i, umbrella] of this.fourmbrellas.entries()) {
-        const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12 + 24 * 12);
+        const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12 + 12 * 12);
         umbrella.progress = clamp(0, (frame - startFrame) / 2, Math.PI*2);
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
         umbrella.y = clamp(-10, 4.5 - (frame - startFrame) / 50, 4.5);
       }
 
-      this.rotation = clamp(0, (frame - FRAME_FOR_BEAN((startBEAN + 32) * 12)) / 100, 10);
+      this.rotation = clamp(0, (frame - FRAME_FOR_BEAN(startBEAN + 16 * 12)) / 100, 10);
     }
 
     render() {
