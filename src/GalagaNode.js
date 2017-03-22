@@ -1,4 +1,9 @@
 (function(global) {
+
+  const easeOutExpo = function (t, b, c, d) {
+      return c * ( -Math.pow( 2, -10 * t/d ) + 1 ) + b;
+  };
+
   class GalagaNode extends NIN.Node {
     constructor(id, options) {
       super(id, {
@@ -11,6 +16,22 @@
       });
       this.noteCount = 0;
 
+      this.particleSprite = document.createElement('canvas');
+
+      if (!document.getElementById('arcade-font')) {
+        var s = document.createElement('style');
+        s.setAttribute('id', 'arcade-font');
+        Loader.loadAjax('res/ARCADECLASSIC.base64', function(response) {
+          s.innerHTML = [
+            "@font-face {",
+            "font-family: 'arcade';",
+            "src: url(data:application/x-font-opentype;charset=utf-8;base64," + response + ") format('opentype');",
+            "}"
+          ].join('\n');
+        })
+        document.body.appendChild(s);
+      }
+
       this.bassAnalysis = new audioAnalysisSanitizer('stem_kick.wav', 'spectral_energy', 0.2);
 
       this.canvas = document.createElement('canvas');
@@ -22,7 +43,7 @@
 
       this.particles = [];
       this.activeParticles = 0;
-      for(let i = 0; i < 2048; i++) {
+      for(let i = 0; i < 2048 * 16; i++) {
         this.particles[i] = {
           x: 0,
           y: 0,
@@ -224,6 +245,21 @@
     resize() {
       this.canvas.width = 16 * GU;
       this.canvas.height = 9 * GU;
+
+      this.particleSprite.width = GU / 2;
+      this.particleSprite.height = GU / 2;
+      const ctx = this.particleSprite.getContext('2d');
+      const gradient = ctx.createRadialGradient(
+        this.particleSprite.width / 2,
+        this.particleSprite.width / 2,
+        this.particleSprite.width / 2,
+        this.particleSprite.width / 2,
+        this.particleSprite.width / 2,
+        0);
+      gradient.addColorStop(0, 'black');
+      gradient.addColorStop(1, '#040408');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, GU, GU);
     }
 
     update(frame) {
@@ -271,15 +307,15 @@
         this.spaceshipY = (24 - (this.spaceshipY - 66)) / 4;
         if(BEAN >= beanOffset + this.notes[this.currentNote].start &&
            BEAN < beanOffset + this.notes[this.currentNote].end) {
-          for(let i = 0; i < 10; i++) {
+          for(let i = 0; i < 30; i++) {
             const particle = this.particles[this.activeParticles++];
             const angle = Math.random() * Math.PI * 2;
             const spread = Math.random() / 16;
             particle.x = this.spaceshipX + Math.cos(angle) * spread;
             particle.y = this.spaceshipY + Math.sin(angle) * spread;
-            particle.dx = -0.1 + Math.random() * 0.01;
-            particle.dy = (Math.random() - 0.5) * 0.005;
-            particle.life = 100;
+            particle.dx = -0.1;
+            particle.dy = 0;
+            particle.life = 150;
           }
         } else if(BEAN >= beanOffset + this.notes[this.currentNote + 1].start) {
           this.currentNote = this.currentNote + 1;
@@ -288,8 +324,9 @@
 
       for(let i = 0; i < this.activeParticles; i++) {
         const particle = this.particles[i];
+        particle.lifeScaled = clamp(0, easeOutExpo(particle.life, 0, 1, 150), 1);
         particle.x += particle.dx;
-        particle.y += particle.dy;
+        particle.y += particle.dy * particle.lifeScaled;
         if(particle.life-- == 0) {
           this.particles[i] = this.particles[this.activeParticles];
           this.particles[this.activeParticles] = particle;
@@ -302,7 +339,7 @@
     render(renderer) {
 
       this.ctx.globalAlpha = 1;
-      this.ctx.fillStyle = '#222';
+      this.ctx.fillStyle = '#112';
       this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
 
       let zoom = 1;
@@ -360,7 +397,7 @@
       this.ctx.rotate(angle);
       this.ctx.translate(-this.canvas.width / 2, -this.canvas.height / 2);
       this.ctx.fillStyle = 'white';
-      this.ctx.globalAlpha = 0.5;
+      this.ctx.globalAlpha = 0.9;
       for(let i = 0; i < this.stars.length; i++) {
         for(let j = 0; j < this.stars[i].length; j++) {
           const star = this.stars[i][j];
@@ -374,16 +411,24 @@
       }
 
       this.ctx.globalAlpha = 1;
-      this.ctx.fillStyle = '#111';
+      this.ctx.fillStyle = '#040411';
       this.ctx.globalCompositeOperation = 'lighter';
       const width = 0.5;
       for(let i = 0; i < this.activeParticles; i++) {
         const particle = this.particles[i];
+        this.ctx.globalAlpha = particle.lifeScaled;
+        this.ctx.drawImage(
+          this.particleSprite,
+          particle.x * GU,
+          particle.y * GU);
+            
+        /*
         this.ctx.fillRect(
           (particle.x) * GU,
           (particle.y) * GU + width / 4 * GU,
           width * GU,
           width * GU / 2);
+          */
       }
       this.ctx.globalCompositeOperation = 'source-over';
 
@@ -396,30 +441,35 @@
       const hudShowTime = (this.frame - 4550) / 50;
       const hudOffset = easeOut(1, 0, hudShowTime);
 
+      const colorA = '#44d';
+      const colorB = '#fff';
+
       this.ctx.globalAlpha = 1;
-      this.ctx.fillStyle = 'red';
-      this.ctx.font = 'bold ' + (0.2 * GU) + 'pt Arial';
+      this.ctx.fillStyle = colorA;
+      this.ctx.font = 'bold ' + (0.4 * GU) + 'pt arcade';
       this.ctx.textBaseline = 'top';
-      this.ctx.fillText('PLAYER 1', 0.2 * GU, -hudOffset * GU);
-      this.ctx.fillStyle = 'white';
-      this.ctx.fillText('NINJADEV', 1.7 * GU, -hudOffset * GU);
-      this.ctx.fillStyle = 'red';
-      this.ctx.fillText('HIGHSCORE', 13 * GU, -hudOffset * GU);
-      this.ctx.fillStyle = 'white';
-      this.ctx.fillText(this.frame, 15 * GU, -hudOffset * GU);
-      this.ctx.fillStyle = 'red';
-      this.ctx.fillText('BULLETS |||| |||| ||||', 0.2 * GU, (hudOffset + 8.5) * GU);
-      this.ctx.fillStyle = 'red';
-      this.ctx.fillText('SHIP HEALTH ', 13 * GU, (hudOffset + 8.5) * GU);
-      this.ctx.fillStyle = 'white';
+      this.ctx.fillText('PLAYER 1', 0.23 * GU, (0.1 - hudOffset) * GU);
+      this.ctx.fillStyle = colorB;
+      this.ctx.fillText('NINJADEV', 2.8 * GU, (0.1 - hudOffset) * GU);
+      this.ctx.fillStyle = colorA;
+      this.ctx.fillText('HIGHSCORE', 11.4 * GU, (0.1 - hudOffset) * GU);
+      this.ctx.fillStyle = colorB;
+      this.ctx.fillText(this.frame, 14.6 * GU, (0.1 - hudOffset) * GU);
+      this.ctx.fillStyle = colorA;
+      this.ctx.fillText('BULLETS', 0.23 * GU, (hudOffset + 8.35) * GU);
+      this.ctx.fillStyle = colorB;
+      this.ctx.fillText('o o o o o o o', 2.5 * GU, (hudOffset + 8.35) * GU);
+      this.ctx.fillStyle = colorA;
+      this.ctx.fillText('SHIP HEALTH ', 10.5 * GU, (hudOffset + 8.35) * GU);
+      this.ctx.fillStyle = colorB;
 
       let health = '';
       let analysisValue = this.bassAnalysis.getValue(this.frame);
       while(analysisValue > 0) {
-        analysisValue -= 0.5;
-        health += '|';
+        analysisValue -= 0.6;
+        health += 'X';
       }
-      this.ctx.fillText(health, 15 * GU, 8.5 * GU);
+      this.ctx.fillText(health, 13.8 * GU, (hudOffset + 8.35) * GU);
 
       this.output.needsUpdate = true;
       this.outputs.render.setValue(this.output);
