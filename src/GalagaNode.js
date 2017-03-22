@@ -20,6 +20,18 @@
       this.output.minFilter = THREE.LinearFilter;
       this.output.magFilter = THREE.LinearFilter;
 
+      this.particles = [];
+      this.activeParticles = 0;
+      for(let i = 0; i < 2048; i++) {
+        this.particles[i] = {
+          x: 0,
+          y: 0,
+          dx: 0,
+          dy: 0,
+          life: 0,
+        };
+      }
+
       const beat = 12;
       const bar = beat * 4;
       const subeighth = beat / 8;
@@ -72,9 +84,129 @@
           start: beat * 11.5,
           end: beat * 13,
           pitch: 66,
-        }
+
         /**/
+
+        }, {
+          start: beat * 13 + 2 * subeighth,
+          end: beat * 13 + 4 * subeighth,
+          pitch: 69,
+
+        }, {
+          start: beat * 13 + 4 * subeighth,
+          end: beat * 13 + 4 * subeighth + 1,
+          pitch: 70,
+        }, {
+          start: beat * 13 + 4 * subeighth + 2,
+          end: beat * 13 + 4 * subeighth + 3,
+          pitch: 73,
+        }, {
+          start: beat * 13 + 4 * subeighth + 4,
+          end: beat * 13 + 4 * subeighth + 5,
+          pitch: 75,
+        }, {
+          start: beat * 14,
+          end: beat * 14 + 3,
+          pitch: 76,
+        }, {
+          start: beat * 14 + 6,
+          end: beat * 15,
+          pitch: 78,
+        }, {
+          start: beat * 15 + 3,
+          end: beat * 15 + 9,
+          pitch: 76,
+        }, {
+          start: beat * 16,
+          end: beat * 18,
+          pitch: 78,
+        }, {
+          start: beat * 19,
+          end: beat * 19.5,
+          pitch: 76,
+        }, {
+          start: beat * 19.5,
+          end: beat * 21,
+          pitch: 66,
+
+          /**/
+
+        }, {
+          start: beat * 21.5,
+          end: beat * 22,
+          pitch: 71,
+        }, {
+          start: beat * 22,
+          end: beat * 22 + 3,
+          pitch: 73,
+        }, {
+          start: beat * 22 + 3,
+          end: beat * 22 + 4.5,
+          pitch: 71,
+        }, {
+          start: beat * 22 + 6,
+          end: beat * 22 + 9,
+          pitch: 76,
+        }, {
+          start: beat * 23,
+          end: beat * 23.5,
+          pitch: 78,
+        }, {
+          start: beat * 23.5,
+          end: beat * 23 + 9,
+          pitch: 76,
+        }, {
+          start: beat * 23 + 9,
+          end: beat * 25,
+          pitch: 69,
+
+        /**/
+
+        }, {
+          start: beat * 25.5,
+          end: beat * 26,
+          pitch: 66,
+        }, {
+          start: beat * 26,
+          end: beat * 26.5,
+          pitch: 69,
+        }, {
+          start: beat * 26.5,
+          end: beat * 27,
+          pitch: 73,
+        }, {
+          start: beat * 27,
+          end: beat * 27.5,
+          pitch: 76,
+        }, {
+          start: beat * 27.5,
+          end: beat * 30,
+          pitch: 71,
+          
+          /**/
+
+        }, {
+          start: beat * 30,
+          end: beat * 30,
+          pitch: 71,
+
+        }
       ];
+
+      for(let i = 0; i < this.notes.length - 1; i++) {
+        const note = this.notes[i];
+        const nextNote = this.notes[i + 1];
+        let noteLength = note.end - note.start;
+        const notePause = nextNote.start - note.end;
+        if(notePause < beat / 2) {
+          if(noteLength > beat / 2) {
+            noteLength -= beat / 2;
+          } else {
+            noteLength /= 2;
+          }
+        }
+        note.end = note.start + noteLength;
+      }
 
       this.stars = [];
       for(let i = 0; i < 3; i++) {
@@ -98,14 +230,48 @@
       this.frame = frame;
       if(frame == 4542) {
         this.currentNote = 0;
+        this.activeNotes = 0;
       }
-      this.spaceshipY = 0;
-      const beanOffset = 12 * 4 * 41;
-      if(BEAN >= beanOffset + this.notes[this.currentNote].start &&
-         BEAN < beanOffset + this.notes[this.currentNote].end) {
-        this.spaceshipY = this.notes[this.currentNote].pitch;
-      } else if(BEAN > beanOffset + this.notes[this.currentNote].end) {
-        this.currentNote = (this.currentNote + 1) % this.notes.length;
+      this.spaceshipX = smoothstep(-8, 0, (this.frame - 4450) / 150) +
+        (this.frame - 4500) / 200 + 6 + smoothstep(0, 8, (this.frame - 5350) / 50);
+      if(this.notes[this.currentNote + 1]) {
+        this.spaceshipY = 0;
+        const beanOffset = 12 * 4 * 41;
+        const currentNote = this.notes[this.currentNote];
+        const nextNote = this.notes[this.currentNote + 1];
+        const startFrame = FRAME_FOR_BEAN(beanOffset + currentNote.end);
+        const endFrame = FRAME_FOR_BEAN(beanOffset + nextNote.start);
+        this.spaceshipY = smoothstep(currentNote.pitch,
+                                     nextNote.pitch,
+                                     (frame - startFrame) / (endFrame - startFrame));
+        this.spaceshipY = (24 - (this.spaceshipY - 66)) / 4;
+        if(BEAN >= beanOffset + this.notes[this.currentNote].start &&
+           BEAN < beanOffset + this.notes[this.currentNote].end) {
+          for(let i = 0; i < 10; i++) {
+            const particle = this.particles[this.activeParticles++];
+            const angle = Math.random() * Math.PI * 2;
+            const spread = Math.random() / 16;
+            particle.x = this.spaceshipX + Math.cos(angle) * spread;
+            particle.y = this.spaceshipY + Math.sin(angle) * spread;
+            particle.dx = -0.1 + Math.random() * 0.01;
+            particle.dy = (Math.random() - 0.5) * 0.005;
+            particle.life = 100;
+          }
+        } else if(BEAN >= beanOffset + this.notes[this.currentNote + 1].start) {
+          this.currentNote = this.currentNote + 1;
+        }
+      }
+
+      for(let i = 0; i < this.activeParticles; i++) {
+        const particle = this.particles[i];
+        particle.x += particle.dx;
+        particle.y += particle.dy;
+        if(particle.life-- == 0) {
+          this.particles[i] = this.particles[this.activeParticles];
+          this.particles[this.activeParticles] = particle;
+          this.activeParticles--;
+          i--;
+        }
       }
     }
 
@@ -140,10 +306,22 @@
       }
 
       this.ctx.globalAlpha = 1;
+      this.ctx.fillStyle = '#111';
+      this.ctx.globalCompositeOperation = 'lighter';
+      const width = 0.5;
+      for(let i = 0; i < this.activeParticles; i++) {
+        const particle = this.particles[i];
+        this.ctx.fillRect(
+          (particle.x) * GU,
+          (particle.y) * GU + width / 4 * GU,
+          width * GU,
+          width * GU / 2);
+      }
+      this.ctx.globalCompositeOperation = 'source-over';
+
+      this.ctx.globalAlpha = 1;
       this.ctx.fillStyle = 'orange';
-      const spaceshipY = (24 - (this.spaceshipY - 66)) / 4;
-      console.log(spaceshipY);
-      this.ctx.fillRect(1 * GU, spaceshipY * GU, GU / 2, GU / 2);
+      this.ctx.fillRect(this.spaceshipX * GU, this.spaceshipY * GU, GU / 2, GU / 2);
 
       this.ctx.restore();
 
