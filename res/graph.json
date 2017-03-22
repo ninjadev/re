@@ -60,7 +60,8 @@
       "F": "kaleidoscope.render",
       "G": "galaga.render",
       "H": "triangle.render",
-      "I": "piano.render"
+      "I": "piano.render",
+      "J": "ConstantiaNode.render"
     }
   },
   {
@@ -123,5 +124,9 @@
     "options": {
       "shader": "triangle"
     }
+  },
+  {
+    "id": "ConstantiaNode",
+    "type": "constantiaNode"
   }
 ]
