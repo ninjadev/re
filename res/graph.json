@@ -33,6 +33,9 @@
     "type": "SpinningNode",
     "connected": {
       "percolator": "percolator.percolator"
+    },
+    "options": {
+      "camera": "res/spinning.camera.json"
     }
   },
   {

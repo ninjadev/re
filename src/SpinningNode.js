@@ -4,7 +4,7 @@
       this.defaultColor = defaultColor;
       this.mesh = new THREE.Object3D();
       const radius = 100;
-      const segmentsPerHalf = 25;
+      const segmentsPerHalf = 30;
 
       const triangleSize = Math.PI * radius / segmentsPerHalf / 4;
 
@@ -59,8 +59,9 @@
   }
 
   class SpinningNode extends NIN.THREENode {
-    constructor(id) {
+    constructor(id, options) {
       super(id, {
+        camera: options.camera,
         inputs: {
           percolator: new NIN.Input()
         }
@@ -90,31 +91,28 @@
       this.colorIdx = 0;
       this.colors = [
         new THREE.Color(0x94e700),
+        new THREE.Color(0x92e700),
         new THREE.Color(0xc2e700),
+        new THREE.Color(0xc1e700),
         new THREE.Color(0xeaa500),
+        new THREE.Color(0xe0a500),
         new THREE.Color(0xf06d00),
-        new THREE.Color(0xb04700),
+        new THREE.Color(0xef6d00),
+        new THREE.Color(0xaf4700),
       ];
-      this.s = new Supersphere(new THREE.Color(0xeeeeee));
+      this.s = new Supersphere(new THREE.Color(0x000000));
       this.scene.add(this.s.mesh);
-      this.camera.position.x = 200;
     }
 
     update(frame) {
       super.update(frame);
 
       if (this.inputs.percolator.getValue()) {
-        const c = this.colors[this.colorIdx++ % this.colors.length];
-        this.s.push(c);
-        this.s.push(c);
-        this.s.push(c);
-        this.s.push(c);
-        this.s.push(c);
-      } else if (frame % 2 == 0) {
+        this.s.push(this.colors[this.colorIdx++ % this.colors.length]);
+        this.s.push(this.colors[this.colorIdx++ % this.colors.length]);
+      } else if (frame % 3 == 0) {
         this.s.update(frame);
       }
-
-      this.camera.rotation.y = Math.PI / 2;
     }
   }
 
