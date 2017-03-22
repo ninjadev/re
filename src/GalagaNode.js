@@ -232,6 +232,30 @@
         this.currentNote = 0;
         this.activeNotes = 0;
       }
+
+      this.cameraOffsetX = 0;
+      this.cameraOffsetY = 0;
+      this.cameraOffsetDX = 0;
+      this.cameraOffsetDY = 0;
+      this.cameraOffsetDDX = 0;
+      this.cameraOffsetDDY = 0;
+
+      const beat = 12;
+      const bar = 12 * 4;
+      const offset = bar * 41;
+      if(BEAN > offset + beat * 14 + 6 && BEAN < offset + beat * 18) {
+        this.cameraOffsetDDX = (Math.random() - 0.5) / 2;
+        this.cameraOffsetDDY = (Math.random() - 0.5) / 2;
+      }
+
+      this.cameraOffsetDX = -this.cameraOffsetX / 2;
+      this.cameraOffsetDY = -this.cameraOffsetY / 2;
+
+      this.cameraOffsetDX += this.cameraOffsetDDX;
+      this.cameraOffsetDY += this.cameraOffsetDDY;
+      this.cameraOffsetX += this.cameraOffsetDX;
+      this.cameraOffsetY += this.cameraOffsetDY;
+
       this.spaceshipX = smoothstep(-8, 0, (this.frame - 4450) / 150) +
         (this.frame - 4500) / 200 + 6 + smoothstep(0, 8, (this.frame - 5350) / 50);
       if(this.notes[this.currentNote + 1]) {
@@ -281,16 +305,60 @@
       this.ctx.fillStyle = '#222';
       this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
 
-      const zoom = 1;
-      const angle = 0;
-      const x = 0;
-      const y = 0;
+      let zoom = 1;
+      let angle = 0;
+      let x = 0;
+      let y = 0;
+
+      const beat = 12;
+      const bar = 12 * 4;
+      const offset = bar * 41;
+      const subeighth = beat / 8;
+
+      let cameraShake = 0;
+
+      if(BEAN >= offset + beat * 13 + 2 * subeighth) {
+        if(BEAN < offset + beat * 13 + 4 * subeighth) {
+          zoom = lerp(1, 3, 1 / 24);
+        } else if(BEAN < offset + beat * 13 + 4 * subeighth + 2) {
+          zoom = lerp(1, 3, 2 / 24);
+        } else if(BEAN < offset + beat * 13 + 4 * subeighth + 4) {
+          zoom = lerp(1, 3, 3 / 24);
+        } else if(BEAN < offset + beat * 14) {
+          zoom = lerp(1, 3, 4 / 24);
+        } else if(BEAN < offset + beat * 14 + 6) {
+          zoom = lerp(1, 3, 5 / 24);
+        } else if(BEAN < offset + beat * 15 + 3) {
+          zoom = 3;
+          angle = -0.1;
+          y = 4;
+          x = -2;
+        } else if(BEAN < offset + beat * 15 + 9) {
+          zoom = 2;
+          angle = 0.1;
+          y = 1;
+          x = -1;
+        } else if(BEAN < offset + beat * 18) {
+          zoom = 3;
+          angle = -0.1;
+          y = 3;
+          x = 0;
+        } else if(BEAN < offset + beat * 19) {
+          const start = FRAME_FOR_BEAN(offset + beat * 18);
+          const end = FRAME_FOR_BEAN(offset + beat * 19);
+          const t = (this.frame - start) / (end - start);
+          zoom = smoothstep(3, 1, t);
+          angle = smoothstep(-0.1, 0, t);
+          y = smoothstep(3, 0, t);
+          x = smoothstep(0, 0, t);
+        }
+      }
       this.ctx.save();
+      this.ctx.translate((x + this.cameraOffsetX)* GU, (y + this.cameraOffsetY) * GU);
       this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
       this.ctx.scale(zoom, zoom);
       this.ctx.rotate(angle);
       this.ctx.translate(-this.canvas.width / 2, -this.canvas.height / 2);
-      this.ctx.translate(x, y);
       this.ctx.fillStyle = 'white';
       this.ctx.globalAlpha = 0.5;
       for(let i = 0; i < this.stars.length; i++) {
@@ -325,21 +393,24 @@
 
       this.ctx.restore();
 
+      const hudShowTime = (this.frame - 4550) / 50;
+      const hudOffset = easeOut(1, 0, hudShowTime);
+
       this.ctx.globalAlpha = 1;
       this.ctx.fillStyle = 'red';
       this.ctx.font = 'bold ' + (0.2 * GU) + 'pt Arial';
       this.ctx.textBaseline = 'top';
-      this.ctx.fillText('PLAYER 1', 0.2 * GU, 0);
+      this.ctx.fillText('PLAYER 1', 0.2 * GU, -hudOffset * GU);
       this.ctx.fillStyle = 'white';
-      this.ctx.fillText('NINJADEV', 1.7 * GU, 0);
+      this.ctx.fillText('NINJADEV', 1.7 * GU, -hudOffset * GU);
       this.ctx.fillStyle = 'red';
-      this.ctx.fillText('HIGHSCORE', 13 * GU, 0);
+      this.ctx.fillText('HIGHSCORE', 13 * GU, -hudOffset * GU);
       this.ctx.fillStyle = 'white';
-      this.ctx.fillText(this.frame, 15 * GU, 0);
+      this.ctx.fillText(this.frame, 15 * GU, -hudOffset * GU);
       this.ctx.fillStyle = 'red';
-      this.ctx.fillText('BULLETS |||| |||| ||||', 0.2 * GU, 8.5 * GU);
+      this.ctx.fillText('BULLETS |||| |||| ||||', 0.2 * GU, (hudOffset + 8.5) * GU);
       this.ctx.fillStyle = 'red';
-      this.ctx.fillText('SHIP HEALTH ', 13 * GU, 8.5 * GU);
+      this.ctx.fillText('SHIP HEALTH ', 13 * GU, (hudOffset + 8.5) * GU);
       this.ctx.fillStyle = 'white';
 
       let health = '';
