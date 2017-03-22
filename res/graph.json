@@ -69,6 +69,9 @@
     "type": "KaleidoscopeNode",
     "connected": {
       "tDiffuse": "spinning.render"
+    },
+    "options": {
+      "shader": "kaleidoscope"
     }
   },
   {
@@ -99,7 +102,8 @@
     "id": "add",
     "type": "AddNode",
     "options": {
-      "opacity": 0.3
+      "opacity": 0.3,
+      "shader": "Add"
     },
     "connected": {
       "A": "sceneselector.selected",
@@ -114,6 +118,7 @@
     "id": "triangle",
     "type": "triangleNode",
     "options": {
+      "shader": "triangle"
     }
   }
 ]

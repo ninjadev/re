@@ -1,11 +1,10 @@
 (function(global) {
   class AddNode extends NIN.ShaderNode {
     constructor(id, options) {
-      options.shader = SHADERS.Add;
       options.inputs = {
         A: new NIN.TextureInput(),
         B: new NIN.TextureInput(),
-      }
+      };
       super(id, options);
       this.opacity = options.opacity;
     }

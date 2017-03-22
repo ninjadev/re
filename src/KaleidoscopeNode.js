@@ -1,7 +1,6 @@
 (function(global) {
   class KaleidoscopeNode extends NIN.ShaderNode {
     constructor(id, options) {
-      options.shader = SHADERS.kaleidoscope;
       options.inputs = {
         tDiffuse: new NIN.TextureInput()
       };
