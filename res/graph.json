@@ -56,6 +56,7 @@
       "E": "umbrellas.render",
       "F": "kaleidoscope.render",
       "G": "galaga.render",
+      "H": "triangle.render",
       "I": "piano.render"
     }
   },
@@ -104,8 +105,15 @@
       "A": "sceneselector.selected",
       "B": "blurX.render"
     }
-  }, {
+  },
+  {
     "id": "galaga",
     "type": "GalagaNode"
+  },
+  {
+    "id": "triangle",
+    "type": "triangleNode",
+    "options": {
+    }
   }
 ]
