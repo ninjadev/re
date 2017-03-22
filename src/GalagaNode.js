@@ -16,6 +16,9 @@
       });
       this.noteCount = 0;
 
+      this.shipSprite = new Image();
+      Loader.load('res/ninship.png', this.shipSprite);
+
       this.particleSprite = document.createElement('canvas');
 
       if (!document.getElementById('arcade-font')) {
@@ -33,6 +36,8 @@
       }
 
       this.bassAnalysis = new audioAnalysisSanitizer('stem_kick.wav', 'spectral_energy', 0.2);
+
+      this.kickThrob = 0;
 
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
@@ -59,6 +64,7 @@
       this.notes = [{
           start: 0,
           end: beat * 2,
+          bend: 6,
           pitch: 78,
         }, {
           start: beat * 2.5,
@@ -67,6 +73,7 @@
         }, {
           start: beat * 3.5,
           end: beat * 5,
+          bend: 6,
           pitch: 66,
         /**/
         }, {
@@ -96,6 +103,7 @@
         }, {
           start: beat * 7 + 6 * subeighth,
           end: beat * 9 + 4 * subeighth,
+          bend: 3,
           pitch: 78,
         }, {
           start: beat * 9 + 4 * subeighth,
@@ -104,6 +112,7 @@
         }, {
           start: beat * 11.5,
           end: beat * 13,
+          bend: 6,
           pitch: 66,
 
         /**/
@@ -140,6 +149,7 @@
         }, {
           start: beat * 16,
           end: beat * 18,
+          bend: 6,
           pitch: 78,
         }, {
           start: beat * 19,
@@ -148,6 +158,7 @@
         }, {
           start: beat * 19.5,
           end: beat * 21,
+          bend: 6,
           pitch: 66,
 
           /**/
@@ -171,6 +182,7 @@
         }, {
           start: beat * 23,
           end: beat * 23.5,
+          bend: 2,
           pitch: 78,
         }, {
           start: beat * 23.5,
@@ -179,6 +191,8 @@
         }, {
           start: beat * 23 + 9,
           end: beat * 25,
+          bend: 3,
+          bendAmount: 1,
           pitch: 69,
 
         /**/
@@ -202,13 +216,14 @@
         }, {
           start: beat * 27.5,
           end: beat * 30,
+          bend: 6,
           pitch: 71,
           
           /**/
 
         }, {
-          start: beat * 30,
-          end: beat * 30,
+          start: beat * 34,
+          end: beat * 34,
           pitch: 71,
 
         }
@@ -219,11 +234,11 @@
         const nextNote = this.notes[i + 1];
         let noteLength = note.end - note.start;
         const notePause = nextNote.start - note.end;
-        if(notePause < beat / 2) {
+        if(notePause < beat / 4) {
           if(noteLength > beat / 2) {
-            noteLength -= beat / 2;
+            noteLength -= beat / 4;
           } else {
-            noteLength /= 2;
+            noteLength *= 0.9;
           }
         }
         note.end = note.start + noteLength;
@@ -246,8 +261,8 @@
       this.canvas.width = 16 * GU;
       this.canvas.height = 9 * GU;
 
-      this.particleSprite.width = GU / 2;
-      this.particleSprite.height = GU / 2;
+      this.particleSprite.width = GU / 3 * 2;
+      this.particleSprite.height = GU / 3 * 2;
       const ctx = this.particleSprite.getContext('2d');
       const gradient = ctx.createRadialGradient(
         this.particleSprite.width / 2,
@@ -259,7 +274,7 @@
       gradient.addColorStop(0, 'black');
       gradient.addColorStop(1, '#040408');
       ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, GU, GU);
+      ctx.fillRect(0, 0, this.particleSprite.width, this.particleSprite.height);
     }
 
     update(frame) {
@@ -267,6 +282,11 @@
       if(frame == 4542) {
         this.currentNote = 0;
         this.activeNotes = 0;
+      }
+
+      this.kickThrob *= 0.95;
+      if(BEAT && BEAN % 12 == 0) {
+        this.kickThrob = 1;
       }
 
       this.cameraOffsetX = 0;
@@ -280,8 +300,8 @@
       const bar = 12 * 4;
       const offset = bar * 41;
       if(BEAN > offset + beat * 14 + 6 && BEAN < offset + beat * 18) {
-        this.cameraOffsetDDX = (Math.random() - 0.5) / 2;
-        this.cameraOffsetDDY = (Math.random() - 0.5) / 2;
+        this.cameraOffsetDDX = (Math.random() - 0.5) / 4;
+        this.cameraOffsetDDY = (Math.random() - 0.5) / 4;
       }
 
       this.cameraOffsetDX = -this.cameraOffsetX / 2;
@@ -301,12 +321,36 @@
         const nextNote = this.notes[this.currentNote + 1];
         const startFrame = FRAME_FOR_BEAN(beanOffset + currentNote.end);
         const endFrame = FRAME_FOR_BEAN(beanOffset + nextNote.start);
-        this.spaceshipY = smoothstep(currentNote.pitch,
-                                     nextNote.pitch,
-                                     (frame - startFrame) / (endFrame - startFrame));
+        const t = (frame - startFrame) / (endFrame - startFrame);
+        this.spaceshipY = smoothstep(currentNote.pitch, nextNote.pitch, t);
+
+        if(t < 0.5) {
+          this.spaceshipRotation = smoothstep(0, 1, t * 2);
+        } else {
+          this.spaceshipRotation = smoothstep(1, 0, (t - 0.5) * 2);
+        }
+        if(nextNote.pitch > currentNote.pitch) {
+          this.spaceshipRotation = -this.spaceshipRotation;
+        }
+
+        if(currentNote.bend) {
+          const bendStart = FRAME_FOR_BEAN(beanOffset + currentNote.start);
+          const bendEnd = FRAME_FOR_BEAN(beanOffset + currentNote.start + currentNote.bend);
+          const bendAmount = currentNote.bendAmount || 2;
+          this.spaceshipY += easeOut(-bendAmount, 0, (frame - bendStart) / (bendEnd - bendStart));
+        }
+
         this.spaceshipY = (24 - (this.spaceshipY - 66)) / 4;
+
+        this.spaceshipRotation *= Math.abs(currentNote.pitch - nextNote.pitch) / 12;
         if(BEAN >= beanOffset + this.notes[this.currentNote].start &&
            BEAN < beanOffset + this.notes[this.currentNote].end) {
+
+          const vibratoStartFrame = FRAME_FOR_BEAN(beanOffset + this.notes[this.currentNote].start + 12 / 4 * 3);
+          const vibratoEndFrame = FRAME_FOR_BEAN(beanOffset + this.notes[this.currentNote].start + 12 / 4 * 7);
+          const vibratoModifier = clamp(0, (frame - vibratoStartFrame) / (vibratoEndFrame - vibratoStartFrame), 1);
+          this.spaceshipY += 0.2 * vibratoModifier * Math.sin(frame * Math.PI * 2 / 60 / 60 * 130 * 4);
+
           for(let i = 0; i < 30; i++) {
             const particle = this.particles[this.activeParticles++];
             const angle = Math.random() * Math.PI * 2;
@@ -369,25 +413,25 @@
           zoom = 3;
           angle = -0.1;
           y = 4;
-          x = -2;
+          x = -3;
         } else if(BEAN < offset + beat * 15 + 9) {
           zoom = 2;
           angle = 0.1;
           y = 1;
-          x = -1;
+          x = -2;
         } else if(BEAN < offset + beat * 18) {
           zoom = 3;
           angle = -0.1;
-          y = 3;
-          x = 0;
+          y = 3.5;
+          x = -1;
         } else if(BEAN < offset + beat * 19) {
           const start = FRAME_FOR_BEAN(offset + beat * 18);
           const end = FRAME_FOR_BEAN(offset + beat * 19);
           const t = (this.frame - start) / (end - start);
           zoom = smoothstep(3, 1, t);
           angle = smoothstep(-0.1, 0, t);
-          y = smoothstep(3, 0, t);
-          x = smoothstep(0, 0, t);
+          y = smoothstep(3.5, 0, t);
+          x = smoothstep(-1, 0, t);
         }
       }
       this.ctx.save();
@@ -397,7 +441,7 @@
       this.ctx.rotate(angle);
       this.ctx.translate(-this.canvas.width / 2, -this.canvas.height / 2);
       this.ctx.fillStyle = 'white';
-      this.ctx.globalAlpha = 0.9;
+      this.ctx.globalAlpha = 0.1 + 0.9 * this.kickThrob;
       for(let i = 0; i < this.stars.length; i++) {
         for(let j = 0; j < this.stars[i].length; j++) {
           const star = this.stars[i][j];
@@ -419,22 +463,23 @@
         this.ctx.globalAlpha = particle.lifeScaled;
         this.ctx.drawImage(
           this.particleSprite,
-          particle.x * GU,
-          particle.y * GU);
-            
-        /*
-        this.ctx.fillRect(
-          (particle.x) * GU,
-          (particle.y) * GU + width / 4 * GU,
-          width * GU,
-          width * GU / 2);
-          */
+          particle.x * GU - this.particleSprite.width / 2 - 0.5 * GU,
+          particle.y * GU - this.particleSprite.height / 2);
       }
       this.ctx.globalCompositeOperation = 'source-over';
 
       this.ctx.globalAlpha = 1;
       this.ctx.fillStyle = 'orange';
-      this.ctx.fillRect(this.spaceshipX * GU, this.spaceshipY * GU, GU / 2, GU / 2);
+      const shipScale = GU / this.shipSprite.width * 1.5;
+      this.ctx.translate(this.spaceshipX * GU, this.spaceshipY * GU);
+      this.ctx.scale(shipScale, shipScale);
+      this.ctx.rotate(this.spaceshipRotation);
+      this.ctx.drawImage(this.shipSprite, -this.shipSprite.width / 2, -this.shipSprite.height / 2);
+      this.ctx.fillStyle = '#ce2458';
+      for(let i = 0; i < 6; i++) {
+        this.ctx.fillStyle = Math.sin(Math.PI * 2 * i / 6 + this.frame / 60 / 60 * 130 * 4 * 2) > 0 ? '#ce2458' : '#1f1f1f';
+        this.ctx.fillRect((0.06 + i * 0.03) * GU, 0.01 * GU, 0.02 * GU, 0.09 * GU);
+      }
 
       this.ctx.restore();
 
