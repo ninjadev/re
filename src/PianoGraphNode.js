@@ -359,21 +359,21 @@
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       }
 
-      if(this.frame > 7235 - 20) {
+      if(this.frame > 7242 - 20) {
         this.globalAlpha = 1;
         this.ctx.fillStyle = 'white';
-        this.ctx.fillRect(0, 0, easeIn(0, 16, (this.frame - 7235 + 20) / 20) * GU, 2.5 * GU);
+        this.ctx.fillRect(0, 0, easeIn(0, 16, (this.frame - 7242 + 20) / 20) * GU, 2.5 * GU);
       }
-      if(this.frame > 7282 - 20) {
+      if(this.frame > 7283 - 20) {
         this.globalAlpha = 1;
         this.ctx.fillStyle = 'white';
-        const value = easeIn(0, 16, (this.frame - 7282 + 20) / 20);
+        const value = easeIn(0, 16, (this.frame - 7283 + 20) / 20);
         this.ctx.fillRect((16 - value) * GU, (9 - 2.5) * GU, 16 * GU, 2.5 * GU);
       }
-      if(this.frame > 7310 - 20) {
+      if(this.frame > 7309 - 20) {
         this.globalAlpha = 1;
         this.ctx.fillStyle = 'white';
-        this.ctx.fillRect(0, 2 * GU, easeIn(0, 16, (this.frame - 7310 + 20) / 20) * GU, 5 * GU);
+        this.ctx.fillRect(0, 2 * GU, easeIn(0, 16, (this.frame - 7309 + 20) / 20) * GU, 5 * GU);
       }
       this.outputTexture.needsUpdate = true;
       this.outputs.render.setValue(this.outputTexture);

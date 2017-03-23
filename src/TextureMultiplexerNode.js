@@ -22,7 +22,7 @@
       });
     }
 
-    render() {
+    update(frame) {
       const bar = 12 * 4;
       const offset = bar;
       this.inputs.A.enabled = false;
