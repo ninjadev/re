@@ -38,6 +38,7 @@
       this.bassAnalysis = new audioAnalysisSanitizer('stem_kick.wav', 'spectral_energy', 0.2);
 
       this.kickThrob = 0;
+      this.snareThrob = 0;
 
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
@@ -272,7 +273,7 @@
         this.particleSprite.width / 2,
         0);
       gradient.addColorStop(0, 'black');
-      gradient.addColorStop(1, '#040408');
+      gradient.addColorStop(1, '#080604');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, this.particleSprite.width, this.particleSprite.height);
     }
@@ -281,12 +282,16 @@
       this.frame = frame;
       if(frame == 4542) {
         this.currentNote = 0;
-        this.activeNotes = 0;
+        this.activeParticles = 0;
       }
 
       this.kickThrob *= 0.95;
+      this.snareThrob *= 0.99;
       if(BEAT && BEAN % 12 == 0) {
         this.kickThrob = 1;
+      }
+      if(BEAT && BEAN % 24 == 12) {
+        this.snareThrob = 1;
       }
 
       this.cameraOffsetX = 0;
@@ -357,8 +362,8 @@
             const spread = Math.random() / 16;
             particle.x = this.spaceshipX + Math.cos(angle) * spread;
             particle.y = this.spaceshipY + Math.sin(angle) * spread;
-            particle.dx = -0.1;
-            particle.dy = 0;
+            particle.dx = -0.1 + (Math.random() -0.5) * 0.05;
+            particle.dy = 0 + (Math.random() - 0.5) * 0.01;
             particle.life = 150;
           }
         } else if(BEAN >= beanOffset + this.notes[this.currentNote + 1].start) {
@@ -450,7 +455,7 @@
             ((32 * 1024 + star.x - this.frame / 16 * (1 + i)) % 32) * GU,
             star.y * GU,
             size,
-            size / 4);
+            size / 8);
         }
       }
 
@@ -476,9 +481,10 @@
       this.ctx.rotate(this.spaceshipRotation);
       this.ctx.drawImage(this.shipSprite, -this.shipSprite.width / 2, -this.shipSprite.height / 2);
       this.ctx.fillStyle = '#ce2458';
-      for(let i = 0; i < 6; i++) {
-        this.ctx.fillStyle = Math.sin(Math.PI * 2 * i / 6 + this.frame / 60 / 60 * 130 * 4 * 2) > 0 ? '#ce2458' : '#1f1f1f';
-        this.ctx.fillRect((0.06 + i * 0.03) * GU, 0.01 * GU, 0.02 * GU, 0.09 * GU);
+      for(let i = 0; i < 7; i++) {
+        this.ctx.fillStyle = Math.sin(Math.PI * 2 * i / 7 + this.frame / 60 / 60 * 130 * 4 * 2) > 0 ? '#ce2458' : '#1f1f1f';
+        //this.ctx.fillRect((0.06 + i * 0.03) * GU * shipScale, 0.01 * GU, 0.02 * GU, 0.09 * GU);
+        this.ctx.fillRect((6 + i * 3), 2, 2, 9);
       }
 
       this.ctx.restore();
@@ -491,7 +497,7 @@
 
       this.ctx.globalAlpha = 1;
       this.ctx.fillStyle = colorA;
-      this.ctx.font = 'bold ' + (0.4 * GU) + 'pt arcade';
+      this.ctx.font = 'bold ' + ((0.4 + this.kickThrob * 0.01) * GU) + 'pt arcade';
       this.ctx.textBaseline = 'top';
       this.ctx.fillText('PLAYER 1', 0.23 * GU, (0.1 - hudOffset) * GU);
       this.ctx.fillStyle = colorB;

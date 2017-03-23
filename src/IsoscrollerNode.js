@@ -87,7 +87,7 @@
     update(frame) {
       this.cube.scale.x = 1 + 0.02 * this.leadAnalysis.getValue(frame);
 
-      if(BEAT && BEAN == 433) {
+      if(frame == 997) {
         this.noteNumbers = 0;
         for(let i = 0; i < this.boxes.length; i++) {
           this.boxes[i].position.z = -i * 2;
