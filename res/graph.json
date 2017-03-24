@@ -53,7 +53,7 @@
     "id": "sceneselector",
     "type": "TextureMultiplexerNode",
     "connected": {
-      "A": "intro.render",
+      "A": "intro_add.render",
       "C": "isoscroller.render",
       "D": "bars.render",
       "E": "umbrellas.render",
@@ -128,5 +128,28 @@
   {
     "id": "ConstantiaNode",
     "type": "constantiaNode"
+  },
+  {
+    "id": "CubeFloor",
+    "type": "cubeFloor"
+  },
+  {
+    "id": "intro_add",
+    "type": "AddNode",
+    "options": {
+      "opacity": 1,
+      "shader": "Add"
+    },
+    "connected": {
+      "A": "intro_SSAO.render",
+      "B": "intro.render"
+    }
+  },
+  {
+    "id": "intro_SSAO",
+    "type": "SSAONode",
+    "connected": {
+        "uniforms": "CubeFloor.depthUniforms"
+    }
   }
 ]
