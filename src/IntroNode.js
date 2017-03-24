@@ -109,6 +109,21 @@
       this.ctx.fillStyle = '#ffeead';
       const step = clamp(0, (this.noteCount - 12) / 6, 1);
       this.ctx.fillRect((8 - step * 8) * GU, 0, step * 16 * GU, 9 * GU);
+
+      if(BEAN >= 12 * 4 * 4 && BEAN < 12 * 4 * 7) {
+        this.ctx.save();
+        this.ctx.translate(8 * GU, 4.5 * GU);
+        this.ctx.rotate(
+          this.frame / 60 / 60 * 130 / 4 * Math.PI * 2 +
+          0.25 * Math.sin(Math.PI + this.frame / 60 / 60 * 130 * Math.PI * 2)
+      );
+        const width = GU * 1.1;
+        this.ctx.fillRect(- width / 2, -width / 2, width, width);
+        this.ctx.scale(0.9, 0.9);
+        this.ctx.fillRect(- width / 2, -width / 2, width, width);
+        this.ctx.restore();
+      }
+
       this.ctx.beginPath();
       this.ctx.ellipse(
         8 * GU,

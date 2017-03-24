@@ -111,8 +111,18 @@
           this.scene.add(boxShadow);
         }
 
+        const frameOffset = 1637 - 21;
+        const frameOffset2 = 1882 + 200;
+        const transitionTime = 60 * 60 / 130;
+        const transitionTime2 = 60 * 60 / 130 / 2;
+
         box.rotation.y = smoothstep(0, Math.PI / 2, (frame - 1529 + 40 - i * 3) / 10);
-        if(frame == 1527) {
+        boxShadow.rotation.y = smoothstep(0, Math.PI / 2, (frame - 1529 + 40 - i * 3) / 10);
+
+        box.rotation.y = smoothstep(box.rotation.y, Math.PI, (frame - frameOffset + transitionTime2 - i * 3) / 10);
+        //boxShadow.rotation.y = smoothstep(boxShadow.rotation.y, Math.PI, (frame - frameOffset2 + transitionTime2 - i * 3) / 10);
+
+        if(frame == 1526) {
           this.boxBoomScale = 2;
         }
         this.boxBoomScale *= 0.999;
@@ -122,6 +132,8 @@
         box.scale.x = 1 / this.boxBoomScale;
         box.scale.y = this.boxBoomScale;
         box.scale.z = 1 / this.boxBoomScale;
+        boxShadow.scale.x = 1 / this.boxBoomScale;
+        boxShadow.scale.z = 1 / this.boxBoomScale;
       }
 
       this.circleThrob *= 0.93;
