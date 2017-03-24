@@ -20,6 +20,7 @@
       Loader.load('res/ninship.png', this.shipSprite);
 
       this.particleSprite = document.createElement('canvas');
+      this.maskCanvas = document.createElement('canvas');
 
       if (!document.getElementById('arcade-font')) {
         var s = document.createElement('style');
@@ -262,6 +263,9 @@
       this.canvas.width = 16 * GU;
       this.canvas.height = 9 * GU;
 
+      this.maskCanvas.width = 16 * GU;
+      this.maskCanvas.height = 9 * GU;
+
       this.particleSprite.width = GU / 3 * 2;
       this.particleSprite.height = GU / 3 * 2;
       const ctx = this.particleSprite.getContext('2d');
@@ -403,6 +407,9 @@
 
       let cameraShake = 0;
 
+      zoom = smoothstep(3, 1, (this.frame - 4583) / 36);
+      y = smoothstep(zoom * 4.5 - zoom * this.spaceshipY, 0, (this.frame - 4604) / 36);
+      x = smoothstep(zoom * 1, 0, (this.frame - 4583) / 36);
       if(BEAN >= offset + beat * 13 + 2 * subeighth) {
         if(BEAN < offset + beat * 13 + 4 * subeighth) {
           zoom = lerp(1, 3, 1 / 24);
@@ -447,15 +454,22 @@
       this.ctx.translate(-this.canvas.width / 2, -this.canvas.height / 2);
       this.ctx.fillStyle = 'white';
       this.ctx.globalAlpha = 0.1 + 0.9 * this.kickThrob;
+      let starLengthModifier = 1;
+      let starSpeedModifier = 1;
+      if(BEAN >= offset + beat * 14 + 6 && BEAN < offset + beat * 18) {
+        starLengthModifier = 10;
+        starSpeedModifier = 3;
+      }
       for(let i = 0; i < this.stars.length; i++) {
         for(let j = 0; j < this.stars[i].length; j++) {
           const star = this.stars[i][j];
-          const size = (1 + i / 2) * GU / 16;
+          const size = (1 + i / 2) / 16 * 2;
+          let length = size * starLengthModifier;
           this.ctx.fillRect(
-            ((32 * 1024 + star.x - this.frame / 16 * (1 + i)) % 32) * GU,
-            star.y * GU,
-            size,
-            size / 8);
+            ((32 * 1024 + star.x - starSpeedModifier * this.frame / 16 * (1 + i)) % 32) * GU,
+            (star.y) * GU,
+            length * GU,
+            size / 16 * GU);
         }
       }
 
@@ -497,21 +511,39 @@
 
       this.ctx.globalAlpha = 1;
       this.ctx.fillStyle = colorA;
-      this.ctx.font = 'bold ' + ((0.4 + this.kickThrob * 0.01) * GU) + 'pt arcade';
+      this.ctx.font = 'bold ' + ((0.4 + this.kickThrob * 0.02) * GU) + 'pt arcade';
       this.ctx.textBaseline = 'top';
-      this.ctx.fillText('PLAYER 1', 0.23 * GU, (0.1 - hudOffset) * GU);
+      this.ctx.textAlign = 'center';
+      this.ctx.fillText('PLAYER 1', 1.28 * GU, (0.1 - hudOffset) * GU);
       this.ctx.fillStyle = colorB;
-      this.ctx.fillText('NINJADEV', 2.8 * GU, (0.1 - hudOffset) * GU);
+      this.ctx.fillText('NINJADEV', 4.2 * GU, (0.1 - hudOffset) * GU);
       this.ctx.fillStyle = colorA;
-      this.ctx.fillText('HIGHSCORE', 11.4 * GU, (0.1 - hudOffset) * GU);
+      this.ctx.fillText('HIGHSCORE', 12.4 * GU, (0.1 - hudOffset) * GU);
       this.ctx.fillStyle = colorB;
-      this.ctx.fillText(this.frame, 14.6 * GU, (0.1 - hudOffset) * GU);
+      this.ctx.fillText(this.frame, 15.2 * GU, (0.1 - hudOffset) * GU);
       this.ctx.fillStyle = colorA;
-      this.ctx.fillText('BULLETS', 0.23 * GU, (hudOffset + 8.35) * GU);
+      this.ctx.fillText('BULLETS', 1.26 * GU, (hudOffset + 8.35) * GU);
       this.ctx.fillStyle = colorB;
-      this.ctx.fillText('o o o o o o o', 2.5 * GU, (hudOffset + 8.35) * GU);
+      for(let i = 0; i < 16; i++) {
+        let offset = 0;
+        if((BEAN % (12 * 4)) / 12 * 4 == i && i % 4 == 0) {
+          offset = 0.2;
+        }
+        if (i == ((BEAN % (12 * 4)) / 12 * 4 | 0)) {
+          this.ctx.globalAlpha = 1;
+        } else {
+          this.ctx.globalAlpha = 0.1;
+        }
+        if(i % 4 == 0) {
+          this.ctx.fillStyle = colorB;
+        } else {
+          this.ctx.fillStyle = colorA;
+        }
+        this.ctx.fillText('o', (2.8 + 0.33 * i) * GU, (hudOffset + 8.35 - offset) * GU);
+      }
+      this.ctx.globalAlpha = 1;
       this.ctx.fillStyle = colorA;
-      this.ctx.fillText('SHIP HEALTH ', 10.5 * GU, (hudOffset + 8.35) * GU);
+      this.ctx.fillText('SHIP HEALTH ', 11.6 * GU, (hudOffset + 8.35) * GU);
       this.ctx.fillStyle = colorB;
 
       let health = '';
@@ -520,7 +552,36 @@
         analysisValue -= 0.6;
         health += 'X';
       }
+      this.ctx.textAlign = 'left';
       this.ctx.fillText(health, 13.8 * GU, (hudOffset + 8.35) * GU);
+
+      if(BEAN >= 12 * 4 * 49 - 12 - 6) {
+        const ctx = this.maskCanvas.getContext('2d');
+        ctx.clearRect(0, 0, this.maskCanvas.width, this.maskCanvas.height);
+        ctx.fillRect(0, 0, this.maskCanvas.width, this.maskCanvas.height);
+        ctx.globalCompositeOperation = 'xor';
+        ctx.fillStyle = '#20db7a';
+        let radius;
+        if(BEAN < 12 * 4 * 49 - 12 - 4) {
+          radius = 7.5;
+        } else if(BEAN < 12 * 4 * 49 - 12 - 2) {
+          radius = 6;
+        } else if(BEAN < 12 * 4 * 49 - 12) {
+          radius = 4.2;
+        } else {
+          radius = 3;
+        }
+        ctx.beginPath();
+        ctx.ellipse(8 * GU, 4.5 * GU, radius * GU, radius * GU, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center';
+        ctx.font = (1.2 * GU) + 'pt arcade'; 
+        if(radius == 3) {
+          ctx.fillText('GREETS', 8 * GU, 4.5 * GU);
+        }
+        this.ctx.drawImage(this.maskCanvas, 0, 0);
+      }
 
       this.output.needsUpdate = true;
       this.outputs.render.setValue(this.output);
