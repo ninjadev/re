@@ -7,9 +7,6 @@
   class GalagaNode extends NIN.Node {
     constructor(id, options) {
       super(id, {
-        inputs: {
-          percolator: new NIN.Input()
-        },
         outputs: {
           render: new NIN.TextureOutput()
         }
@@ -296,6 +293,10 @@
       }
       if(BEAT && BEAN % 24 == 12) {
         this.snareThrob = 1;
+      }
+
+      if(demo.nm.nodes.galagafx_add) {
+        demo.nm.nodes.galagafx_add.opacity = 0.5 + this.kickThrob / 4;
       }
 
       this.cameraOffsetX = 0;

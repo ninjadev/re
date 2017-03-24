@@ -10,9 +10,9 @@
     }
 
     update(frame) {
-      this.quad.material.uniforms.A.value = this.inputs.A.getValue();
-      this.quad.material.uniforms.B.value = this.inputs.B.getValue();
-      this.quad.material.uniforms.opacity.value = this.opacity;
+      this.uniforms.A.value = this.inputs.A.getValue();
+      this.uniforms.B.value = this.inputs.B.getValue();
+      this.uniforms.opacity.value = this.opacity;
     }
   }
 

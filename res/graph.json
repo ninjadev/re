@@ -57,7 +57,7 @@
       "C": "LaneSwipeTransition.render",
       "E": "umbrellas.render",
       "F": "kaleidoscope.render",
-      "G": "galaga.render",
+      "G": "galagafx_add.render",
       "H": "triangle.render",
       "I": "piano.render",
       "J": "ConstantiaNode.render"
@@ -102,6 +102,26 @@
     }
   },
   {
+    "id": "galagafx_blurX",
+    "type": "BlurPassNode",
+    "options": {
+      "direction": "x"
+    },
+    "connected": {
+      "tDiffuse": "galagafx_blurY.render"
+    }
+  },
+  {
+    "id": "galagafx_blurY",
+    "type": "BlurPassNode",
+    "options": {
+      "direction": "y"
+    },
+    "connected": {
+      "tDiffuse": "galagafx_crt.render"
+    }
+  },
+  {
     "id": "add",
     "type": "AddNode",
     "options": {
@@ -111,6 +131,18 @@
     "connected": {
       "A": "sceneselector.selected",
       "B": "blurX.render"
+    }
+  },
+  {
+    "id": "galagafx_add",
+    "type": "AddNode",
+    "options": {
+      "opacity": 1.5,
+      "shader": "Add"
+    },
+    "connected": {
+      "A": "galagafx_crt.render",
+      "B": "galagafx_blurX.render"
     }
   },
   {
@@ -160,6 +192,16 @@
     "connected": {
         "A": "isoscroller.render",
         "B": "bars.render"
+    }
+  },
+  {
+    "id": "galagafx_crt",
+    "type": "CRTShaderNode",
+    "options": {
+        "shader": "CRTShader"
+    },
+    "connected": {
+        "tDiffuse": "galaga.render"
     }
   }
 ]
