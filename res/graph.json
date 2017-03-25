@@ -54,8 +54,7 @@
     "type": "TextureMultiplexerNode",
     "connected": {
       "A": "intro_add.render",
-      "C": "isoscroller.render",
-      "D": "bars.render",
+      "C": "LaneSwipeTransition.render",
       "E": "umbrellas.render",
       "F": "kaleidoscope.render",
       "G": "galaga.render",
@@ -149,7 +148,18 @@
     "id": "intro_SSAO",
     "type": "SSAONode",
     "connected": {
-        "uniforms": "CubeFloor.depthUniforms"
+      "uniforms": "CubeFloor.depthUniforms"
+    }
+  },
+  {
+    "id": "LaneSwipeTransition",
+    "type": "LaneSwipeTransitionNode",
+    "options": {
+        "shader": "LaneSwipeTransition"
+    },
+    "connected": {
+        "A": "isoscroller.render",
+        "B": "bars.render"
     }
   }
 ]

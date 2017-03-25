@@ -43,12 +43,9 @@
       } else if(BEAN < offset + bar * 8) {
         this.inputs.B.enabled = true;
         this.outputs.selected.setValue(this.inputs.B.getValue());
-      } else if(BEAN < offset + bar * 16) {
+      } else if(BEAN < offset + bar * 24) {
         this.inputs.C.enabled = true;
         this.outputs.selected.setValue(this.inputs.C.getValue());
-      } else if(BEAN < offset + bar * 24) {
-        this.inputs.D.enabled = true;
-        this.outputs.selected.setValue(this.inputs.D.getValue());
       } else if(BEAN < offset + bar * 32) {
         this.inputs.E.enabled = true;
         this.outputs.selected.setValue(this.inputs.E.getValue());

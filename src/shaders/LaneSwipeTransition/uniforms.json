@@ -1,0 +1,10 @@
+{
+    "A": { "type": "t", "value": null },
+    "B": { "type": "t", "value": null },
+    "frame": { "type": "f", "value": 0.0 },
+    "one": { "type": "f", "value": 0.0 },
+    "two": { "type": "f", "value": 0.0 },
+    "three": { "type": "f", "value": 0.0 },
+    "four": { "type": "f", "value": 0.0 },
+    "five": { "type": "f", "value": 0.0 }
+}
