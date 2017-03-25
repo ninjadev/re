@@ -375,6 +375,16 @@
         this.ctx.fillStyle = 'white';
         this.ctx.fillRect(0, 2 * GU, easeIn(0, 16, (this.frame - 7309 + 20) / 20) * GU, 5 * GU);
       }
+
+      if(this.frame < 6500) {
+        this.ctx.save();
+        this.ctx.fillStyle = 'white';
+        this.ctx.globalCompositeOperation = 'lighter';
+        this.ctx.globalAlpha = easeOut(0.5, 0, (this.frame - 6313) / 60);
+        this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
+        this.ctx.restore();
+      }
+
       this.outputTexture.needsUpdate = true;
       this.outputs.render.setValue(this.outputTexture);
     }
