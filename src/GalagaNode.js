@@ -7,9 +7,6 @@
   class GalagaNode extends NIN.Node {
     constructor(id, options) {
       super(id, {
-        inputs: {
-          percolator: new NIN.Input()
-        },
         outputs: {
           render: new NIN.TextureOutput()
         }
@@ -266,8 +263,8 @@
       this.maskCanvas.width = 16 * GU;
       this.maskCanvas.height = 9 * GU;
 
-      this.particleSprite.width = GU / 3 * 2;
-      this.particleSprite.height = GU / 3 * 2;
+      this.particleSprite.width = GU / 4 * 2;
+      this.particleSprite.height = GU / 4 * 2;
       const ctx = this.particleSprite.getContext('2d');
       const gradient = ctx.createRadialGradient(
         this.particleSprite.width / 2,
@@ -276,8 +273,8 @@
         this.particleSprite.width / 2,
         this.particleSprite.width / 2,
         0);
-      gradient.addColorStop(0, 'black');
-      gradient.addColorStop(1, '#080604');
+      gradient.addColorStop(0, 'rgba(32, 219, 122, 0)');
+      gradient.addColorStop(1, '#20db7a');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, this.particleSprite.width, this.particleSprite.height);
     }
@@ -296,6 +293,10 @@
       }
       if(BEAT && BEAN % 24 == 12) {
         this.snareThrob = 1;
+      }
+
+      if(demo.nm.nodes.galagafx_add) {
+        demo.nm.nodes.galagafx_add.opacity = 0.5 + this.kickThrob / 4;
       }
 
       this.cameraOffsetX = 0;
@@ -366,9 +367,9 @@
             const spread = Math.random() / 16;
             particle.x = this.spaceshipX + Math.cos(angle) * spread;
             particle.y = this.spaceshipY + Math.sin(angle) * spread;
-            particle.dx = -0.1 + (Math.random() -0.5) * 0.05;
-            particle.dy = 0 + (Math.random() - 0.5) * 0.01;
-            particle.life = 150;
+            particle.dx = -0.15 + (Math.random() -0.5) * 0.005;
+            particle.dy = 0 + (Math.random() - 0.5) * 0.001;
+            particle.life = 100;
           }
         } else if(BEAN >= beanOffset + this.notes[this.currentNote + 1].start) {
           this.currentNote = this.currentNote + 1;
@@ -377,7 +378,7 @@
 
       for(let i = 0; i < this.activeParticles; i++) {
         const particle = this.particles[i];
-        particle.lifeScaled = clamp(0, easeOutExpo(particle.life, 0, 1, 150), 1);
+        particle.lifeScaled = clamp(0, easeOutExpo(particle.life, 0, 1, 100), 1);
         particle.x += particle.dx;
         particle.y += particle.dy * particle.lifeScaled;
         if(particle.life-- == 0) {
@@ -392,7 +393,7 @@
     render(renderer) {
 
       this.ctx.globalAlpha = 1;
-      this.ctx.fillStyle = '#112';
+      this.ctx.fillStyle = '#210021';
       this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
 
       let zoom = 1;
@@ -474,21 +475,20 @@
       }
 
       this.ctx.globalAlpha = 1;
-      this.ctx.fillStyle = '#040411';
-      this.ctx.globalCompositeOperation = 'lighter';
+      this.ctx.fillStyle = '#0500b05';
+      //this.ctx.globalCompositeOperation = 'lighter';
       const width = 0.5;
       for(let i = 0; i < this.activeParticles; i++) {
         const particle = this.particles[i];
         this.ctx.globalAlpha = particle.lifeScaled;
         this.ctx.drawImage(
           this.particleSprite,
-          particle.x * GU - this.particleSprite.width / 2 - 0.5 * GU,
+          (particle.x - 0.5) * GU - this.particleSprite.width / 2 - 0.5 * GU,
           particle.y * GU - this.particleSprite.height / 2);
       }
       this.ctx.globalCompositeOperation = 'source-over';
 
       this.ctx.globalAlpha = 1;
-      this.ctx.fillStyle = 'orange';
       const shipScale = GU / this.shipSprite.width * 1.5;
       this.ctx.translate(this.spaceshipX * GU, this.spaceshipY * GU);
       this.ctx.scale(shipScale, shipScale);
@@ -506,8 +506,8 @@
       const hudShowTime = (this.frame - 4550) / 50;
       const hudOffset = easeOut(1, 0, hudShowTime);
 
-      const colorA = '#44d';
-      const colorB = '#fff';
+      const colorA = '#961A96';
+      const colorB = '#20db7a';
 
       this.ctx.globalAlpha = 1;
       this.ctx.fillStyle = colorA;
