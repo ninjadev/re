@@ -25,21 +25,32 @@ void main() {
         color = colorB; 
     }
     if(frame > two &&
-       uv.x >= 0.125 + offset &&
-       uv.x < 0.25 + offset &&
+       uv.x >= 0.125 &&
+       uv.x < 0.25 &&
        uv.y > 1. - (frame - two) / (three - two)) {
         color = colorB; 
     }
     if(frame > three &&
-       uv.x >= 0.25 + offset &&
-       uv.x < 0.375 + offset &&
+       uv.x >= 0.25 &&
+       uv.x < 0.375 &&
        uv.y < (frame - three) / (four - three)) {
         color = colorB; 
     }
+    uv = vUv;
+    float t = (frame - four) / (five - four);
     if(frame > three &&
-       uv.x >= 0.375 + offset &&
+       uv.x >= 0.375 &&
        uv.x < 1. &&
-       uv.x < 0.375 + 0.125 * (frame - four) / (five - four)) {
+       uv.x < 0.375 + 0.25 * t &&
+       uv.y / 4. + uv.x < 0.375 + 0.25 * t) {
+        color = colorB; 
+    }
+    uv = 1.  -uv;
+    if(frame > three &&
+       uv.x >= 0.375 &&
+       uv.x < 1. &&
+       uv.x < 0.375 + 0.25 * t &&
+       uv.y / 4. + uv.x < 0.375 + 0.25 * t) {
         color = colorB; 
     }
     gl_FragColor = color;
