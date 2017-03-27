@@ -155,7 +155,7 @@
       }
 
       this.rotation = clamp(0, (frame - FRAME_FOR_BEAN(startBEAN + 8 * 12)) / 70, Math.PI);
-      const zoomLevel = clamp(0, (BEAN - startBEAN + 12) / (2 * 12), 8);
+      const zoomLevel = clamp(0, (BEAN - startBEAN) / (2 * 12), 8);
       if ((zoomLevel | 0) % 2) {
         this.foregroundColor = '#64db84';
         this.backgroundColor = '#84eb94';

@@ -2,54 +2,75 @@
   "position": [
     {
       "startFrame": 1880,
-      "endFrame": 2300,
+      "endFrame": 2328,
+      "type": "circle",
+      "radius": [100, 300],
+      "center": [
+        [-150, 0, 0],
+        [0, 10, 0]
+      ],
+      "up": [1, 0, 0],
+      "offset": 3.76,
+      "length": 0.2
+    },
+    {
+      "startFrame": 2329,
+      "endFrame": 2548,
       "points": [
-        [-150, 100, 0],
-        [0, 300, 0]
+        [-200, 10, 100],
+        [-100, 30, 100],
+        [0, 50, 0]
       ]
     },
     {
-      "startFrame": 2301,
-      "endFrame": 2400,
-      "type": "circle",
-      "radius": 300,
-      "center": [0, 0, 0],
-      "up": [1, 0, 0],
-      "offset": 3.001,
-      "length": 0.25
-    },
-    {
-      "startFrame": 2552,
+      "startFrame": 2549,
       "endFrame": 2700,
-      "type": "circle",
-      "radius": 300,
-      "center": [0, 0, 0],
-      "length": 0.25
+      "points": [
+        [10, 150, 0],
+        [10, 60, 0]
+      ]
     }
   ],
   "lookAt": [
     {
       "startFrame": 1880,
-      "endFrame": 2300,
+      "endFrame": 2328,
       "points": [
         [-150, 0, 0],
         [0, 0, 0]
       ]
     },
     {
-      "startFrame": 2301,
-      "endFrame": 2500,
-      "points": [0, 0, 0]
+      "startFrame": 2329,
+      "endFrame": 2548,
+      "points": [
+        [-120, 5, 0],
+        [50, 3, -30]
+      ]
+    },
+    {
+      "startFrame": 2549,
+      "endFrame": 2700,
+      "points": [10, 0, 0]
+    }
+  ],
+  "fov": [
+    {
+      "startFrame": 2000,
+      "endFrame": 2100,
+      "value": 45
     }
   ],
   "roll": [
     {
-      "startFrame": 3001,
-      "endFrame": 3100,
-      "points": [
-        0,
-        1.57
-      ]
+      "startFrame": 2000,
+      "endFrame": 2100,
+      "points": [0, 0]
+    },
+    {
+      "startFrame": 2549,
+      "endFrame": 2700,
+      "points": [0, 2.5]
     }
   ]
 }
