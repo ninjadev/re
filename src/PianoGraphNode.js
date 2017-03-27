@@ -140,6 +140,14 @@
         }
       });
 
+      this.cameraX = 0;
+      this.cameraY = 0;
+      this.cameraDX = 0;
+      this.cameraDY = 0;
+      this.cameraDDX = 0;
+      this.cameraDDY = 0;
+      this.shakeThrob = 0;
+
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
       this.resize();
@@ -226,6 +234,31 @@
     update(frame) {
 
       this.frame = frame;
+
+      this.shakeThrob *= 0.9;
+      if(frame == 7242) {
+        this.shakeThrob = -1;
+      }
+      if(frame == 7283) {
+        this.shakeThrob = 1;
+      }
+      if(frame == 7309) {
+        this.shakeThrob = -1;
+      }
+
+      this.cameraDDX += -this.cameraDX * 0.9 + (Math.random() - 0.5) * this.shakeThrob * 1;
+      this.cameraDDY += -this.cameraDY * 0.9 + (Math.random() - 0.5) * this.shakeThrob * 0.5;
+      this.cameraDX = -this.cameraX * 0.5;
+      this.cameraDY = -this.cameraY * 0.5;
+      this.cameraDX *= 0.5;
+      this.cameraDY *= 0.5;
+      this.cameraDX += this.cameraDDX;
+      this.cameraDY += this.cameraDDY;
+      this.cameraX += this.cameraDX;
+      this.cameraY += this.cameraDY;
+      this.cameraX *= .5;
+      this.cameraY *= .5;
+      console.log(this.cameraX, this.cameraY);
 
       if(this.oldPolygonValue != this.inputs.polygons.getValue()) {
         this.loadPolygons();
@@ -318,6 +351,7 @@
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.fillStyle = 'white';
       this.ctx.strokeStyle = 'white';
+      this.ctx.translate(this.cameraX * GU, this.cameraY * GU);
       this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2); 
       this.ctx.scale(this.zoom, this.zoom);
       this.ctx.translate(-this.canvas.width / 2, -this.canvas.height / 2); 
@@ -344,6 +378,7 @@
       if(this.frame > 6979) {
         const scale = 2;
         const image = this.inputs.logo.getValue().image;
+        this.ctx.translate(this.cameraX * GU, this.cameraY * GU);
         this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
         this.ctx.scale(scale, scale);
         this.ctx.globalAlpha = lerp(0, 1, (this.frame - 6979) / 100);
