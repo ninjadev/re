@@ -31,14 +31,14 @@
       this.background = new THREE.Mesh(
         new THREE.BoxGeometry(1000, 1000, 1000),
         new THREE.MeshBasicMaterial({
-          color: 0xbeeb9f,
+          color: 0x1b0922,
           side: THREE.BackSide
         }));
       this.scene.add(this.background);
       this.cube = new THREE.Mesh(
         new THREE.BoxGeometry(5, 0.5, 1000),
         new THREE.MeshStandardMaterial({
-          color: 0x79bd8f
+          color: 0x00a2ff
       }));
       this.scene.add(this.cube);
 
@@ -60,7 +60,7 @@
         const box = new THREE.Mesh(
           new THREE.BoxGeometry(1, 1, 1),
           new THREE.MeshStandardMaterial({
-            color: 0xffeead,
+            color: 0xff00a2,
             roughness: 1,
             shading: THREE.SmoothShading
           }));
@@ -70,7 +70,7 @@
         const boxShadow = new THREE.Mesh(
           new THREE.BoxGeometry(1, 0.1, 1),
           new THREE.MeshStandardMaterial({
-            color: 0x3c5e47,
+            color: 0x00263c,
             roughness: 1,
             shading: THREE.SmoothShading
           }));

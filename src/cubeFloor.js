@@ -48,7 +48,9 @@
               metalness: .9,
               shading: THREE.SmoothShading
             }));
-          cube.color = color;
+          cube.originalColor = cube.material.color;
+          cube.emissive = new THREE.Color(0, 0, 0);
+          cube.redColor = new THREE.Color(0xff/0xff, 0, 0xa2/0xff);
           cube.material.shading = THREE.FlatShading;
           cube.position.x = x - 8 * size;
           cube.position.y = y - 4.5 * size;
@@ -60,6 +62,7 @@
     }
 
     update(frame) {
+
       const size = 1;
       for(let x = 0; x < 16 * size; x++) {
         for(let y = 0; y < 9 * size; y++) {
@@ -68,6 +71,13 @@
           let v = y - 4.5 * size;
           cube.position.z = 0.5 * Math.sin(
           (u ^ v) / 8 / size * Math.PI * 2 + frame / 100);
+
+          if(false) {
+            cube.material.emissive = cube.redColor;
+          } else{
+            cube.material.color = cube.originalColor;
+            cube.material.emissive = cube.emissive;
+          }
         }
       }
     }
