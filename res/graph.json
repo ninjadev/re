@@ -125,7 +125,7 @@
     "id": "add",
     "type": "AddNode",
     "options": {
-      "opacity": 0.3,
+      "opacity": 0.9,
       "shader": "Add"
     },
     "connected": {
@@ -165,6 +165,17 @@
     "type": "cubeFloor"
   },
   {
+    "id": "isoscroller_add",
+    "type": "AddNode",
+    "options": {
+      "opacity": 1,
+      "shader": "Add"
+    },
+    "connected": {
+      "B": "isoscroller.render"
+    }
+  },
+  {
     "id": "intro_add",
     "type": "AddNode",
     "options": {
@@ -172,7 +183,6 @@
       "shader": "Add"
     },
     "connected": {
-      "A": "intro_SSAO.render",
       "B": "intro.render"
     }
   },
@@ -190,7 +200,7 @@
         "shader": "LaneSwipeTransition"
     },
     "connected": {
-        "A": "isoscroller.render",
+        "A": "isoscroller_add.render",
         "B": "bars.render"
     }
   },

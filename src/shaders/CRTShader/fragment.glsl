@@ -17,6 +17,8 @@ vec4 scene(vec2 uv) {
     uv = (xy + 1.) * .5;
     uv.x += 0.005 * sin( frame / 54.) * sin(frame / 194.) * sin(frame / 17. / 2.) * sin(frame / 19. / 2.) * cos(frame / 7. / 2.);
     uv.y += 0.005 * sin(frame / 23. / 2.) * sin(frame / 20. / 2.) * cos(frame / 16. / 2.);
+
+    uv.x += sin(uv.y * PI * 2. * 240.) * .0003;
     vec4 color = texture2D(tDiffuse, uv);
     color *= 2. - d * d;
     if(uv.x > 1. || uv.y > 1. || uv.x < 0. || uv.y < 0.) {

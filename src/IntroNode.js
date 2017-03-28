@@ -95,20 +95,19 @@
       this.ctx.clearRect(0, 0, 16 * GU, 9 * GU);
       for(let i = 0; i < this.squares.length; i++) {
         this.ctx.save();
-        this.ctx.fillStyle = '#ffeead';
+        this.ctx.fillStyle = '#00a2ff';
         this.ctx.translate(8 * GU, 4.5 * GU);
         this.ctx.rotate(this.rotation + this.squares[i].rotation);
         const scale = this.squares[i].size;
         this.ctx.scale(scale, scale);
         this.renderShape(this.ctx, this.squares[i]);
-        const otherScaler = 0.95;
+        const otherScaler = 0.85;
         this.ctx.scale(otherScaler, otherScaler);
         this.renderShape(this.ctx, this.squares[i]);
         this.ctx.restore();
       }
-      this.ctx.fillStyle = '#ffeead';
+      this.ctx.fillStyle = '#ff00a2';
       const step = clamp(0, (this.noteCount - 12) / 6, 1);
-      this.ctx.fillRect((8 - step * 8) * GU, 0, step * 16 * GU, 9 * GU);
 
       if(BEAN >= 12 * 4 * 4 && BEAN < 12 * 4 * 7) {
         this.ctx.save();
