@@ -165,17 +165,6 @@
     "type": "cubeFloor"
   },
   {
-    "id": "isoscroller_add",
-    "type": "AddNode",
-    "options": {
-      "opacity": 1,
-      "shader": "Add"
-    },
-    "connected": {
-      "B": "isoscroller.render"
-    }
-  },
-  {
     "id": "intro_add",
     "type": "AddNode",
     "options": {
@@ -194,24 +183,34 @@
     }
   },
   {
+    "id": "isoscroller_vignette",
+    "type": "VignetteShaderNode",
+    "options": {
+      "shader": "VignetteShader"
+    },
+    "connected": {
+      "tDiffuse": "isoscroller.render"
+    }
+  },
+  {
     "id": "LaneSwipeTransition",
     "type": "LaneSwipeTransitionNode",
     "options": {
-        "shader": "LaneSwipeTransition"
+      "shader": "LaneSwipeTransition"
     },
     "connected": {
-        "A": "isoscroller_add.render",
-        "B": "bars.render"
+      "A": "isoscroller_vignette.render",
+      "B": "bars.render"
     }
   },
   {
     "id": "galagafx_crt",
     "type": "CRTShaderNode",
     "options": {
-        "shader": "CRTShader"
+      "shader": "CRTShader"
     },
     "connected": {
-        "tDiffuse": "galaga.render"
+      "tDiffuse": "galaga.render"
     }
   }
 ]
