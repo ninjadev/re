@@ -23,7 +23,7 @@
 
           const square = new THREE.Mesh(
             new THREE.SphereGeometry(triangleSize),
-            new THREE.MeshBasicMaterial({
+            new THREE.MeshStandardMaterial({
               color: this.defaultColor,
             }));
 
@@ -44,6 +44,7 @@
 
         for (const circle of circles.children) {
           circle.material.color = newColor;
+          circle.material.emissive = newColor;
         }
 
         newColor = prevColor;
@@ -78,6 +79,15 @@
           color: 0xffffff,
         }));
 
+      this.background = new THREE.Mesh(
+          new THREE.BoxGeometry(1000, 1000, 1000),
+          new THREE.MeshBasicMaterial({
+            color: 0x0c0716,
+            side: THREE.BackSide,
+          }));
+
+      this.scene.add(this.background);
+
       var light = new THREE.PointLight( 0xffffff, 1, 100 );
       light.position.set( -50, -50, -50 );
       this.scene.add(light);
@@ -102,12 +112,16 @@
       ];
       this.s = new Supersphere(new THREE.Color(0x000000));
       this.scene.add(this.s.mesh);
+
+      this.resize();
     }
 
     update(frame) {
       super.update(frame);
 
       if (this.inputs.percolator.getValue()) {
+        this.s.push(this.colors[this.colorIdx++ % this.colors.length]);
+        this.s.push(this.colors[this.colorIdx++ % this.colors.length]);
         this.s.push(this.colors[this.colorIdx++ % this.colors.length]);
         this.s.push(this.colors[this.colorIdx++ % this.colors.length]);
       } else if (frame % 3 == 0) {
