@@ -296,7 +296,7 @@
       }
 
       if(demo.nm.nodes.galagafx_add) {
-        demo.nm.nodes.galagafx_add.opacity = 0.5 + this.kickThrob / 4;
+        demo.nm.nodes.galagafx_add.opacity = 0.1 + this.kickThrob / 2;
       }
 
       this.cameraOffsetX = 0;

@@ -10,8 +10,11 @@ float rand(vec2 co){
 }
 
 vec4 scene(vec2 uv) {
+
+    float amount = max(0., min(1., mix(0., 1., (frame - 4583.) / 36. / 2.)));
+
     vec2 xy = 2.0 * uv - 1.0;
-    float d = length(xy);
+    float d = length(xy) * amount;
     xy += xy * d * .5;
     xy *= .75;
     uv = (xy + 1.) * .5;
