@@ -67,7 +67,7 @@
         }
       });
 
-      const ninTexture = Loader.loadTexture('res/nin.png');
+      const ninTexture = new THREE.Texture();
 
       this.cube = new THREE.Mesh(
         new THREE.BoxGeometry(50, 50, 50),
