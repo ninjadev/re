@@ -1,0 +1,7 @@
+{
+    "tDiffuse": { "type": "t", "value": null },
+    "frame": { "type": "f", "value": 0.0 },
+    "zoom": { "type": "f", "value": 0.0 },
+    "angle": { "type": "f", "value": 0.0 },
+    "translate": { "type": "2f", "value": null }
+}
