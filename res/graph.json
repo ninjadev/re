@@ -119,7 +119,7 @@
       "direction": "y"
     },
     "connected": {
-      "tDiffuse": "galagafx_crt.render"
+      "tDiffuse": "galaga.render"
     }
   },
   {
@@ -142,7 +142,7 @@
       "shader": "Add"
     },
     "connected": {
-      "A": "galagafx_crt.render",
+      "A": "galaga.render",
       "B": "galagafx_blurX.render"
     }
   },
@@ -202,16 +202,6 @@
     "connected": {
       "A": "isoscroller_vignette.render",
       "B": "bars.render"
-    }
-  },
-  {
-    "id": "galagafx_crt",
-    "type": "CRTShaderNode",
-    "options": {
-      "shader": "CRTShader"
-    },
-    "connected": {
-      "tDiffuse": "galaga.render"
     }
   },
   {
