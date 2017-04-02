@@ -17,6 +17,7 @@
         1,
         (frame - this.amountStartTime) / (this.amountStartTime - this.startTime) / 8);
 
+
       if(BEAN >= 12 * 4 * 78.5) {
         if(BEAN < 12 * 4 * 78.5 + 3) {
           frame = this.amountStartTime;
@@ -43,6 +44,18 @@
       this.uniforms.translate.value.y = 1. + amount * (2. * Math.cos(frame * 0.02));
       this.uniforms.frame.value = frame;
       this.uniforms.tDiffuse.value = this.inputs.texture.getValue();
+
+      if(BEAN >= 12 * 4 * 76.75) {
+        if(BEAN < 12 * 4 * 76.75 + 3) {
+          this.uniforms.zoom.value += 1;  
+        } else if(BEAN < 12 * 4 * 76.75 + 6) {
+          this.uniforms.zoom.value += 2;
+        } else if(BEAN < 12 * 4 * 76.75 + 9) {
+          this.uniforms.zoom.value += 3;
+        } else {
+          this.uniforms.zoom.value += smoothstep(4, -1, (frame - 8530) / 65);
+        }
+      }
     }
   }
 
