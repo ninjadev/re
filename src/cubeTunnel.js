@@ -1,5 +1,8 @@
 (function(global) {
   class cubeTunnel extends NIN.Node {
+
+    
+
     constructor(id, options) {
       super(id, {
         outputs: {
@@ -14,26 +17,34 @@
         format: THREE.RGBFormat
       });
       this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 10000);
-      this.cube = new THREE.Mesh(new THREE.BoxGeometry(50, 5, 5),
-                                 new THREE.MeshBasicMaterial({ color: 0x000fff }));
-      this.scene.add(this.cube);
 
-      var light = new THREE.PointLight( 0xffffff, 1, 100 );
-      light.position.set( -50, -50, -50 );
-      this.scene.add(light);
-
-      var pointLight = new THREE.PointLight(0xFFFFFF);
-      pointLight.position.x = 10;
-      pointLight.position.y = 50;
-      pointLight.position.z = 130;
-      this.scene.add(pointLight);
+      this.spawningCubes = [];
+      for(var i=0; i<16; i++) {
+        var newCube = new THREE.Mesh(new THREE.BoxGeometry(5, 5, 5),
+                                     new THREE.MeshBasicMaterial({ color: 0x000fff }));
+        this.spawningCubes.push(newCube);
+        this.spawningCubes[i].position.x = 1000;
+        this.scene.add(this.spawningCubes[i]);
+      }
 
       this.camera.position.z = 100;
     }
 
     update(frame) {
-      this.cube.rotation.x = Math.sin(frame / 10);
-      this.cube.rotation.y = Math.cos(frame / 10);
+      var startBEAN = 3792;
+
+      var relativeBEAN = BEAN - startBEAN;
+      var cubeID = Math.max(0, Math.floor(relativeBEAN / 6));
+
+      for(var i=cubeID; i<16; i++) {
+        this.spawningCubes[i].position.x = 1000;
+      }
+
+
+      if (cubeID >= 0 && cubeID < 16 && ((cubeID+1)%4)) {
+        this.spawningCubes[cubeID].position.x = 20 * Math.sin(cubeID/16*2*Math.PI);
+        this.spawningCubes[cubeID].position.y = 20 * Math.cos(cubeID/16*2*Math.PI);
+      }      
     }
 
     render(renderer) {
@@ -43,7 +54,7 @@
 
     resize() {
       this.renderTarget.setSize(16 * GU, 9 * GU);
-    }
+     }
   }
 
   global.cubeTunnel = cubeTunnel;
