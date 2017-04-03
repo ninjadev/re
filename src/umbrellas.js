@@ -51,11 +51,22 @@
       }
 
       this.bubbles = [];
-      for (let i=0; i < 19; i++) {
+      for (let i=0; i < 13; i++) {
         this.bubbles[i] = {
           x: 8 + (i%3 - 1) * 2,
           y: 4.5,
           radius: 1,
+          progress: Math.PI * 2,
+          opacity: 0,
+        };
+      }
+
+      this.twobbles = [];
+      for (let i=0; i < 5; i++) {
+        this.twobbles[i] = {
+          x: 8 + (2 - i) * 3,
+          y: 4.5,
+          radius: 0.1,
           progress: Math.PI * 2,
           opacity: 0,
         };
@@ -120,15 +131,27 @@
           bubble.opacity = 0;
         }
         bubble.radius = clamp(0, (frame - startFrame) / 5, 100);
-        if (i === 18) {
-          const yolo = clamp(0, (BEAN - 30 * 12 - 6 - startBEAN) / 1 | 0, 4);
-          const yolo2 = (BEAN - 31 * 12 + 6 - startBEAN) / 3 | 0;
-          bubble.x = clamp(6, 6 + (frame - startFrame) / 30, 8);
-          bubble.progress = clamp(0, 1 - yolo * 0.125 - yolo2 * 0.125, 1) * Math.PI * 2;
-          bubble.radius *= 3;
+        bubble.y = clamp(4.5, 4.5 + (frame - startFrame) / 25, 18);
+      }
+
+      const twobbleBEANS = [
+        startBEAN + 24 * 12 + 1.5 * 12,
+        startBEAN + 24 * 12 + 2 * 12,
+        startBEAN + 24 * 12 + 2.5 * 12,
+        startBEAN + 24 * 12 + 3 * 12,
+        startBEAN + 24 * 12 + 3.5 * 12,
+      ];
+      for (const [i, bubble] of this.twobbles.entries()) {
+        const startFrame = FRAME_FOR_BEAN(twobbleBEANS[i]);
+        if (frame > startFrame) {
+          bubble.opacity = 1;
         } else {
-          bubble.y = clamp(4.5, 4.5 + (frame - startFrame) / 25, 18);
+          bubble.opacity = 0;
         }
+        bubble.radius = clamp(0, (i * 12 + frame - startFrame) / 8, 100);
+        const yolo = clamp(0, (BEAN - 30 * 12 - 6 - startBEAN) / 1 | 0, 4);
+        const yolo2 = (BEAN - 31 * 12 + 6 - startBEAN) / 3 | 0;
+        bubble.progress = clamp(0, 1 - yolo * 0.125 - yolo2 * 0.125, 1) * Math.PI * 2;
       }
 
       this.rotation = clamp(0, (frame - FRAME_FOR_BEAN(startBEAN + 8 * 12)) / 70, Math.PI);
@@ -169,7 +192,7 @@
       let shadowGradient = this.ctx.createLinearGradient(0, 0, 0, 20 * GU);
       shadowGradient.addColorStop(0, '#408e54');
       shadowGradient.addColorStop(1, '#64db84');
-      for (const umbrella of [...this.umbrellas, ...this.twombrellas, ...this.threembrellas, ...this.fourmbrellas, ...this.bubbles]) {
+      for (const umbrella of [...this.umbrellas, ...this.twombrellas, ...this.threembrellas, ...this.fourmbrellas, ...this.bubbles, ...this.twobbles]) {
         if(umbrella.opacity > 0) {
           this.ctx.save();
           this.ctx.fillStyle = shadowGradient;
@@ -182,7 +205,7 @@
         }
       }
 
-      for (const umbrella of [...this.umbrellas, ...this.twombrellas, ...this.threembrellas, ...this.fourmbrellas, ...this.bubbles]) {
+      for (const umbrella of [...this.umbrellas, ...this.twombrellas, ...this.threembrellas, ...this.fourmbrellas, ...this.bubbles, ...this.twobbles]) {
         this.ctx.strokeStyle = `rgba(0,0,0, ${umbrella.opacity})`;
         this.ctx.fillStyle = `rgba(242,133,33, ${umbrella.opacity})`;
         this.ctx.lineWidth = 0.2 * GU;
