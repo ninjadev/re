@@ -128,7 +128,7 @@
     }
 
     render() {
-      this.ctx.fillStyle = '#ffeead';
+      this.ctx.fillStyle = '#64db84';
       this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
 
       this.ctx.save();
@@ -137,12 +137,30 @@
       this.ctx.scale(this.scale, this.scale);
       this.ctx.translate(-8 * GU, -4.5 * GU);
 
+      let shadowGradient = this.ctx.createLinearGradient(0, 0, 0, 20 * GU);
+      shadowGradient.addColorStop(0, '#408e54');
+      shadowGradient.addColorStop(1, '#64db84');
       for (const umbrella of [...this.umbrellas, ...this.twombrellas, ...this.threembrellas, ...this.fourmbrellas, ...this.bubbles]) {
-        this.ctx.strokeStyle = `rgba(75,119,190, ${umbrella.opacity})`;
-        this.ctx.lineWidth = 0.1 * GU;
+        if(umbrella.opacity > 0) {
+          this.ctx.save();
+          this.ctx.fillStyle = shadowGradient;
+          this.ctx.translate(umbrella.x * GU, umbrella.y * GU);
+          this.ctx.rotate(-Math.PI / 4);
+          this.ctx.rotate(-this.rotation);
+          const radius = umbrella.progress * (1 * GU + 0.03 * umbrella.radius * GU)/ Math.PI / 2;
+          this.ctx.fillRect(-radius, 0, radius * 2, 20 * GU);
+          this.ctx.restore();
+        }
+      }
+
+      for (const umbrella of [...this.umbrellas, ...this.twombrellas, ...this.threembrellas, ...this.fourmbrellas, ...this.bubbles]) {
+        this.ctx.strokeStyle = `rgba(0,0,0, ${umbrella.opacity})`;
+        this.ctx.fillStyle = `rgba(242,133,33, ${umbrella.opacity})`;
+        this.ctx.lineWidth = 0.2 * GU;
         this.ctx.beginPath();
-        this.ctx.arc(umbrella.x * GU, umbrella.y * GU, umbrella.radius + GU, 0, umbrella.progress);
+        this.ctx.arc(umbrella.x * GU, umbrella.y * GU, umbrella.progress * (1 * GU + 0.03 * umbrella.radius * GU) / Math.PI / 2, 0, Math.PI * 2);
         this.ctx.stroke();
+        this.ctx.fill();
       }
       this.ctx.restore();
 
