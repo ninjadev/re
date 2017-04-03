@@ -68,10 +68,12 @@
           this.fire(5);
         } else if(this.noteCount < 12) {
           this.fire(6);
-        } else if(this.noteCount > 12) {
+        } else if(this.noteCount < 18) {
           this.fire(3);
         }
-        this.circleThrob = 1;
+        if(this.noteCount < 18) {
+          this.circleThrob = 1;
+        }
         this.noteCount++;
       }
       this.rotation = -frame / 30;
@@ -123,12 +125,18 @@
         this.ctx.restore();
       }
 
+      this.circleEndSize = smoothstep(0, 1, (this.frame - 927) / (996 - 927));
+
+      const r = smoothstep(255, 27, this.circleEndSize);
+      const g = smoothstep(0, 9, this.circleEndSize);
+      const b = smoothstep(162, 34, this.circleEndSize);
+      this.ctx.fillStyle = `rgb(${r|0}, ${g|0}, ${b|0})`;
       this.ctx.beginPath();
       this.ctx.ellipse(
         8 * GU,
         4.5 * GU,
-        0.5 * GU * this.circleThrob,
-        0.5 * GU * this.circleThrob,
+        0.5 * GU * this.circleThrob * (1 + this.circleEndSize * 200),
+        0.5 * GU * this.circleThrob * (1 + this.circleEndSize * 200),
         0, 0, Math.PI * 2);
       this.ctx.fill();
       this.output.needsUpdate = true;
