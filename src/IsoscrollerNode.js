@@ -30,10 +30,14 @@
 
       this.background = new THREE.Mesh(
         new THREE.BoxGeometry(1000, 1000, 1000),
+        new THREE.ShaderMaterial(SHADERS.zigzag));
+      this.background.material.side = THREE.BackSide;
+        /*
         new THREE.MeshBasicMaterial({
           color: 0x1b0922,
           side: THREE.BackSide
         }));
+        */
       this.scene.add(this.background);
       this.cube = new THREE.Mesh(
         new THREE.BoxGeometry(5, 0.5, 1000),
@@ -86,6 +90,11 @@
 
     update(frame) {
       this.cube.scale.x = 1 + 0.02 * this.leadAnalysis.getValue(frame);
+      this.background.material.uniforms.frame.value = frame;
+      this.background.material.uniforms.amount.value = easeOut(
+          0,
+          1,
+          (frame - 996) / (1051 - 996));
 
       if(frame == 997) {
         this.noteNumbers = 0;
@@ -158,7 +167,13 @@
         this.camera.position.z = smoothstep(5, 0, (frame - frameOffset2 + transitionTime2) / transitionTime2);
       }
       this.camera.lookAt(new THREE.Vector3(0, smoothstep(0, 4, t), 0));
+      this.background.rotation.copy(this.camera.rotation);
       this.cube.position.z = frame / 10;
+
+      if(demo.nm.nodes.isoscroller_vignette) {
+        demo.nm.nodes.isoscroller_vignette.uniforms.amount.value = 
+          easeOut(0., 1., (frame - 996) / (1051 - 996));
+      }
     }
 
     render(renderer) {

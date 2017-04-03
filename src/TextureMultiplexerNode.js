@@ -37,12 +37,9 @@
       this.inputs.J.enabled = false;
       this.inputs.K.enabled = false;
       this.inputs.L.enabled = false;
-      if(BEAN < offset + bar * 7 + 12 * 2 - 6) {
+      if(BEAN < offset + bar * 8) {
         this.inputs.A.enabled = true;
         this.outputs.selected.setValue(this.inputs.A.getValue());
-      } else if(BEAN < offset + bar * 8) {
-        this.inputs.B.enabled = true;
-        this.outputs.selected.setValue(this.inputs.B.getValue());
       } else if(BEAN < offset + bar * 24) {
         this.inputs.C.enabled = true;
         this.outputs.selected.setValue(this.inputs.C.getValue());
