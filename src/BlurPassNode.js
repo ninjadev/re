@@ -21,7 +21,8 @@
       if(options.direction == 'x') {
         this.uniforms.uImageIncrement.value = THREE.BloomPass.blurX;
       } else {
-        this.uniforms.uImageIncrement.value = THREE.BloomPass.blurY;
+        this.uniforms.uImageIncrement.value = THREE.BloomPass.blurY.clone();
+        this.uniforms.uImageIncrement.value.y *= 16 / 9;
       }
       this.uniforms.cKernel.value = THREE.ConvolutionShader.buildKernel(sigma);
       this.resize();
