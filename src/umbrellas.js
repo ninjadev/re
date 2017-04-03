@@ -75,10 +75,12 @@
 
     update(frame) {
       const startBEAN = 100 * 12;
+      const partTwoFrame = FRAME_FOR_BEAN(startBEAN + 16 * 12) - 20;
       for (const [i, umbrella] of this.umbrellas.entries()) {
         const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12);
         umbrella.progress = clamp(0, (frame - startFrame) / 2, Math.PI*2);
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
+        umbrella.progress = smoothstep(umbrella.progress, 0, (i + frame - partTwoFrame) / 30);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
         umbrella.x = clamp(8, 8 + (frame - startFrame) / 25, 20);
       }
@@ -87,6 +89,7 @@
         const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12 + 4 * 12);
         umbrella.progress = clamp(0, (frame - startFrame) / 2, Math.PI*2);
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
+        umbrella.progress = smoothstep(umbrella.progress, 0, (i + frame - partTwoFrame) / 30);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
         umbrella.x = clamp(-10, 8 - (frame - startFrame) / 25, 8);
       }
@@ -95,6 +98,7 @@
         const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12 + 8 * 12);
         umbrella.progress = clamp(0, (frame - startFrame) / 2, Math.PI*2);
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
+        umbrella.progress = smoothstep(umbrella.progress, 0, (i + frame - partTwoFrame) / 30);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
         umbrella.y = clamp(4.5, 4.5 + (frame - startFrame) / 25, 18);
       }
@@ -103,6 +107,7 @@
         const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12 + 12 * 12);
         umbrella.progress = clamp(0, (frame - startFrame) / 2, Math.PI*2);
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
+        umbrella.progress = smoothstep(umbrella.progress, 0, (i + frame - partTwoFrame) / 30);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
         umbrella.y = clamp(-10, 4.5 - (frame - startFrame) / 25, 4.5);
       }
