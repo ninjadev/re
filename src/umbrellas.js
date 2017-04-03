@@ -62,6 +62,10 @@
       }
 
       this.zoomLevel = 0;
+
+      this.aSquareSize = 0;
+      this.foregroundColor = '#64db84';
+      this.backgroundColor = '#84eb94';
     }
 
     resize() {
@@ -71,10 +75,12 @@
 
     update(frame) {
       const startBEAN = 100 * 12;
+      const partTwoFrame = FRAME_FOR_BEAN(startBEAN + 16 * 12) - 20;
       for (const [i, umbrella] of this.umbrellas.entries()) {
         const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12);
         umbrella.progress = clamp(0, (frame - startFrame) / 2, Math.PI*2);
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
+        umbrella.progress = smoothstep(umbrella.progress, 0, (i + frame - partTwoFrame) / 30);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
         umbrella.x = clamp(8, 8 + (frame - startFrame) / 25, 20);
       }
@@ -83,6 +89,7 @@
         const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12 + 4 * 12);
         umbrella.progress = clamp(0, (frame - startFrame) / 2, Math.PI*2);
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
+        umbrella.progress = smoothstep(umbrella.progress, 0, (i + frame - partTwoFrame) / 30);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
         umbrella.x = clamp(-10, 8 - (frame - startFrame) / 25, 8);
       }
@@ -91,6 +98,7 @@
         const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12 + 8 * 12);
         umbrella.progress = clamp(0, (frame - startFrame) / 2, Math.PI*2);
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
+        umbrella.progress = smoothstep(umbrella.progress, 0, (i + frame - partTwoFrame) / 30);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
         umbrella.y = clamp(4.5, 4.5 + (frame - startFrame) / 25, 18);
       }
@@ -99,6 +107,7 @@
         const startFrame = FRAME_FOR_BEAN(startBEAN + i * 12 + 12 * 12);
         umbrella.progress = clamp(0, (frame - startFrame) / 2, Math.PI*2);
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
+        umbrella.progress = smoothstep(umbrella.progress, 0, (i + frame - partTwoFrame) / 30);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
         umbrella.y = clamp(-10, 4.5 - (frame - startFrame) / 25, 4.5);
       }
@@ -123,13 +132,33 @@
       }
 
       this.rotation = clamp(0, (frame - FRAME_FOR_BEAN(startBEAN + 8 * 12)) / 70, Math.PI);
-      const zoomLevel = clamp(0, (BEAN - startBEAN + 12) / (2 * 12) | 0, 8);
+      const zoomLevel = clamp(0, (BEAN - startBEAN + 12) / (2 * 12), 8);
+      if ((zoomLevel | 0) % 2) {
+        this.foregroundColor = '#64db84';
+        this.backgroundColor = '#84eb94';
+      } else {
+        this.foregroundColor = '#84eb94';
+        this.backgroundColor = '#64db84';
+      }
+      this.aSquareSize = (zoomLevel % 1) * 2;
       this.scale = clamp(0, 0.4 + 0.075 * zoomLevel, 1);
     }
 
     render() {
       this.ctx.fillStyle = '#64db84';
+      this.ctx.fillStyle = this.backgroundColor;
       this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
+
+      this.ctx.fillStyle = this.foregroundColor;
+      this.roundRect(
+        this.ctx,
+        (8 - easeIn(4.5, 8, this.aSquareSize) * this.aSquareSize) * GU,
+        (4.5 - 4.5 * this.aSquareSize) * GU,
+        easeIn(9, 16, this.aSquareSize) * this.aSquareSize * GU,
+        9 * this.aSquareSize * GU,
+        easeIn(4.5, 0, this.aSquareSize * 0.5) * this.aSquareSize * GU,
+        true,
+        false);
 
       this.ctx.save();
       this.ctx.translate(8 * GU, 4.5 * GU);
@@ -166,6 +195,41 @@
 
       this.output.needsUpdate = true;
       this.outputs.render.setValue(this.output);
+    }
+
+    roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+      if (typeof stroke == 'undefined') {
+        stroke = true;
+      }
+      if (typeof radius === 'undefined') {
+        radius = 5;
+      }
+      if (typeof radius === 'number') {
+        radius = {tl: radius, tr: radius, br: radius, bl: radius};
+      } else {
+        var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
+        for (var side in defaultRadius) {
+          radius[side] = radius[side] || defaultRadius[side];
+        }
+      }
+      ctx.beginPath();
+      ctx.moveTo(x + radius.tl, y);
+      ctx.lineTo(x + width - radius.tr, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+      ctx.lineTo(x + width, y + height - radius.br);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+      ctx.lineTo(x + radius.bl, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+      ctx.lineTo(x, y + radius.tl);
+      ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+      ctx.closePath();
+      if (fill) {
+        ctx.fill();
+      }
+      if (stroke) {
+        ctx.stroke();
+      }
+
     }
   }
 
