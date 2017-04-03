@@ -60,7 +60,7 @@
       "G": "galagafx_add.render",
       "H": "mixer.render",
       "I": "piano.render",
-      "J": "ConstantiaShader.render",
+      "J": "LavaNode.render",
       "K": "BitGlitchShader.render",
       "L": "cubeTunnel.render"
     }
@@ -258,6 +258,13 @@
     "type": "CircleNode",
     "options": {
       "shader": "Circle"
+    }
+  },
+  {
+    "id": "LavaNode",
+    "type": "lavaNode",
+    "options": {
+      "camera": "res/lavaNode.camera.json"
     }
   }
 ]

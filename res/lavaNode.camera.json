@@ -1,0 +1,35 @@
+{
+  "position": [
+    {
+      "startFrame": 7310,
+      "endFrame": 8310,
+      "type": "circle",
+      "radius": 400,
+      "center": [0, 200, 0],
+      "offset": -0.25,
+      "length": 0.5
+    }
+  ],
+  "shake": [
+    {
+      "startFrame": 7310,
+      "endFrame": 7380,
+      "value": 10
+    },
+    {
+      "startFrame": 7380,
+      "endFrame": 7450,
+      "value": 5
+    },
+    {
+      "startFrame": 7450,
+      "endFrame": 7500,
+      "value": 1
+    },
+    {
+      "startFrame": 7500,
+      "endFrame": 8310,
+      "value": 0
+    }
+  ]
+}
