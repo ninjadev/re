@@ -61,7 +61,8 @@
       "H": "triangle.render",
       "I": "piano.render",
       "J": "ConstantiaNode.render",
-      "K": "BitGlitchShader.render"
+      "K": "BitGlitchShader.render",
+      "L": "cubeTunnel.render"
     }
   },
   {
@@ -160,6 +161,10 @@
   {
     "id": "ConstantiaNode",
     "type": "constantiaNode"
+  },
+  {
+    "id": "cubeTunnel",
+    "type": "cubeTunnel"
   },
   {
     "id": "CubeFloor",
