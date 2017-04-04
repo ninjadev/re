@@ -2,12 +2,12 @@
   "position": [
     {
       "startFrame": 7310,
-      "endFrame": 8310,
+      "endFrame": 8010,
       "type": "circle",
       "radius": 400,
       "center": [0, 200, 0],
       "offset": -0.25,
-      "length": 0.5
+      "length": 1.0
     }
   ],
   "shake": [

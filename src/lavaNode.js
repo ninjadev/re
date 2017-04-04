@@ -84,15 +84,23 @@
       this.nin = new NINFloor();
       this.nin.mesh.position.y = 10;
       this.scene.add(this.nin.mesh);
+
+      this.skybox = new THREE.Mesh(
+        new THREE.BoxBufferGeometry(1000, 1000, 1000),
+        new THREE.ShaderMaterial(SHADERS[options.shader])
+      );
+
+      this.skybox.material.side = THREE.BackSide;
+      this.scene.add(this.skybox);
     }
 
     update(frame) {
       const baseFrame = 7260;
       super.update(frame);
       this.lava.update(frame);
-      this.nin.mesh.position.y = lerp(-10, 0, (frame - baseFrame) / 100);
+      this.nin.mesh.position.y = lerp(-7, 0, (frame - baseFrame) / 250);
       this.camera.lookAt(new THREE.Vector3(0, 0, 0));
-
+      this.skybox.material.uniforms.frame.value = frame;
     }
   }
 
