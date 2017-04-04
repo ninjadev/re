@@ -1,0 +1,8 @@
+{
+    "tDiffuse": { "type": "t", "value": null },
+    "tiles": { "value": null },
+    "start1": { "type": "f", "value": null },
+    "stop1": { "type": "f", "value": null },
+    "start2": { "type": "f", "value": null },
+    "stop2": { "type": "f", "value": null }
+}
