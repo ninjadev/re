@@ -9,7 +9,7 @@
 
     update(frame) {
       this.uniforms.frame.value = frame;
-      this.uniforms.amount.value = BEAN >= 12 * 4 * 78.5 ? 1 : 0;
+      this.uniforms.amount.value = BEAN >= 12 * 4 * 79.5 ? 1 : 0;
       this.uniforms.tDiffuse.value = this.inputs.texture.getValue();
     }
   }
