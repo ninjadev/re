@@ -59,13 +59,13 @@
       } else if(BEAN < offset + bar * 65 /* extra bar */) {
         this.inputs.I.enabled = true;
         this.outputs.selected.setValue(this.inputs.I.getValue());
-      } else if(BEAN < offset + bar * 74) {
+      } else if(BEAN < offset + bar * 75) {
         this.inputs.J.enabled = true;
         this.outputs.selected.setValue(this.inputs.J.getValue());
-      } else if(BEAN < offset + bar * 78) {
+      } else if(BEAN < offset + bar * 79) {
         this.inputs.K.enabled = true;
         this.outputs.selected.setValue(this.inputs.K.getValue());
-      } else if(BEAN < offset + bar * 90) {
+      } else if(BEAN < offset + bar * 91) {
         this.inputs.L.enabled = true;
         this.outputs.selected.setValue(this.inputs.L.getValue());
       }

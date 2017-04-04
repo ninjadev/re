@@ -6,8 +6,8 @@
       };
       super(id, options);
 
-      this.startTime = FRAME_FOR_BEAN(12 * 4 * 75);
-      this.amountStartTime = FRAME_FOR_BEAN(12 * 4 * 75.5);
+      this.startTime = FRAME_FOR_BEAN(12 * 4 * 76);
+      this.amountStartTime = FRAME_FOR_BEAN(12 * 4 * 76.5);
       this.uniforms.translate.value = new THREE.Vector2();
     }
 
@@ -18,22 +18,22 @@
         (frame - this.amountStartTime) / (this.amountStartTime - this.startTime) / 8);
 
 
-      if(BEAN >= 12 * 4 * 78.5) {
-        if(BEAN < 12 * 4 * 78.5 + 3) {
+      if(BEAN >= 12 * 4 * 79.5) {
+        if(BEAN < 12 * 4 * 79.5 + 3) {
           frame = this.amountStartTime;
-        } else if(BEAN < 12 * 4 * 78.5 + 9){
+        } else if(BEAN < 12 * 4 * 79.5 + 9){
           frame = this.amountStartTime + 10;
-        } else if(BEAN < 12 * 4 * 78.5 + 9 + 3){
+        } else if(BEAN < 12 * 4 * 79.5 + 9 + 3){
           frame = this.amountStartTime + 20;
-        } else if(BEAN < 12 * 4 * 78.5 + 9 + 6){
+        } else if(BEAN < 12 * 4 * 79.5 + 9 + 6){
           frame = this.amountStartTime + 30;
-        } else if(BEAN < 12 * 4 * 78.5 + 9 + 6 + 1.5){
+        } else if(BEAN < 12 * 4 * 79.5 + 9 + 6 + 1.5){
           frame = this.amountStartTime + 40;
-        } else if(BEAN < 12 * 4 * 78.5 + 9 + 9){
+        } else if(BEAN < 12 * 4 * 79.5 + 9 + 9){
           frame = this.amountStartTime + 50;
-        } else if(BEAN < 12 * 4 * 78.5 + 9 + 9 + 3){
+        } else if(BEAN < 12 * 4 * 79.5 + 9 + 9 + 3){
           frame = this.amountStartTime + 60;
-        } else if(BEAN < 12 * 4 * 78.5 + 9 + 9 + 6){
+        } else if(BEAN < 12 * 4 * 79.5 + 9 + 9 + 6){
           frame = this.amountStartTime + 70;
         }
       }
@@ -45,15 +45,13 @@
       this.uniforms.frame.value = frame;
       this.uniforms.tDiffuse.value = this.inputs.texture.getValue();
 
-      if(BEAN >= 12 * 4 * 76.75) {
-        if(BEAN < 12 * 4 * 76.75 + 3) {
+      if(BEAN >= 12 * 4 * 77.75) {
+        if(BEAN < 12 * 4 * 77.75 + 3) {
           this.uniforms.zoom.value += 1;  
-        } else if(BEAN < 12 * 4 * 76.75 + 6) {
+        } else if(BEAN < 12 * 4 * 77.75 + 6) {
           this.uniforms.zoom.value += 2;
-        } else if(BEAN < 12 * 4 * 76.75 + 9) {
+        } else if(BEAN < 12 * 4 * 77.75 + 9) {
           this.uniforms.zoom.value += 3;
-        } else {
-          this.uniforms.zoom.value += smoothstep(4, -1, (frame - 8530) / 65);
         }
       }
     }

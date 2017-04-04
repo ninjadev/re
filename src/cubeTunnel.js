@@ -31,7 +31,7 @@
     }
 
     update(frame) {
-      var startBEAN = 3792;
+      var startBEAN = 3792 + 12 * 4;
 
       var relativeBEAN = BEAN - startBEAN;
       var cubeID = Math.max(0, Math.floor(relativeBEAN / 6));
