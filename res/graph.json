@@ -264,7 +264,8 @@
     "id": "LavaNode",
     "type": "lavaNode",
     "options": {
-      "camera": "res/lavaNode.camera.json"
+      "camera": "res/lavaNode.camera.json",
+      "shader": "starrySky"
     }
   }
 ]
