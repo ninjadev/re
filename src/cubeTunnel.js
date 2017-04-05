@@ -32,15 +32,6 @@
 
 
         this.create_geoms();
-
-        this.create_layer(0);
-        this.create_layer(-20);
-        this.create_layer(-40);
-        this.create_layer(-60);
-        this.create_layer(-80);
-        this.create_layer(-100);
-        this.create_layer(-120);
-        this.create_layer(-140);
     }
 
     update(frame) {
@@ -48,9 +39,13 @@
 
       var relativeBEAN = BEAN - startBEAN;
 
-      if (BEAN < 3936) {
+      var switch_time = 3936;
+      if (BEAN < switch_time) {
         // Spawning the first "ring" of cubes.
         this.camera.position.z = 100;
+        this.camera.position.y = 0;
+        this.camera.lookAt(new THREE.Vector3(0,0,0));
+
         var slideDuration = 12;
         var cornerSlideDuration = 24;
 
@@ -105,12 +100,31 @@
         this.spawningCubes[8].position.y = easeIn(100, 12, (frame - FRAME_FOR_BEAN(startBEAN + 54) + cornerSlideDuration)/ cornerSlideDuration);
         this.spawningCubes[11].position.x = easeIn(-100, -12, (frame - FRAME_FOR_BEAN(startBEAN + 72) + cornerSlideDuration)/ cornerSlideDuration);
         this.spawningCubes[11].position.y = -12;
+      
+
       } else {
+
+
         // Spawning the rest of the scene and start playing with camera.
         this.camera.position.z = 0;
-        this.camera.position.y = 34;
+        this.camera.position.y = 16;
 
         this.camera.lookAt(new THREE.Vector3(0,0,0));
+
+        var beats2 = [0, 12, 24, 36, 48, 60];
+        if (BEAN == FRAME_FOR_BEAN(startBEAN + beats[0])) {
+          create_layer_first_layer(0);
+        }
+        if (BEAN == FRAME_FOR_BEAN(startBEAN + beats[1])) {
+          create_layer_first_layer(1);
+        }
+        if (BEAN == FRAME_FOR_BEAN(startBEAN + beats[1])) {
+          create_layer_first_layer(2);
+        }
+        if (BEAN == FRAME_FOR_BEAN(startBEAN + beats[1])) {
+          create_layer_first_layer(3);
+        }
+
       }
 
       // When BEAN is equal to startBEAN + one of the numbers in the list, a ring is spawned on the texture on top of the cubes.
@@ -142,7 +156,11 @@
       this.top_material.uniforms.start2.value = clamp(0, stripe_position2 - 0.2, 1);
       this.top_material.uniforms.stop2.value = clamp(0, stripe_position2, 1);
       // Set the number tiles in the shader. Can be set to more or less anything, but small numbers are best IMO.
-      this.top_material.uniforms.tiles.value = 4;
+      if (BEAN < switch_time) {
+        this.top_material.uniforms.tiles.value = 1;
+      } else {        
+        this.top_material.uniforms.tiles.value = 4;
+      }
 
       this.wall_material.uniforms.time.value = Math.floor((BEAN / 6) % 4) * 100;
     }
@@ -162,9 +180,52 @@
 
 
 
+    create_layer_first_layer(beat) {
+      var distance = 8.485; // sqrt(6^2 + 6^2)
+      var elevation = 1;
+      var elevation2 = 0.5;
+      var elevation3 = 1;
+      var y=0;
 
+      if (beat == 0) {
+        // Center cube
+        this.create_small(0,y+elevation,0,0);
+      }
 
+      if (beat == 1) {
+        this.create_large(0,y,0,Math.PI/4);
+      }
 
+      if (beat == 2) {
+        // Over, under, right left cube
+        this.create_small(distance,y+elevation,0,0);
+        this.create_large(distance,y+elevation2,0,Math.PI/4);
+
+        this.create_small(-distance,y+elevation,0,0);
+        this.create_large(-distance,y+elevation2,0,Math.PI/4);
+
+        this.create_small(0,y+elevation,distance,0);
+        this.create_large(0,y+elevation2,distance,Math.PI/4);
+
+        this.create_small(0,y+elevation,-distance,0);
+        this.create_large(0,y+elevation2,-distance,Math.PI/4);
+      }
+      
+      if (beat == 3) {
+        // Corner cubes
+        this.create_small(distance,y+elevation,distance,0);
+        this.create_large(distance,y+elevation3,distance,Math.PI/4);
+
+        this.create_small(-distance,y+elevation,-distance,0);
+        this.create_large(-distance,y+elevation3,-distance,Math.PI/4);
+
+        this.create_small(distance,y+elevation,-distance,0);
+        this.create_large(distance,y+elevation3,-distance,Math.PI/4);
+
+        this.create_small(-distance,y+elevation,distance,0);
+        this.create_large(-distance,y+elevation3,distance,Math.PI/4);
+      }
+    }
 
 // Create a full layer of squares
     create_layer(y) {
@@ -231,7 +292,7 @@
       this.create_top(mesh, this.large_square_geom, this.top_material);
 
       this.create_walls(mesh, 3, this.wall_material, false);
-       this.create_walls(mesh, 4, this.wall_material, true);
+      this.create_walls(mesh, 4, this.wall_material, true);
 
       mesh.position.x = x;
       mesh.position.y = y;
