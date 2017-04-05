@@ -111,18 +111,44 @@
 
         this.camera.lookAt(new THREE.Vector3(0,0,0));
 
-        var beats2 = [0, 12, 24, 36, 48, 60];
-        if (BEAN == FRAME_FOR_BEAN(startBEAN + beats[0])) {
-          create_layer_first_layer(0);
+        var beats2 = [0, 12, 24, 36, 48, 50, 52, 54, 56, 58, 60, 62];
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[0])) {
+          this.scene = new THREE.Scene();
+          this.create_layer_first_layer(0);
         }
-        if (BEAN == FRAME_FOR_BEAN(startBEAN + beats[1])) {
-          create_layer_first_layer(1);
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[1])) {
+          this.create_layer_first_layer(1);
         }
-        if (BEAN == FRAME_FOR_BEAN(startBEAN + beats[1])) {
-          create_layer_first_layer(2);
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[2])) {
+          this.create_layer_first_layer(2);
         }
-        if (BEAN == FRAME_FOR_BEAN(startBEAN + beats[1])) {
-          create_layer_first_layer(3);
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[3])) {
+          this.create_layer_first_layer(3);
+        }
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[4])) {
+          this.create_layer(-20);
+        }
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[5])) {
+          this.create_layer(-40);
+        }
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[6])) {
+          this.create_layer(-60);
+        }
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[7])) {
+          this.create_layer(-80);
+        }
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[8])) {
+          this.create_layer(-100);
+        }
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[9])) {
+          this.create_layer(-120);
+        }
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[10])) {
+          this.create_layer(-140);
+        }
+
+        if (frame > FRAME_FOR_BEAN(4030)) {
+          this.camera.position.y = 16 - (frame - FRAME_FOR_BEAN(4030))/8;
         }
 
       }
