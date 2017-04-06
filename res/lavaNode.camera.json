@@ -19,16 +19,26 @@
     {
       "startFrame": 7380,
       "endFrame": 7450,
-      "value": 5
+      "value": 4
     },
     {
       "startFrame": 7450,
-      "endFrame": 7500,
+      "endFrame": 7560,
       "value": 1
     },
     {
-      "startFrame": 7500,
-      "endFrame": 8310,
+      "startFrame": 7560,
+      "endFrame": 7672,
+      "value": 10
+    },
+    {
+      "startFrame": 7672,
+      "endFrame": 7730,
+      "value": 1
+    },
+    {
+      "startFrame": 7730,
+      "endFrame": 8400,
       "value": 0
     }
   ]
