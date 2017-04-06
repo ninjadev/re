@@ -4,7 +4,7 @@
       "startFrame": 7310,
       "endFrame": 8010,
       "type": "circle",
-      "radius": 500,
+      "radius": 400,
       "center": [0, 200, 0],
       "offset": -0.25,
       "length": 1.0

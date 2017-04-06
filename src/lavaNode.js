@@ -100,9 +100,11 @@
       const baseFrame = 7260;
       super.update(frame);
       this.lava.update(frame);
-      this.nin.mesh.position.y = lerp(-7, 0, (frame - baseFrame) / 250);
-      this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
+      this.nin.mesh.position.y = lerp(-7, 0, (frame - baseFrame) / 250);
+      this.nin.mesh.position.y = lerp(this.nin.mesh.position.y, -7, (frame - baseFrame - 180) / 250);
+
+      this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       this.skybox.material.uniforms.frame.value =  (BEAN - 2 + 5 * 3) % 24;
     }
   }
