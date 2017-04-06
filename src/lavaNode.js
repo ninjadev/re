@@ -1,7 +1,36 @@
 (function(global) {
-  class NINFloor {
+  class Floor {
+    constructor(pattern) {
+      this.pattern = pattern;
+      const width = 18;
+      const padding = 2;
+
+      const texture = Loader.loadTexture('res/obsidian564x564.jpg');
+
+      this.mesh = new THREE.Object3D();
+      for (let [x, row] of this.pattern.entries()) {
+        for (let [z, elm] of row.entries()) {
+          if (elm !== 1) { continue;  }
+
+          const cube = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(width, 10, width),
+            new THREE.MeshBasicMaterial({
+              map: texture,
+            }));
+
+          cube.position.set(
+            (z - this.pattern[0].length / 2) * (width + padding) + Math.random(),
+            0,
+            (x - this.pattern.length / 2) * (width + padding) + Math.random());
+          this.mesh.add(cube);
+        }
+      }
+    }
+  }
+
+  class NINFloor extends Floor {
     constructor() {
-      this.pattern = [
+      const pattern = [
         [1,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,1,1],
         [1,1,0,0,0,1,1,1,0,0,1,1,1,1,0,0,0,0,0,0,1,1],
         [1,1,1,0,0,0,1,1,1,0,1,1,1,1,1,0,0,0,0,0,1,1],
@@ -16,23 +45,38 @@
         [1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,1],
       ];
 
-      const texture = Loader.loadTexture('res/obsidian564x564.jpg');
+      super(pattern);
+    }
+  }
 
-      this.mesh = new THREE.Object3D();
-      for (let [x, row] of this.pattern.entries()) {
-        for (let [z, elm] of row.entries()) {
-          if (elm == 0) { continue;  }
+  class RevisionFloor extends Floor {
+    constructor() {
+      const pattern = [
+        [ , , , , , , , , ,1,1,1, , , , , , , , , , , ],
+        [ , , , , , , ,1,1,1,1,1,1,1,1, , , , , , , , ],
+        [ , , , , ,1,1,1,1,1, , , , ,1,1,1,1, , , , , ],
+        [ , , , ,1,1, ,1,1, , , , , ,1, ,1,1,1, , , , ],
+        [ , , ,1, , , , , , , , , , , , , ,1,1,1, , , ],
+        [ , ,1, , , , , ,1,1,1,1,1, , , , , ,1,1,1, , ],
+        [ ,1,1, , , ,1,1,1,1,1,1,1,1,1, , , , ,1,1, , ],
+        [ ,1, , , ,1, , , , , ,1,1,1,1,1, , , , ,1,1, ],
+        [1, , , , ,1,1, , , , , , , ,1,1, , , , ,1,1, ],
+        [1, , , , ,1, , , , ,1,1, , , , ,1, , , ,1,1, ],
+        [1,1, , ,1,1,1, , ,1, , ,1, , ,1,1, , , ,1,1, ],
+        [1,1, , ,1,1, , , ,1, , ,1, , ,1,1, , ,1,1, , ],
+        [1,1, , ,1,1, , ,1,1,1,1, , , ,1,1, , ,1,1, , ],
+        [1,1, , ,1, , ,1,1,1,1, , ,1, ,1,1, , ,1,1, , ],
+        [1,1,1, , ,1, , ,1,1, , ,1,1,1,1, , , , ,1, , ],
+        [ ,1,1, , , ,1, , , , , ,1,1,1,1, , , ,1, , , ],
+        [ ,1,1,1, , , ,1, , ,1,1,1,1,1, , ,1,1,1, , , ],
+        [ , ,1,1,1, , , ,1,1,1,1,1, , , , ,1,1, , , , ],
+        [ , , ,1,1, , , , , , , , , , , , ,1, , , , , ],
+        [ , ,1,1,1,1, , , ,1,1,1,1, , ,1,1, , , , , , ],
+        [ , , , , ,1,1,1,1,1,1,1,1,1,1,1, , , , , , , ],
+        [ , , , , , , , ,1,1,1,1,1, , , , , , , , , , ],
+      ];
 
-          const cube = new THREE.Mesh(
-            new THREE.BoxBufferGeometry(14, 10, 15),
-            new THREE.MeshBasicMaterial({
-              map: texture,
-            }));
-
-          cube.position.set((z - 11.5) * 20 + Math.random(), 0, (x - 5.5) * 20 + Math.random());
-          this.mesh.add(cube);
-        }
-      }
+      super(pattern);
     }
   }
 
@@ -82,8 +126,12 @@
       this.scene.add(this.lava.mesh);
 
       this.nin = new NINFloor();
-      this.nin.mesh.position.y = 10;
+      this.nin.mesh.position.y = -7;
       this.scene.add(this.nin.mesh);
+
+      this.revision = new RevisionFloor();
+      this.revision.mesh.position.y = -7;
+      this.scene.add(this.revision.mesh);
 
       this.skybox = new THREE.Mesh(
         new THREE.BoxBufferGeometry(700, 400, 700),
@@ -102,7 +150,10 @@
       this.lava.update(frame);
 
       this.nin.mesh.position.y = lerp(-7, 0, (frame - baseFrame) / 250);
-      this.nin.mesh.position.y = lerp(this.nin.mesh.position.y, -7, (frame - baseFrame - 180) / 250);
+      this.nin.mesh.position.y = lerp(this.nin.mesh.position.y, -7, (frame - baseFrame - 200) / 250);
+
+      this.revision.mesh.position.y = lerp(-7, 0, (frame - baseFrame - 250) / 250);
+      this.revision.mesh.position.y = lerp(this.revision.mesh.position.y, -7, (frame - baseFrame - 250 -150) / 250);
 
       this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       this.skybox.material.uniforms.frame.value =  (BEAN - 2 + 5 * 3) % 24;
