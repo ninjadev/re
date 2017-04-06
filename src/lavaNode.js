@@ -86,9 +86,11 @@
       this.scene.add(this.nin.mesh);
 
       this.skybox = new THREE.Mesh(
-        new THREE.BoxBufferGeometry(1000, 1000, 1000),
+        new THREE.BoxBufferGeometry(700, 400, 700),
         new THREE.ShaderMaterial(SHADERS[options.shader])
       );
+
+      this.skybox.position.y = 100;
 
       this.skybox.material.side = THREE.BackSide;
       this.scene.add(this.skybox);
@@ -98,9 +100,12 @@
       const baseFrame = 7260;
       super.update(frame);
       this.lava.update(frame);
+
       this.nin.mesh.position.y = lerp(-7, 0, (frame - baseFrame) / 250);
+      this.nin.mesh.position.y = lerp(this.nin.mesh.position.y, -7, (frame - baseFrame - 180) / 250);
+
       this.camera.lookAt(new THREE.Vector3(0, 0, 0));
-      this.skybox.material.uniforms.frame.value = frame;
+      this.skybox.material.uniforms.frame.value =  (BEAN - 2 + 5 * 3) % 24;
     }
   }
 
