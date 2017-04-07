@@ -40,6 +40,9 @@
       var relativeBEAN = BEAN - startBEAN;
 
       var switch_time = 3936;
+      var switch_time2 = 4200;
+      var camera_move_start = 4030;
+      var camera_speed = 0.15;
       if (BEAN < switch_time) {
         // Spawning the first "ring" of cubes.
         this.camera.position.z = 100;
@@ -102,7 +105,7 @@
         this.spawningCubes[11].position.y = -12;
       
 
-      } else {
+      } else if (BEAN < switch_time2) {
 
 
         // Spawning the rest of the scene and start playing with camera.
@@ -111,7 +114,7 @@
 
         this.camera.lookAt(new THREE.Vector3(0,0,0));
 
-        var beats2 = [0, 12, 24, 36, 48, 50, 52, 54, 56, 58, 60, 62];
+        var beats2 = [0, 8, 16, 24, 30,      48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68];
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[0])) {
           this.scene = new THREE.Scene();
           this.create_layer_first_layer(0);
@@ -126,36 +129,189 @@
           this.create_layer_first_layer(3);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[4])) {
+          this.create_layer_first_layer(4);
+          this.create_layer_first_layer(5);
+        }
+
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[5])) {
           this.create_layer(-20);
         }
-        if (frame == FRAME_FOR_BEAN(switch_time + beats2[5])) {
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[6])) {
           this.create_layer(-40);
         }
-        if (frame == FRAME_FOR_BEAN(switch_time + beats2[6])) {
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[8])) {
           this.create_layer(-60);
         }
-        if (frame == FRAME_FOR_BEAN(switch_time + beats2[7])) {
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[9])) {
           this.create_layer(-80);
         }
-        if (frame == FRAME_FOR_BEAN(switch_time + beats2[8])) {
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[10])) {
           this.create_layer(-100);
         }
-        if (frame == FRAME_FOR_BEAN(switch_time + beats2[9])) {
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[11])) {
           this.create_layer(-120);
         }
-        if (frame == FRAME_FOR_BEAN(switch_time + beats2[10])) {
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[12])) {
           this.create_layer(-140);
+        }
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[13])) {
+          this.create_layer(-160);
+        }
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[14])) {
+          this.create_layer(-180);
+        }
+        if (frame == FRAME_FOR_BEAN(switch_time + beats2[15])) {
+          this.create_layer(-200);
         }
 
         if (frame > FRAME_FOR_BEAN(4030)) {
-          this.camera.position.y = 16 - (frame - FRAME_FOR_BEAN(4030))/8;
+          this.camera.position.y = 16 - (frame - FRAME_FOR_BEAN(camera_move_start))*camera_speed;
         }
 
+      } else {
+        this.camera.position.z = 0;
+
+        this.camera.lookAt(new THREE.Vector3(0,-200,0));
+        this.camera.position.y = 16 - (FRAME_FOR_BEAN(switch_time2) - FRAME_FOR_BEAN(camera_move_start))*camera_speed;
+
+        var elevation = 1;
+        var beats3 = [24, 36, 48, 60, 72, 94];
+        if (frame == FRAME_FOR_BEAN(switch_time2 + beats3[0])) {
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = 0;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = 0;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+        }
+
+        if (frame == FRAME_FOR_BEAN(switch_time2 + beats3[1])) {
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = 4*1.2;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = 0;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = -4*1.2;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = 0;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+        }
+
+
+        if (frame == FRAME_FOR_BEAN(switch_time2 + beats3[2])) {
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = 0;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = 4*1.2;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = 0;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = -4*1.2;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+        }
+
+        if (frame == FRAME_FOR_BEAN(switch_time2 + beats3[3])) {
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = 8*1.2;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = 4*1.2;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = 8*1.2;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = -4*1.2;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = -8*1.2;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = 4*1.2;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+
+                    var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = -8*1.2;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = -4*1.2;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+        }
+
+        if (frame == FRAME_FOR_BEAN(switch_time2 + beats3[4])) {
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = 4*1.2;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = 4*1.2;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = 4*1.2;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = -4*1.2;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = -4*1.2;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = 4*1.2;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = -4*1.2;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = -4*1.2;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+
+
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = 8*1.2;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = 0;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+
+          var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
+          newPlane.position.x = -8*1.2;
+          newPlane.position.y = -58.99;
+          newPlane.position.z = 0;
+          newPlane.rotation.x = -Math.PI/2;
+          newPlane.rotation.z = Math.PI;
+          this.scene.add(newPlane);
+        }
       }
 
       // When BEAN is equal to startBEAN + one of the numbers in the list, a ring is spawned on the texture on top of the cubes.
       // Only two rings at a time is supported. Modify topshader to add more if neccessary.
-      var beats = [0, 12,  24,  36,  48,  60,  72,  84,  96,  108,  120,  132,  144,  156,  168,  180,  192,  204,  216,  228,  240,  252,  264,  276,  288,  300,  312,  324,  336,  348,  360,  372,  384,  396,  408,  420,  432,  444,  456,  468,  480,  492,  504,  516,  528,  540,  552,  564,  576,  588];
+      var beats = [0, 12,  24,  36,  48,  60,  72,  84,  96,  108,  120,  132,  144,  156,  168,  180,  192,  204,  216,  228,  240,  252,  264,  276,  288,  300,  312,  324,  336,  348,  360,  372,  384,  396,  408,  420,  432];
       var passed_1 = -1;
       var passed_2 = -1;
       //Figure out the last two passed time stamps (for ring spawning).
@@ -225,30 +381,36 @@
       if (beat == 2) {
         // Over, under, right left cube
         this.create_small(distance,y+elevation,0,0);
-        this.create_large(distance,y+elevation2,0,Math.PI/4);
 
         this.create_small(-distance,y+elevation,0,0);
-        this.create_large(-distance,y+elevation2,0,Math.PI/4);
 
         this.create_small(0,y+elevation,distance,0);
-        this.create_large(0,y+elevation2,distance,Math.PI/4);
 
         this.create_small(0,y+elevation,-distance,0);
-        this.create_large(0,y+elevation2,-distance,Math.PI/4);
       }
       
-      if (beat == 3) {
+      if (beat == 3) {      
+        this.create_large(distance,y+elevation2,0,Math.PI/4);
+        this.create_large(-distance,y+elevation2,0,Math.PI/4);
+        this.create_large(0,y+elevation2,distance,Math.PI/4);
+        this.create_large(0,y+elevation2,-distance,Math.PI/4);
+      } 
+
+      if (beat == 4) {
         // Corner cubes
         this.create_small(distance,y+elevation,distance,0);
-        this.create_large(distance,y+elevation3,distance,Math.PI/4);
 
         this.create_small(-distance,y+elevation,-distance,0);
-        this.create_large(-distance,y+elevation3,-distance,Math.PI/4);
 
         this.create_small(distance,y+elevation,-distance,0);
-        this.create_large(distance,y+elevation3,-distance,Math.PI/4);
 
         this.create_small(-distance,y+elevation,distance,0);
+      }
+
+      if (beat == 5) {
+        this.create_large(distance,y+elevation3,distance,Math.PI/4);
+        this.create_large(-distance,y+elevation3,-distance,Math.PI/4);
+        this.create_large(distance,y+elevation3,-distance,Math.PI/4);
         this.create_large(-distance,y+elevation3,distance,Math.PI/4);
       }
     }
