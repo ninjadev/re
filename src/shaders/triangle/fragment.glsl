@@ -10,7 +10,9 @@ varying vec2 aUv;
 #define STEPS 64
 
 float map(vec3 p) {
-    return length(p) - 1.0;
+    float v = frame / 60.;
+    float r = 1.35 + 0.35*cos(8.3*p.y + v) + 0.35*cos(2.3*p.x + v);
+    return length(p) - r;
 }
 
 vec3 shade(vec3 ro, vec3 rd, float t) {
