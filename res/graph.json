@@ -267,5 +267,9 @@
       "camera": "res/lavaNode.camera.json",
       "shader": "starrySky"
     }
+  },
+  {
+    "id": "jules",
+    "type": "jules"
   }
 ]
