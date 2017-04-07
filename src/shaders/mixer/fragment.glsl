@@ -17,7 +17,7 @@ void main() {
     c = smoothstep(X, X-0.001, vUv.x);
     c += smoothstep(Y, Y-0.001, vUv.y);
 
-    res = colorA*c + colorB*(0.9-c);
+    res = colorA*(c+0.35) + colorB*(0.35-c);
 
     gl_FragColor = res;
 }
