@@ -15,6 +15,10 @@ float map(vec3 p) {
     return length(p) - r;
 }
 
+float map_black(vec3 p) {
+    return map(p) - 0.05;
+}
+
 vec3 shade(vec3 ro, vec3 rd, float t) {
     return vec3(1.0);
 }
@@ -28,15 +32,32 @@ void main() {
     float t = 0.0;
     float d = EPS;
 
+    // background
+    vec3 c = mix(vec3(0.0), vec3(0.3, 0.3, 0.8), 2.0 - length(uv));
+
+    // black outline
+    for(int i = 0; i < STEPS; ++i) {
+        d = map_black(ro + t*rd);
+        if(d < EPS || t > FAR) break;
+        t += d;
+    }
+
+    if(d < EPS) {
+        c = vec3(0.0);
+    }
+
+    // blob
+    t = 0.0;
+    d = EPS;
     for(int i = 0; i < STEPS; ++i) {
         d = map(ro + t*rd);
         if(d < EPS || t > FAR) break;
         t += d;
     }
 
-    vec3 c = d < EPS ? shade(ro, rd, t) : mix(vec3(0.0),
-                                              vec3(0.2, 0.3, 0.8),
-                                              2.0 - length(uv));
+    if(d < EPS) {
+        c = shade(ro, rd, t);
+    }
 
     gl_FragColor = vec4(c, 1.0);
 }
