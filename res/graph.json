@@ -58,7 +58,7 @@
       "E": "umbrellas.render",
       "F": "kaleidoscope.render",
       "G": "galagafx_add.render",
-      "H": "mixer.render",
+      "H": "triangle.render",
       "I": "piano.render",
       "J": "LavaNode.render",
       "K": "BitGlitchShader.render",
@@ -156,6 +156,10 @@
     "type": "triangleNode",
     "options": {
       "shader": "triangle"
+    },
+    "connected": {
+      "A": "Circle.render",
+      "B": "jules.render"
     }
   },
   {
@@ -240,17 +244,6 @@
     },
     "connected": {
       "texture": "RotozoomShader.render"
-    }
-  },
-  {
-    "id": "mixer",
-    "type": "mixerNode",
-    "options": {
-      "shader": "mixer"
-    },
-    "connected": {
-      "A": "Circle.render",
-      "B": "triangle.render"
     }
   },
   {
