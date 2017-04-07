@@ -18,8 +18,8 @@ vec3 shade(vec3 ro, vec3 rd, float t) {
 }
 
 void main() {
-    // TODO: anyone know how to correctly scale this so it's not an ellipse?
     vec2 uv = -1.0 + 2.0 * vUv;
+    uv.x *= 16.0/9.0;
     vec3 ro = vec3(0.0, 0.0, 2.5);
     vec3 rd = normalize(vec3(uv, -1.0));
 
