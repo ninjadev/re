@@ -2,6 +2,9 @@ uniform float frame;
 uniform sampler2D tDiffuse;
 uniform vec2 resolution;
 
+uniform float big;
+uniform float extra;
+
 varying vec2 vUv;
 varying vec2 aUv;
 
@@ -11,7 +14,7 @@ varying vec2 aUv;
 
 float map(vec3 p) {
     float v = frame / 60.;
-    float r = 1.35 + 0.35*cos(8.3*p.y + v) + 0.35*cos(2.3*p.x + v);
+    float r = (0.9*big + 1.0*extra)  + 0.35*cos(8.3*p.y + v) + 0.35*cos(2.3*p.x + v);
     return length(p) - r;
 }
 
