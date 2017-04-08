@@ -226,13 +226,6 @@
     }
   },
   {
-    "id": "Circle",
-    "type": "CircleNode",
-    "options": {
-      "shader": "Circle"
-    }
-  },
-  {
     "id": "LavaNode",
     "type": "lavaNode",
     "options": {
