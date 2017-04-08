@@ -54,11 +54,11 @@ vec3 shade(vec4 color, vec2 uv, vec3 rd, vec3 ro, float multiplier) {
     vec2 point = vec2(refd.x + cam.x, refd.y + cam.y);
     vec4 col = texture2D(B, mod(0.35*point+.5,1.));
 
-    return vec3(.4*diffusion) + .6*col.xyz;
+    col = vec4(.35*diffusion) + .65*col;
 
     // post processing
-    //col = smoothstep(0.0, 1.0, col);
-    //vec3 res = pow(col.xyz, vec3(0.45));
+    col = smoothstep(0.0, 1.0, col);
+    vec3 res = pow(col.xyz, vec3(0.45));
     return col.xyz;
 }
 
