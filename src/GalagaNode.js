@@ -286,17 +286,13 @@
         this.activeParticles = 0;
       }
 
-      this.kickThrob *= 0.95;
+      this.kickThrob *= 0.9;
       this.snareThrob *= 0.99;
       if(BEAT && BEAN % 12 == 0) {
         this.kickThrob = 1;
       }
       if(BEAT && BEAN % 24 == 12) {
         this.snareThrob = 1;
-      }
-
-      if(demo.nm.nodes.galagafx_add) {
-        demo.nm.nodes.galagafx_add.opacity = 0.1 + this.kickThrob / 2;
       }
 
       this.cameraOffsetX = 0;
@@ -361,14 +357,14 @@
           const vibratoModifier = clamp(0, (frame - vibratoStartFrame) / (vibratoEndFrame - vibratoStartFrame), 1);
           this.spaceshipY += 0.2 * vibratoModifier * Math.sin(frame * Math.PI * 2 / 60 / 60 * 130 * 4);
 
-          for(let i = 0; i < 30; i++) {
+          for(let i = 0; i < 10; i++) {
             const particle = this.particles[this.activeParticles++];
-            const angle = Math.random() * Math.PI * 2;
+            const angle = Math.PI / 2  + Math.random() * Math.PI;
             const spread = Math.random() / 16;
-            particle.x = this.spaceshipX + Math.cos(angle) * spread;
+            particle.x = this.spaceshipX + Math.cos(angle) * spread * 2;
             particle.y = this.spaceshipY + Math.sin(angle) * spread;
-            particle.dx = -0.15 + (Math.random() -0.5) * 0.005;
-            particle.dy = 0 + (Math.random() - 0.5) * 0.001;
+            particle.dx = -0.2;
+            particle.dy = 0;
             particle.life = 100;
           }
         } else if(BEAN >= beanOffset + this.notes[this.currentNote + 1].start) {
@@ -380,7 +376,7 @@
         const particle = this.particles[i];
         particle.lifeScaled = clamp(0, easeOutExpo(particle.life, 0, 1, 100), 1);
         particle.x += particle.dx;
-        particle.y += particle.dy * particle.lifeScaled;
+        particle.y += particle.dy;
         if(particle.life-- == 0) {
           this.particles[i] = this.particles[this.activeParticles];
           this.particles[this.activeParticles] = particle;
@@ -425,26 +421,26 @@
         } else if(BEAN < offset + beat * 15 + 3) {
           zoom = 3;
           angle = -0.1;
-          y = 4;
-          x = -3;
-        } else if(BEAN < offset + beat * 15 + 9) {
-          zoom = 2;
-          angle = 0.1;
-          y = 1;
+          y = 6;
           x = -2;
-        } else if(BEAN < offset + beat * 18) {
-          zoom = 3;
-          angle = -0.1;
-          y = 3.5;
+        } else if(BEAN < offset + beat * 16) {
+          zoom = 2;
+          angle = 0.05;
+          y = 1.9;
           x = -1;
+        } else if(BEAN < offset + beat * 18) {
+          zoom = 4;
+          angle = -0.1;
+          y = 5;
+          x = 0;
         } else if(BEAN < offset + beat * 19) {
           const start = FRAME_FOR_BEAN(offset + beat * 18);
           const end = FRAME_FOR_BEAN(offset + beat * 19);
           const t = (this.frame - start) / (end - start);
-          zoom = smoothstep(3, 1, t);
+          zoom = smoothstep(4, 1, t);
           angle = smoothstep(-0.1, 0, t);
-          y = smoothstep(3.5, 0, t);
-          x = smoothstep(-1, 0, t);
+          y = smoothstep(5, 0, t);
+          x = smoothstep(0, 0, t);
         }
       }
       this.ctx.save();
@@ -470,36 +466,38 @@
             ((32 * 1024 + star.x - starSpeedModifier * this.frame / 16 * (1 + i)) % 32) * GU,
             (star.y) * GU,
             length * GU,
-            size / 16 * GU);
+            size * size * GU * 0.5);
         }
       }
 
       this.ctx.globalAlpha = 1;
       this.ctx.fillStyle = '#0500b05';
       //this.ctx.globalCompositeOperation = 'lighter';
+      this.ctx.globalCompositeOperation = 'source-over';
       const width = 0.5;
       for(let i = 0; i < this.activeParticles; i++) {
         const particle = this.particles[i];
-        this.ctx.globalAlpha = particle.lifeScaled;
+        this.ctx.globalAlpha = particle.life / 100;
         this.ctx.drawImage(
           this.particleSprite,
           (particle.x - 0.5) * GU - this.particleSprite.width / 2 - 0.5 * GU,
           particle.y * GU - this.particleSprite.height / 2);
       }
-      this.ctx.globalCompositeOperation = 'source-over';
 
       this.ctx.globalAlpha = 1;
-      const shipScale = GU / this.shipSprite.width * 1.5;
+      const shipScale = GU / this.shipSprite.width *  2;
       this.ctx.translate(this.spaceshipX * GU, this.spaceshipY * GU);
       this.ctx.scale(shipScale, shipScale);
       this.ctx.rotate(this.spaceshipRotation);
       this.ctx.drawImage(this.shipSprite, -this.shipSprite.width / 2, -this.shipSprite.height / 2);
       this.ctx.fillStyle = '#ce2458';
+      /*
       for(let i = 0; i < 7; i++) {
         this.ctx.fillStyle = Math.sin(Math.PI * 2 * i / 7 + this.frame / 60 / 60 * 130 * 4 * 2) > 0 ? '#ce2458' : '#1f1f1f';
         //this.ctx.fillRect((0.06 + i * 0.03) * GU * shipScale, 0.01 * GU, 0.02 * GU, 0.09 * GU);
         this.ctx.fillRect((6 + i * 3), 2, 2, 9);
       }
+      */
 
       this.ctx.restore();
 
