@@ -17,7 +17,7 @@
       this.output.magFilter = THREE.LinearFilter;
 
       this.umbrellas = [];
-      for (let i=0; i < 16; i++) {
+      for (let i=0; i < 14; i++) {
         this.umbrellas[i] = {
           progress: 0,
           x: 8,
@@ -26,7 +26,7 @@
       }
 
       this.twombrellas = [];
-      for (let i=0; i < 12; i++) {
+      for (let i=0; i < 10; i++) {
         this.twombrellas[i] = {
           progress: 0,
           x: 8,
@@ -35,7 +35,7 @@
       }
 
       this.threembrellas = [];
-      for (let i=0; i < 8; i++) {
+      for (let i=0; i < 6; i++) {
         this.threembrellas[i] = {
           progress: 0,
           x: 8,
@@ -44,13 +44,36 @@
       }
 
       this.fourmbrellas = [];
-      for (let i=0; i < 4; i++) {
+      for (let i=0; i < 2; i++) {
         this.fourmbrellas[i] = {
           progress: 0,
           x: 8,
           y: 4.5,
         };
       }
+
+      this.transishbrellas = [
+        {
+          progress: 0,
+          x: 4,
+          y: 3,
+        },
+        {
+          progress: 0,
+          x: 12,
+          y: 3,
+        },
+        {
+          progress: 0,
+          x: 4,
+          y: 6,
+        },
+        {
+          progress: 0,
+          x: 12,
+          y: 6,
+        }
+      ];
 
       this.bubbles = [];
       for (let i=0; i < 13; i++) {
@@ -85,12 +108,6 @@
     }
 
     update(frame) {
-
-      if(frame >= FRAME_FOR_BEAN(12 * 4 * 28) && frame < FRAME_FOR_BEAN(12 * 4 * 29 - 12)) {
-        frame -= smoothstep(0, 25, (frame - FRAME_FOR_BEAN(12 * 4 * 28)) / 50);
-      }
-
-
       this.frame = frame;
       this.kickThrob *= 0.95;
       if(this.kickThrob < 0.01) {
@@ -139,6 +156,15 @@
         umbrella.y = 4.5 - spacing * (frame - startFrame) / 25;
       }
 
+      for (const [i, umbrella] of this.transishbrellas.entries()) {
+        const startFrame = FRAME_FOR_BEAN(startBEAN + i * 3 + 14.75 * 12);
+        umbrella.progress = clamp(0, (frame - startFrame) / 2, Math.PI*2);
+        umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
+        umbrella.progress = smoothstep(umbrella.progress, 0, (frame - partTwoFrame - i * 3) / 20);
+        umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
+        //umbrella.y = 4.5 - spacing * (frame - startFrame) / 25;
+      }
+
       for (const [i, bubble] of this.bubbles.entries()) {
         const startFrame = FRAME_FOR_BEAN(startBEAN + i * 8 + 16 * 12);
         if (frame > startFrame) {
@@ -181,6 +207,9 @@
       }
       this.aSquareSize = (zoomLevel % 1) * 2;
       this.scale = clamp(0, 0.4 + 0.075 * zoomLevel, 1);
+
+      this.scale = smoothstep(this.scale, 0.6, (frame - FRAME_FOR_BEAN(startBEAN + 23.75 * 12)) / 40);
+      this.scale = easeOut(this.scale, 0.3, (frame - FRAME_FOR_BEAN(startBEAN + 23.75 * 12)) / 160);
     }
 
     render() {
@@ -238,7 +267,7 @@
       let shadowGradient = this.ctx.createLinearGradient(0, 0, 0, 20 * GU);
       shadowGradient.addColorStop(0, colorAShadowStart);
       shadowGradient.addColorStop(1, colorAShadowEnd);
-      for (const umbrella of [...this.umbrellas, ...this.twombrellas, ...this.threembrellas, ...this.fourmbrellas, ...this.bubbles, ...this.twobbles]) {
+      for (const umbrella of [...this.umbrellas, ...this.twombrellas, ...this.threembrellas, ...this.fourmbrellas, ...this.bubbles, ...this.twobbles, ...this.transishbrellas]) {
         if(umbrella.opacity > 0) {
           this.ctx.save();
           this.ctx.fillStyle = shadowGradient;
@@ -251,7 +280,7 @@
         }
       }
 
-      for (const umbrella of [...this.umbrellas, ...this.twombrellas, ...this.threembrellas, ...this.fourmbrellas, ...this.bubbles, ...this.twobbles]) {
+      for (const umbrella of [...this.umbrellas, ...this.twombrellas, ...this.threembrellas, ...this.fourmbrellas, ...this.bubbles, ...this.twobbles, ...this.transishbrellas]) {
         if(umbrella.opacity == 0) {
           continue;
         }
