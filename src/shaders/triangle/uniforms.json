@@ -4,5 +4,6 @@
     "B": { "type": "t", "value": null },
     "frame": { "type": "f", "value": 0.0 },
     "extra": { "type": "f", "value": 0.5 },
+    "shift": { "type": "f", "value": 0.0 },
     "big": { "type": "f", "value": 1.0 }
 }

@@ -11,7 +11,10 @@
       this.uniforms.A.value = this.inputs.A.getValue();
       this.uniforms.B.value = this.inputs.B.getValue();
       this.uniforms.frame.value = frame;
-      this.uniforms.big.value = Math.min(Math.sin(frame/100), 0.5);
+      this.uniforms.big.value = Math.max(Math.sin(frame/100), 0.5);
+      if(BEAT && (BEAN%12==0)) {
+        this.uniforms.shift.value = 1.0;
+      }
       // this value needs to change to follow the rythm
       //this.uniforms.extra.value = smoothstep(0, 1, BEAT);
     }
