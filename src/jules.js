@@ -21,7 +21,7 @@
             mat = new THREE.MeshBasicMaterial({color: 0xb1cbbb});
           }
           let mesh = new THREE.Mesh(geo, mat);
-          mesh.position.set((i-25)*30,(j-25)*30,0);
+          mesh.position.set((i-25)*30,(j-25)*30,-3);
           this.group[i][j]= mesh;
           this.scene.add(this.group[i][j]);
         }
