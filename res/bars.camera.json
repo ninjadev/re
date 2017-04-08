@@ -28,6 +28,14 @@
         [10, 150, 0],
         [10, 60, 0]
       ]
+    },
+    {
+      "startFrame": 2701,
+      "endFrame": 2767,
+      "points": [
+        [10, 60, 0],
+        [10, 60, 15]
+      ]
     }
   ],
   "lookAt": [
@@ -51,6 +59,14 @@
       "startFrame": 2549,
       "endFrame": 2700,
       "points": [10, 0, 0]
+    },
+    {
+      "startFrame": 2701,
+      "endFrame": 2767,
+      "points": [
+        [10, 0, 0],
+        [10, 0, 15]
+      ]
     }
   ],
   "fov": [
@@ -68,8 +84,8 @@
     },
     {
       "startFrame": 2549,
-      "endFrame": 2800,
-      "points": [0, 2.5]
+      "endFrame": 2757,
+      "points": [2.5, 0]
     }
   ]
 }

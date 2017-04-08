@@ -109,7 +109,13 @@
             if (frame > endStartFrameTwo + 20) {
               if (j !== 8 || i !== 8) {
                 cube.position.x = 10000;
+              } else {
+                cube.scale.x = lerp(1, 0, (frame - endStartFrameTwo - 40) / 10);
+                cube.scale.z = lerp(1, 0, (frame - endStartFrameTwo - 40) / 10);
               }
+            } else {
+              cube.scale.x = 1;
+              cube.scale.z = 1;
             }
           } else {
             cube.position.x = 100000;
