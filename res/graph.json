@@ -61,6 +61,7 @@
       "F": "SphereTransitionShader.render",
       "G": "galagafx_vignette.render",
       "H": "triangle.render",
+      "H_and_a_half": "greets.render",
       "I": "piano.render",
       "J": "lava_SSAO.render",
       "K": "BitGlitchShader.render",
@@ -247,5 +248,9 @@
       "A": "umbrellas.render",
       "B": "kaleidoscope.render"
     }
+  },
+  {
+    "id": "greets",
+    "type": "greets"
   }
 ]
