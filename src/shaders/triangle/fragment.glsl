@@ -7,7 +7,6 @@ uniform float extra;
 uniform float shift;
 
 varying vec2 vUv;
-varying vec2 aUv;
 
 #define EPS 0.01
 #define FAR 10.0
