@@ -17,7 +17,9 @@ varying vec2 aUv;
 
 float map(vec3 p) {
     float v = frame / 60.;
-    float r = max((0.9*big + 1.0*extra), 0.5)  + 0.35*cos(8.3*p.y + v) + 0.35*cos(2.3*p.x + v);
+    float r = max((0.9*big + 1.0*extra), 0.5) +
+               0.35*cos(8.3*p.y + v) +
+               0.35*cos(2.3*p.x + v);
     return length(p) - r;
 }
 
@@ -25,18 +27,39 @@ float map_black(vec3 p) {
     return map(p) - 0.05;
 }
 
-vec3 shade(vec4 color, vec2 uv) {
+vec3 calcNormal(in vec3 pos) {
+    vec2 e = vec2(1.0,-1.0)*0.5773*0.0005;
+    return normalize(
+        e.xyy*map(pos + e.xyy) +
+        e.yyx*map(pos + e.yyx) +
+        e.yxy*map(pos + e.yxy) +
+        e.xxx*map(pos + e.xxx)
+    );
+}
+
+vec3 shade(vec4 color, vec2 uv, vec3 rd, vec3 ro, float multiplier) {
     float l = length(uv);
     float t = frame / 60.;
 
     //vec2 uv2 = ((-1.0 + 2.0 * uv)/l)*cos(l*12.0-t*4.0);
-    vec2 uv2 = uv*max(0.9, cos(l*12.0-t*4.0)+shift);
-    vec4 col = texture2D(B, uv2);
+    //vec2 uv2 = uv*max(0.9, cos(l*12.0-t*4.0)+shift);
+
+    vec3 norm = calcNormal(rd);
+    vec3 refd = refract(rd, norm, 1.0/1.33);
+
+    vec3 light = vec3(1.0, 1.0, -1.0);
+    float diffusion = clamp(dot(norm, light), 0.0, 1.0);
+
+    vec3 cam = ro+rd*multiplier;
+    vec2 point = vec2(refd.x + cam.x, refd.y + cam.y);
+    vec4 col = texture2D(B, mod(0.35*point+.5,1.));
+
+    return vec3(.4*diffusion) + .6*col.xyz;
 
     // post processing
-    col = smoothstep(0.0, 1.0, col);
-    vec3 res = pow(col.xyz, vec3(0.45));
-    return res;
+    //col = smoothstep(0.0, 1.0, col);
+    //vec3 res = pow(col.xyz, vec3(0.45));
+    return col.xyz;
 }
 
 void main() {
@@ -75,7 +98,7 @@ void main() {
     }
 
     if(d < EPS) {
-        c = shade(colorA, vUv);
+        c = shade(colorA, vUv, rd, ro, t);
     }
 
     gl_FragColor = vec4(c, 1.0);
