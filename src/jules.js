@@ -74,15 +74,6 @@
               let xyz = (i+j) % 2 == 0 ? 1.5 * scale : 0.5 * scale;
               this.group[i][j].scale.set(xyz, xyz, xyz);
             }
-
-            if (frame >= 6270){
-              let colorij = this.group[i][j].material.color;
-              if ((i + j) % 2 == 0) { 
-                this.group[i][j].material.color.setRGB(colorij.r-3, colorij.g-3, colorij.b-3);
-              } else {
-                this.group[i][j].material.color.setRGB(colorij.r+3, colorij.g+3, colorij.b+3);
-              }
-            }
           }
         }
       }
