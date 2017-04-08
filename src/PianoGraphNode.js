@@ -309,7 +309,7 @@
           this.spawnPoint(
             8 + (Math.random() - 0.5) * 8 * 2 / this.zoom * 1.1,
             4.5 + (Math.random() - 0.5) * 4.5 * 2 / this.zoom * 1.1);
-          if(frame > 6800 && frame < 7000) {
+          if(frame > 6800 && frame < 7900) {
             this.spawnPointsAroundPolygon();
             this.spawnPointsAroundPolygon();
             analysisValue -= 0.1;
