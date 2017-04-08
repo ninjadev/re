@@ -9,10 +9,10 @@
 
       this.hexagonRotation = 0;
       this.group = [];
+      var geo = new THREE.CircleBufferGeometry(3, 6);
       for (var i=0;i<50;i++) {
         this.group[i] = [];
         for (var j=0;j<50;j++) {
-          var geo = new THREE.CircleBufferGeometry(3, 6);
           if ((i+j) % 2 == 0) {
             var mat = new THREE.MeshBasicMaterial({color: 0xc94c4c});
           }
