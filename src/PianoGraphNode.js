@@ -262,7 +262,6 @@
       this.cameraY += this.cameraDY;
       this.cameraX *= .5;
       this.cameraY *= .5;
-      console.log(this.cameraX, this.cameraY);
 
       if(this.oldPolygonValue != this.inputs.polygons.getValue()) {
         this.loadPolygons();
