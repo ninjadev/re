@@ -1,3 +1,4 @@
+uniform float stage;
 uniform float frame;
 uniform sampler2D tDiffuse;
 
@@ -39,7 +40,7 @@ void main() {
     int y = int((vUv.y * 90.0) - 45.0);
     vec2 pos = vec2(x, y);
 
-    int stage = int(mod(frame, 12.));
+    int stage = int(mod(stage, 12.));
     float s=0.;
 
     if (int(frame) >= 12) {
@@ -58,10 +59,20 @@ void main() {
         s = max(insideStar(pos, vec2( 0,  10), stage), s);
     }
 
-    if (s == 1.) {
-        //gl_FragColor = vec4(148./255.,0.,211./255., 0.);
-        gl_FragColor = vec4(1.0);
+    vec4 star;
+    vec4 background;
+
+    if (frame > 8800.) {
+        background = vec4(1.0);
+        star = vec4(0.0, 0.0, 0.1, 1.0);
     } else {
-        gl_FragColor = vec4(0., 0., 0.1, 1.);
+        background = vec4(0.0, 0.0, 0.1, 1.0);
+        star = vec4(1.0);
+    }
+
+    if (s == 1.) {
+        gl_FragColor = background;;
+    } else {
+        gl_FragColor = star;
     }
 }
