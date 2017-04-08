@@ -97,7 +97,7 @@
           (frame - 968) / (1051 - 968));
 
       if(frame == 997) {
-        this.noteNumbers = 0;
+        this.noteNumbers = 1;
         for(let i = 0; i < this.boxes.length; i++) {
           this.boxes[i].position.z = -i * 2;
         }
@@ -110,13 +110,13 @@
         const box = this.boxes[i];
         this.scene.remove(box);
         box.position.z += 0.035;
-        if(i <= this.noteNumbers) {
+        if(i < this.noteNumbers) {
           this.scene.add(box);
         }
         const boxShadow = this.boxShadows[i];
         this.scene.remove(boxShadow);
         boxShadow.position.z += 0.035;
-        if(i <= this.noteNumbers) {
+        if(i < this.noteNumbers) {
           this.scene.add(boxShadow);
         }
 
@@ -149,7 +149,7 @@
       if(this.circleThrob < 0.5) {
         this.circleThrob = 0.5;
       }
-      if(this.inputs.percolator.getValue()) {
+      if(this.inputs.percolator.getValue() && frame > 996) {
         this.circleThrob = 1;
         this.noteNumbers++;
       }

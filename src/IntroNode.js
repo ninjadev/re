@@ -61,7 +61,7 @@
       if(BEAT && (BEAN - bar) % (bar * 8) == 0) {
         this.noteCount = 0;
       }
-      if(this.inputs.percolator.getValue() && frame >= 996) {
+      if(this.inputs.percolator.getValue()) {
         if(this.noteCount < 7) {
           this.fire(4);
         } else if(this.noteCount < 11) {
