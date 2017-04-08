@@ -11,6 +11,9 @@
     "type": "bars",
     "options": {
       "camera": "res/bars.camera.json"
+    },
+    "connected": {
+      "percolator": "percolator.percolator"
     }
   },
   {
