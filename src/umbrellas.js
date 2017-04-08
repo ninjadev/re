@@ -7,6 +7,8 @@
         }
       });
 
+      this.kickThrob = 0;
+
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
       this.resize();
@@ -53,7 +55,7 @@
       this.bubbles = [];
       for (let i=0; i < 13; i++) {
         this.bubbles[i] = {
-          x: 8 + (i%3 - 1) * 2,
+          x: 8 + (i%3 - 1) * 4,
           y: 4.5,
           radius: 1,
           progress: Math.PI * 2,
@@ -64,8 +66,8 @@
       this.twobbles = [];
       for (let i=0; i < 5; i++) {
         this.twobbles[i] = {
-          x: 8 + (2 - i) * 3,
-          y: 4.5,
+          x: 8 + (2 - i) * 8,
+          y: 6,
           radius: 0.1,
           progress: Math.PI * 2,
           opacity: 0,
@@ -75,8 +77,6 @@
       this.zoomLevel = 0;
 
       this.aSquareSize = 0;
-      this.foregroundColor = '#64db84';
-      this.backgroundColor = '#84eb94';
     }
 
     resize() {
@@ -85,6 +85,22 @@
     }
 
     update(frame) {
+
+      if(frame >= FRAME_FOR_BEAN(12 * 4 * 28) && frame < FRAME_FOR_BEAN(12 * 4 * 29 - 12)) {
+        frame -= smoothstep(0, 25, (frame - FRAME_FOR_BEAN(12 * 4 * 28)) / 50);
+      }
+
+
+      this.frame = frame;
+      this.kickThrob *= 0.95;
+      if(this.kickThrob < 0.01) {
+        this.kickThrob = 0;
+      }
+      if(BEAT && BEAN % 12 == 0) {
+        this.kickThrob = 1;
+      }
+
+      const spacing = 6;
       const startBEAN = 100 * 12;
       const partTwoFrame = FRAME_FOR_BEAN(startBEAN + 16 * 12) - 20;
       for (const [i, umbrella] of this.umbrellas.entries()) {
@@ -93,7 +109,7 @@
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
         umbrella.progress = smoothstep(umbrella.progress, 0, (i + frame - partTwoFrame) / 30);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
-        umbrella.x = clamp(8, 8 + (frame - startFrame) / 25, 20);
+        umbrella.x = 8 + spacing * (frame - startFrame) / 25;
       }
 
       for (const [i, umbrella] of this.twombrellas.entries()) {
@@ -102,7 +118,7 @@
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
         umbrella.progress = smoothstep(umbrella.progress, 0, (i + frame - partTwoFrame) / 30);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
-        umbrella.x = clamp(-10, 8 - (frame - startFrame) / 25, 8);
+        umbrella.x = 8 - spacing * (frame - startFrame) / 25;
       }
 
       for (const [i, umbrella] of this.threembrellas.entries()) {
@@ -111,7 +127,7 @@
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
         umbrella.progress = smoothstep(umbrella.progress, 0, (i + frame - partTwoFrame) / 30);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
-        umbrella.y = clamp(4.5, 4.5 + (frame - startFrame) / 25, 18);
+        umbrella.y = 4.5 + spacing * (frame - startFrame) / 25;
       }
 
       for (const [i, umbrella] of this.fourmbrellas.entries()) {
@@ -120,7 +136,7 @@
         umbrella.radius = clamp(1, 1 + (frame - startFrame) / 10, 100);
         umbrella.progress = smoothstep(umbrella.progress, 0, (i + frame - partTwoFrame) / 30);
         umbrella.opacity = clamp(0, 1 - (frame - startFrame) / 500, 1);
-        umbrella.y = clamp(-10, 4.5 - (frame - startFrame) / 25, 4.5);
+        umbrella.y = 4.5 - spacing * (frame - startFrame) / 25;
       }
 
       for (const [i, bubble] of this.bubbles.entries()) {
@@ -131,7 +147,7 @@
           bubble.opacity = 0;
         }
         bubble.radius = clamp(0, (frame - startFrame) / 5, 100);
-        bubble.y = clamp(4.5, 4.5 + (frame - startFrame) / 25, 18);
+        bubble.y = 3 + spacing * (frame - startFrame) / 25;
       }
 
       const twobbleBEANS = [
@@ -157,41 +173,71 @@
       this.rotation = clamp(0, (frame - FRAME_FOR_BEAN(startBEAN + 8 * 12)) / 70, Math.PI);
       const zoomLevel = clamp(0, (BEAN - startBEAN) / (2 * 12), 8);
       if ((zoomLevel | 0) % 2) {
-        this.foregroundColor = '#64db84';
-        this.backgroundColor = '#84eb94';
+        this.foregroundColor = '#0092dd';
+        this.backgroundColor = '#00a2ff';
       } else {
-        this.foregroundColor = '#84eb94';
-        this.backgroundColor = '#64db84';
+        this.foregroundColor = '#00a2ff';
+        this.backgroundColor = '#0092dd';
       }
       this.aSquareSize = (zoomLevel % 1) * 2;
       this.scale = clamp(0, 0.4 + 0.075 * zoomLevel, 1);
     }
 
     render() {
-      this.ctx.fillStyle = '#64db84';
-      this.ctx.fillStyle = this.backgroundColor;
-      this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
 
-      this.ctx.fillStyle = this.foregroundColor;
-      this.roundRect(
-        this.ctx,
-        (8 - easeIn(4.5, 8, this.aSquareSize) * this.aSquareSize) * GU,
-        (4.5 - 4.5 * this.aSquareSize) * GU,
-        easeIn(9, 16, this.aSquareSize) * this.aSquareSize * GU,
-        9 * this.aSquareSize * GU,
-        easeIn(4.5, 0, this.aSquareSize * 0.5) * this.aSquareSize * GU,
-        true,
-        false);
+      let zoomSwitchStart = FRAME_FOR_BEAN(12 * 4 * 26.5);
+      let zoomSwitchEnd = FRAME_FOR_BEAN(12 * 4 * 26.75 + 6);
+      let zoomSwitchPivotEnd = FRAME_FOR_BEAN(12 * 4 * 27);
+      let zoomSwitchPivot = FRAME_FOR_BEAN(12 *4 * 26.75);
+      let zoomSwitchProgress = (this.frame - zoomSwitchStart) / (zoomSwitchEnd - zoomSwitchStart);
+      let zoomSwitchScaler = Math.pow(2, smoothstep(0, 4, zoomSwitchProgress));
+      let zoomSwitchX = lerp(0, -10, zoomSwitchProgress);
+      let zoomSwitchUmbrellaScaler = 1;
+
+      let startXTranslater = smoothstep(-7, 0, (this.frame - 2856) / 25);
+
+      let colorA = '#0092dd';
+      let colorAShadowStart = '#006688';
+      let colorAShadowEnd = '#0088aa';
+      let colorB = '#ff00a2';
+      let colorBShadowStart = '#880066';
+      let colorBShadowEnd = '#aa0088';
+
+      if(this.frame > zoomSwitchPivot) {
+        zoomSwitchX = 0;
+        zoomSwitchScaler = 1;
+        zoomSwitchUmbrellaScaler = smoothstep(0, 3,
+            (this.frame - zoomSwitchPivot) / (zoomSwitchPivotEnd - zoomSwitchPivot));
+        zoomSwitchUmbrellaScaler = smoothstep(zoomSwitchUmbrellaScaler, 1,
+            (this.frame - zoomSwitchPivot) / (zoomSwitchPivotEnd - zoomSwitchPivot));
+        colorB = '#0092dd';
+        colorBShadowStart = '#006688';
+        colorBShadowEnd = '#0088aa';
+        colorA = '#ff00a2';
+        colorAShadowStart = '#880066';
+        colorAShadowEnd = '#aa0088';
+      }
+      this.ctx.fillStyle = colorA;
+      this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
+      this.ctx.save();
+      this.ctx.globalCompositeOperation = 'lighter';
+      this.ctx.globalAlpha = 0.2 * this.kickThrob;
+      this.ctx.fillStyle = 'white';
+      //this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
+      this.ctx.restore();
 
       this.ctx.save();
       this.ctx.translate(8 * GU, 4.5 * GU);
       this.ctx.rotate(this.rotation);
       this.ctx.scale(this.scale, this.scale);
+      this.ctx.scale(zoomSwitchScaler, zoomSwitchScaler);
       this.ctx.translate(-8 * GU, -4.5 * GU);
+      this.ctx.translate(zoomSwitchX * GU, 0);
+      this.ctx.translate(startXTranslater * GU, 0);
 
       let shadowGradient = this.ctx.createLinearGradient(0, 0, 0, 20 * GU);
-      shadowGradient.addColorStop(0, '#408e54');
-      shadowGradient.addColorStop(1, '#64db84');
+      shadowGradient.addColorStop(0, colorAShadowStart);
+      shadowGradient.addColorStop(1, colorAShadowEnd);
       for (const umbrella of [...this.umbrellas, ...this.twombrellas, ...this.threembrellas, ...this.fourmbrellas, ...this.bubbles, ...this.twobbles]) {
         if(umbrella.opacity > 0) {
           this.ctx.save();
@@ -199,18 +245,22 @@
           this.ctx.translate(umbrella.x * GU, umbrella.y * GU);
           this.ctx.rotate(-Math.PI / 4);
           this.ctx.rotate(-this.rotation);
-          const radius = umbrella.progress * (1 * GU + 0.03 * umbrella.radius * GU)/ Math.PI / 2;
-          this.ctx.fillRect(-radius, 0, radius * 2, 20 * GU);
+          const radius = umbrella.progress * 0.3 * GU * zoomSwitchUmbrellaScaler;
+          this.ctx.fillRect(-radius, 0, radius * 2, 100 * GU);
           this.ctx.restore();
         }
       }
 
       for (const umbrella of [...this.umbrellas, ...this.twombrellas, ...this.threembrellas, ...this.fourmbrellas, ...this.bubbles, ...this.twobbles]) {
-        this.ctx.strokeStyle = `rgba(0,0,0, ${umbrella.opacity})`;
-        this.ctx.fillStyle = `rgba(242,133,33, ${umbrella.opacity})`;
-        this.ctx.lineWidth = 0.2 * GU;
+        if(umbrella.opacity == 0) {
+          continue;
+        }
+        this.ctx.strokeStyle = '#002244';
+        this.ctx.fillStyle = colorB;
+        this.ctx.lineWidth = 0.1 * GU;
         this.ctx.beginPath();
-        this.ctx.arc(umbrella.x * GU, umbrella.y * GU, umbrella.progress * (1 * GU + 0.03 * umbrella.radius * GU) / Math.PI / 2, 0, Math.PI * 2);
+        const radius = umbrella.progress * 0.3 * GU * zoomSwitchUmbrellaScaler;
+        this.ctx.arc(umbrella.x * GU, umbrella.y * GU, radius, 0, Math.PI * 2);
         this.ctx.stroke();
         this.ctx.fill();
       }
