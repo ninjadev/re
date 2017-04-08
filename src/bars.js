@@ -3,6 +3,9 @@
   class bars extends NIN.THREENode {
     constructor(id, options) {
       super(id, {
+        inputs: {
+          percolator: new NIN.Input()
+        },
         camera: options.camera,
       });
 
@@ -17,13 +20,15 @@
           cube.rotation.y = 1;
           cube.scale.y = 0.01;
           cube.position.x = 100000;
-          cube.position.z = 40 * (j - 8);
+          cube.position.z = 20 * (j - 8);
           this.scene.add(cube);
           cuberow.push(cube);
 
         }
         this.cubes.push(cuberow);
       }
+
+      this.rowStartIndices = [8,9,7,10,6,11,5,12,4,13,3,14,2,15,1,16,0];
 
       this.splashes = [];
       for (let i=0; i < 12; i++) {
@@ -34,7 +39,7 @@
         const splash = {
           radius: 0,
           x: 10 + 80 * ((i % 4) - 2),
-          z: 160 * zIndex,
+          z: 80 * zIndex,
           opacity: 0,
         };
         this.splashes.push(splash);
@@ -75,9 +80,18 @@
         this.camera.up = new THREE.Vector3(0, 1, 0);
       }
 
+      if (this.inputs.percolator.getValue()) {
+        this.rowStartIndex++;
+      }
+
       super.update(frame);
 
       const fft = demo.music ? demo.music.getFFT() : [];
+
+
+      if (frame < 1880) {
+        this.rowStartIndex = 0;
+      }
 
       const relativeBEAN = (BEAN / 12 - 67) | 0;
       for (const [j, cuberow] of this.cubes.entries()) {
@@ -104,12 +118,19 @@
           cube.scale.y = clamp(0.01, height, 10);
           cube.position.y = 5 * height;
 
-          if (i < relativeBEAN && (j === 8 || relativeBEAN >= Math.abs(j - 8) + 8)) {
+          if (i < relativeBEAN && (this.rowStartIndices.slice(0, this.rowStartIndex).includes(j))) {
             cube.position.x = 10 + 20 * (i - 8);
-            if (frame > endStartFrameTwo + 20) {
+            if (frame > endStartFrameTwo) {
               if (j !== 8 || i !== 8) {
-                cube.position.x = 10000;
+                cube.scale.x = lerp(1, 0, (frame - endStartFrameTwo - 0) / 20);
+                cube.scale.z = lerp(1, 0, (frame - endStartFrameTwo - 0) / 20);
+              } else {
+                cube.scale.x = lerp(1, 0, (frame - endStartFrameTwo - 30) / 10);
+                cube.scale.z = lerp(1, 0, (frame - endStartFrameTwo - 30) / 10);
               }
+            } else {
+              cube.scale.x = 1;
+              cube.scale.z = 1;
             }
           } else {
             cube.position.x = 100000;
