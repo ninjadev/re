@@ -138,8 +138,7 @@
       "shader": "triangle"
     },
     "connected": {
-      "A": "Circle.render",
-      "B": "jules.render"
+      "A": "jules.render"
     }
   },
   {
@@ -224,13 +223,6 @@
     },
     "connected": {
       "texture": "RotozoomShader.render"
-    }
-  },
-  {
-    "id": "Circle",
-    "type": "CircleNode",
-    "options": {
-      "shader": "Circle"
     }
   },
   {

@@ -1,6 +1,5 @@
 uniform float frame;
 uniform sampler2D A;
-uniform sampler2D B;
 uniform vec2 resolution;
 
 uniform float big;
@@ -49,7 +48,7 @@ vec3 shade(vec4 color, vec2 uv, vec3 rd, vec3 ro, float multiplier) {
 
     vec3 cam = ro+rd*multiplier;
     vec2 point = vec2(refd.x + cam.x, refd.y + cam.y);
-    vec4 col = texture2D(B, mod(0.35*point+.5,1.));
+    vec4 col = texture2D(A, mod(0.35*point+.5,1.));
 
     col = vec4(.35*diffusion) + .65*col;
 
@@ -62,8 +61,7 @@ vec3 shade(vec4 color, vec2 uv, vec3 rd, vec3 ro, float multiplier) {
 }
 
 void main() {
-    vec4 colorA = texture2D(A, vUv);
-    vec4 colorB = texture2D(B, vUv);
+    vec4 bg = texture2D(A, vUv);
 
     vec2 uv = -1.0 + 2.0 * vUv;
     uv.x *= 16.0/9.0;
@@ -74,7 +72,7 @@ void main() {
     float d = EPS;
 
     // background
-    vec3 c = mix(vec3(0.0), colorB.xyz, 2.0 - length(uv));
+    vec3 c = mix(vec3(0.0), bg.xyz, 2.0 - length(uv));
 
     // black outline
     for(int i = 0; i < STEPS; ++i) {
@@ -97,7 +95,7 @@ void main() {
     }
 
     if(d < EPS) {
-        c = shade(colorA, vUv, rd, ro, t);
+        c = shade(bg, vUv, rd, ro, t);
     }
 
     gl_FragColor = vec4(c, 1.0);
