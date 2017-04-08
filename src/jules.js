@@ -46,6 +46,12 @@
             if (BEAT) {
               this.group[i][j].position.x = (i-25)*10*((Math.sin(frame/100)+3)/3);
               this.group[i][j].position.y = (j-25)*10*((Math.sin(frame/100)+3)/3);
+              if(BEAN % 12 == 0 && (i+j) % 2 == 0) {
+                let z = this.group[i][j].position.z;
+                z += 3;
+                if(z > 0) { z = -z; }
+                this.group[i][j].position.z = z;
+              }
               this.group[i][j].rotation.z = this.hexagonRotation * ((i + j) % 2 == 0 ? 1 : -1);
             }
             if (frame < 5500 && BEAT) { 
