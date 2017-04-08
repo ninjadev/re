@@ -266,8 +266,8 @@
         this.particleSprite.width / 2,
         this.particleSprite.width / 2,
         0);
-      gradient.addColorStop(0, 'rgba(68, 250, 218, 0)');
-      gradient.addColorStop(1, '#44fada');
+      gradient.addColorStop(0, 'rgba(255, 8, 162, 0)');
+      gradient.addColorStop(1, '#ff00a2');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, this.particleSprite.width, this.particleSprite.height);
     }
@@ -354,7 +354,7 @@
             const particle = this.particles[this.activeParticles++];
             const angle = Math.PI / 2  + Math.random() * Math.PI;
             const spread = Math.random() / 16;
-            particle.x = this.spaceshipX - spread * 8;
+            particle.x = this.spaceshipX - spread * 4;
             particle.y = this.spaceshipY;
             particle.dx = -0.3;
             particle.dy = 0;
@@ -427,8 +427,8 @@
         } else if(BEAN < offset + beat * 18) {
           zoom = 4;
           angle = -0.1;
-          y = 5;
-          x = 0;
+          y = 6;
+          x = -1.5;
           stripeCrazyColors = true;
           stripeSpeed = 2.2;
         } else if(BEAN < offset + beat * 19) {
@@ -437,8 +437,8 @@
           const t = (this.frame - start) / (end - start);
           zoom = smoothstep(4, 1, t);
           angle = smoothstep(-0.1, 0, t);
-          y = smoothstep(5, 0, t);
-          x = smoothstep(0, 0, t);
+          y = smoothstep(6, 0, t);
+          x = smoothstep(-1.5, 0, t);
         }
       }
 
@@ -457,12 +457,12 @@
           this.ctx.fillStyle = `#${9-digit}${digit}a0${digit}${digit}`;
         }
         const x = (20 - i + stripeOffset) * GU * 2;
-        this.ctx.fillRect(x, -x - 1 * GU, 1 * GU, 16 * GU);
+        this.ctx.fillRect(x, -x - 1 * GU, 1 * GU, 17 * GU);
         if(stripeCrazyColors) {
           let digit = 1 + ((1 + Math.sin((i - 8) / 30 * Math.PI * 2 * 9))  * 4 | 0);
           this.ctx.fillStyle = `#${9-digit}${digit}a0${digit}${digit}`;
         }
-        this.ctx.fillRect(x, -x - 17 * GU, 16 * GU, 1 * GU);
+        this.ctx.fillRect(x, -x - 17 * GU, 17 * GU, 1 * GU);
       }
       this.ctx.restore();
 
@@ -494,18 +494,17 @@
       }
 
       this.ctx.globalAlpha = 1;
-      this.ctx.fillStyle = '#0500b05';
-      //this.ctx.globalCompositeOperation = 'lighter';
-      this.ctx.globalCompositeOperation = 'source-over';
+      this.ctx.fillStyle = '#050005';
       const width = 0.5;
       for(let i = 0; i < this.activeParticles; i++) {
         const particle = this.particles[i];
-        this.ctx.globalAlpha = particle.life / 100;
+        this.ctx.globalAlpha = particle.life / 100 * 0.1;
         this.ctx.drawImage(
           this.particleSprite,
           (particle.x - 0.5) * GU - this.particleSprite.width / 2 - 0.5 * GU,
           particle.y * GU - this.particleSprite.height / 2);
       }
+      this.ctx.globalCompositeOperation = 'source-over';
 
       this.ctx.globalAlpha = 1;
       const shipScale = GU / this.shipSprite.width *  2;
@@ -513,14 +512,6 @@
       this.ctx.scale(shipScale, shipScale);
       this.ctx.rotate(this.spaceshipRotation);
       this.ctx.drawImage(this.shipSprite, -this.shipSprite.width / 2, -this.shipSprite.height / 2);
-      this.ctx.fillStyle = '#ce2458';
-      /*
-      for(let i = 0; i < 7; i++) {
-        this.ctx.fillStyle = Math.sin(Math.PI * 2 * i / 7 + this.frame / 60 / 60 * 130 * 4 * 2) > 0 ? '#ce2458' : '#1f1f1f';
-        //this.ctx.fillRect((0.06 + i * 0.03) * GU * shipScale, 0.01 * GU, 0.02 * GU, 0.09 * GU);
-        this.ctx.fillRect((6 + i * 3), 2, 2, 9);
-      }
-      */
 
       this.ctx.restore();
 
@@ -532,7 +523,7 @@
 
 
       this.ctx.globalAlpha = 1;
-      this.ctx.fillStyle = '#010001';
+      this.ctx.fillStyle = '#110011';
       this.ctx.fillRect(0, -hudOffset * GU, 16 * GU, 1.3 * GU);
       this.ctx.fillRect(0, hudOffset * GU + 9 * GU - 1.3 * GU, 16 * GU, 1.5 * GU);
       this.ctx.fillStyle = colorA;
@@ -603,9 +594,6 @@
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         ctx.font = (1.2 * GU) + 'pt vcr'; 
-        if(radius == 3) {
-          ctx.fillText('GREETS', 8 * GU, 4.5 * GU);
-        }
         this.ctx.drawImage(this.maskCanvas, 0, 0);
       }
 
