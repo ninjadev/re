@@ -94,7 +94,7 @@
       this.background.material.uniforms.amount.value = easeOut(
           0,
           1,
-          (frame - 996) / (1051 - 996));
+          (frame - 968) / (1051 - 968));
 
       if(frame == 997) {
         this.noteNumbers = 0;
@@ -168,11 +168,14 @@
       }
       this.camera.lookAt(new THREE.Vector3(0, smoothstep(0, 4, t), 0));
       this.background.rotation.copy(this.camera.rotation);
-      this.cube.position.z = frame / 10;
+      //this.cube.position.z = frame / 10;
+
+      this.cube.position.z = 500 + easeOut(9, -25,
+          (frame - 996) / (1051 - 996));
 
       if(demo.nm.nodes.isoscroller_vignette) {
         demo.nm.nodes.isoscroller_vignette.uniforms.amount.value = 
-          easeOut(0., 1., (frame - 996) / (1051 - 996));
+          easeOut(0., 1., (frame - 968) / (996 - 968));
       }
     }
 

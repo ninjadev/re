@@ -61,7 +61,7 @@
       if(BEAT && (BEAN - bar) % (bar * 8) == 0) {
         this.noteCount = 0;
       }
-      if(this.inputs.percolator.getValue()) {
+      if(this.inputs.percolator.getValue() && frame >= 996) {
         if(this.noteCount < 7) {
           this.fire(4);
         } else if(this.noteCount < 11) {
@@ -127,9 +127,9 @@
 
       this.circleEndSize = smoothstep(0, 1, (this.frame - 927) / (996 - 927));
 
-      const r = smoothstep(255, 27, this.circleEndSize);
-      const g = smoothstep(0, 9, this.circleEndSize);
-      const b = smoothstep(162, 34, this.circleEndSize);
+      const r = smoothstep(255, 27, this.circleEndSize * 2);
+      const g = smoothstep(0, 9, this.circleEndSize * 2);
+      const b = smoothstep(162, 34, this.circleEndSize * 2);
       this.ctx.fillStyle = `rgb(${r|0}, ${g|0}, ${b|0})`;
       this.ctx.beginPath();
       this.ctx.ellipse(
