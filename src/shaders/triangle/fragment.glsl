@@ -5,6 +5,7 @@ uniform vec2 resolution;
 
 uniform float big;
 uniform float extra;
+uniform float shift;
 
 varying vec2 vUv;
 varying vec2 aUv;
@@ -13,9 +14,10 @@ varying vec2 aUv;
 #define FAR 10.0
 #define STEPS 64
 
+
 float map(vec3 p) {
     float v = frame / 60.;
-    float r = (0.9*big + 1.0*extra)  + 0.35*cos(8.3*p.y + v) + 0.35*cos(2.3*p.x + v);
+    float r = max((0.9*big + 1.0*extra), 0.5)  + 0.35*cos(8.3*p.y + v) + 0.35*cos(2.3*p.x + v);
     return length(p) - r;
 }
 
@@ -23,8 +25,18 @@ float map_black(vec3 p) {
     return map(p) - 0.05;
 }
 
-vec3 shade(vec3 ro, vec3 rd, float t, vec4 color) {
-    return color.xyz;
+vec3 shade(vec4 color, vec2 uv) {
+    float l = length(uv);
+    float t = frame / 60.;
+
+    //vec2 uv2 = ((-1.0 + 2.0 * uv)/l)*cos(l*12.0-t*4.0);
+    vec2 uv2 = uv*max(0.9, cos(l*12.0-t*4.0)+shift);
+    vec4 col = texture2D(B, uv2);
+
+    // post processing
+    col = smoothstep(0.0, 1.0, col);
+    vec3 res = pow(col.xyz, vec3(0.45));
+    return res;
 }
 
 void main() {
@@ -63,7 +75,7 @@ void main() {
     }
 
     if(d < EPS) {
-        c = shade(ro, rd, t, colorA);
+        c = shade(colorA, vUv);
     }
 
     gl_FragColor = vec4(c, 1.0);
