@@ -58,8 +58,7 @@
     "connected": {
       "A": "intro_add.render",
       "C": "LaneSwipeTransition.render",
-      "E": "umbrellas.render",
-      "F": "kaleidoscope.render",
+      "F": "SphereTransitionShader.render",
       "G": "galagafx_vignette.render",
       "H": "triangle.render",
       "I": "piano.render",
@@ -245,5 +244,16 @@
   {
     "id": "jules",
     "type": "jules"
+  },
+  {
+    "id": "SphereTransitionShader",
+    "type": "SphereTransitionShaderNode",
+    "options": {
+      "shader": "SphereTransitionShader"
+    },
+    "connected": {
+      "A": "umbrellas.render",
+      "B": "kaleidoscope.render"
+    }
   }
 ]

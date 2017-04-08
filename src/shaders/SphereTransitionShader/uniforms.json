@@ -1,0 +1,5 @@
+{
+    "mixer": { "type": "f", "value": "0.0" },
+    "A": { "type": "t", "value": null },
+    "B": { "type": "t", "value": null }
+}
