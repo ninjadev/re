@@ -6,16 +6,14 @@
         camera: options.camera,
       });
 
-      this.scene.background = new THREE.Color(0x00a2ff);
+      this.scene.background = new THREE.Color(0x6C92B4);
 
-      this.splashes = [];
       this.cubes = [];
       for (let j=0; j < 17; j++) {
         const cuberow = [];
-        const splashrow = [];
         for (let i=0; i < 16; i++) {
           const cube = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, 10, 32),
-                                      new THREE.MeshToonMaterial({color: 0x875F9A }));
+                                      new THREE.MeshToonMaterial({color: 0xaa4839 }));
           cube.rotation.y = 1;
           cube.scale.y = 0.01;
           cube.position.x = 100000;
@@ -23,15 +21,23 @@
           this.scene.add(cube);
           cuberow.push(cube);
 
-          const splash = {
-            radius: 1,
-            x: 10 + 20 * (i - 8),
-            z: 40 * (j - 8),
-          };
-          splashrow.push(splash);
         }
         this.cubes.push(cuberow);
-        this.splashes.push(splashrow);
+      }
+
+      this.splashes = [];
+      for (let i=0; i < 12; i++) {
+        let zIndex = (i / 4 | 0);
+        if (zIndex == 2) {
+          zIndex = -1;
+        }
+        const splash = {
+          radius: 0,
+          x: 10 + 80 * ((i % 4) - 2),
+          z: 160 * zIndex,
+          opacity: 0,
+        };
+        this.splashes.push(splash);
       }
 
       const light = new THREE.AmbientLight(0xffffff, 0.1);
@@ -41,28 +47,6 @@
       dirLight.position.set(0, 100, 100);
       this.scene.add(dirLight);
 
-      /*
-      this.triangles = [];
-      for (let i=0; i < 8; i++) {
-        const geom = new THREE.Geometry();
-        geom.vertices.push(
-          new THREE.Vector3(0,0,0),
-          new THREE.Vector3(-100,500,0),
-          new THREE.Vector3(100,500,0)
-        );
-
-        geom.faces.push(new THREE.Face3(0, 1, 2));
-        geom.computeFaceNormals();
-
-        const material = new THREE.MeshBasicMaterial({color: 0x22ccff, side: THREE.DoubleSide});
-        const triangle = new THREE.Mesh(geom, material);
-        triangle.position.set(0, 0, -300);
-        triangle.rotation.set(0, 0, Math.PI);
-        this.triangles.push(triangle);
-        this.scene.add(triangle);
-      }
-      */
-
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
       this.canvasTexture = new THREE.CanvasTexture(this.canvas);
@@ -70,7 +54,7 @@
       this.canvasTexture.magFilter = THREE.LinearFilter;
       this.canvasMaterial = new THREE.MeshBasicMaterial({map: this.canvasTexture});
       this.plane = new THREE.Mesh(
-        new THREE.PlaneGeometry(1600, 600),
+        new THREE.PlaneGeometry(1200, 1200),
         this.canvasMaterial
       );
       this.plane.rotation.x = -Math.PI * 0.5;
@@ -85,6 +69,12 @@
     }
 
     update(frame) {
+      if (frame >= 2549 && frame <= 2800) {
+        this.camera.up = new THREE.Vector3(1, 0, 0);
+      } else {
+        this.camera.up = new THREE.Vector3(0, 1, 0);
+      }
+
       super.update(frame);
 
       const fft = demo.music.getFFT();
@@ -93,8 +83,13 @@
       for (const [j, cuberow] of this.cubes.entries()) {
         for (const [i, cube] of cuberow.entries()) {
           const index = 15 - i;
-          let height = clamp(0, 150 + fft.slice(index * 64, index * 64 + 64).reduce((a,b) => a+b, 0) / 64, 120);
-          height = (0.005 * (index)) * height;
+          const fftSlice = fft.slice(
+            index * 55,
+            index * 55 + 55
+          );
+          const fftAvg = fftSlice.reduce((a, b) => a + b, 0) / 55;
+          let height = clamp(0, 150 + fftAvg, 150);
+          height = height * 0.001 * (index + 30);
 
           const endStartFrame = FRAME_FOR_BEAN(97 * 12 + 6) - 10;
           const endStartFrameTwo = FRAME_FOR_BEAN(98 * 12 + 6) - 10;
@@ -109,63 +104,56 @@
           cube.scale.y = clamp(0.01, height, 10);
           cube.position.y = 5 * height;
 
-          if (i < relativeBEAN && (j === 8 || relativeBEAN >= 9)) {
+          if (i < relativeBEAN && (j === 8 || relativeBEAN >= Math.abs(j - 8) + 8)) {
             cube.position.x = 10 + 20 * (i - 8);
             if (frame > endStartFrameTwo + 20) {
               if (j !== 8 || i !== 8) {
                 cube.position.x = 10000;
               }
             }
-
-            this.splashes[j][i].x = 10 + 20 * (i - 8);
-            this.splashes[j][i].z = 40 * (j - 8);
           } else {
             cube.position.x = 100000;
-
-            this.splashes[j][i].x = 10000;
-            this.splashes[j][i].z = 10000;
           }
         }
       }
 
-      /*
-      for (const [i, triangle] of this.triangles.entries()) {
-        triangle.rotation.z = (frame - this.chordFrames[i]) / 60;
+      for (let [i, splash] of this.splashes.entries()) {
+        if (i >= 8) {
+          i -= 4;
+        }
+        const startFrame = FRAME_FOR_BEAN(67 * 12 + 48 * i);
+        splash.opacity = easeOut(0.3, 1, (frame - startFrame) / 150);
+        splash.radius = lerp(0.1, 1, (frame - startFrame) / 150);
       }
-      */
 
       const planeColorFrame = FRAME_FOR_BEAN(98 * 12 + 12) - 10;
-      const r = smoothstep(255, 100, (frame - planeColorFrame) / 20);
-      const g = smoothstep(255, 219, (frame - planeColorFrame) / 20);
-      const b = smoothstep(255, 132, (frame - planeColorFrame) / 20);
-      this.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-
-      this.splashRadius = lerp(1, 5, (frame - FRAME_FOR_BEAN(BEAN - BEAN % 48)) / 240);
+      const r = lerp(255, 100, (frame - planeColorFrame) / 20);
+      const g = lerp(224, 219, (frame - planeColorFrame) / 20);
+      const b = lerp(144, 132, (frame - planeColorFrame) / 20);
+      this.backgroundColor = `rgb(${r|0}, ${g|0}, ${b|0})`;
     }
 
     resize() {
       super.resize();
 
-      this.canvas.width = 160 * GU;
-      this.canvas.height = 60 * GU;
+      this.canvas.width = 20 * GU;
+      this.canvas.height = 20 * GU;
     }
 
     render(renderer) {
       this.ctx.fillStyle = this.backgroundColor;
-      this.ctx.fillRect(0, 0, 160 * GU, 60 * GU);
+      this.ctx.fillRect(0, 0, 20 * GU, 20 * GU);
 
-      this.ctx.fillStyle = 'rgba(100, 219, 132, 0.7)';
-      for (const [j, splashrow] of this.splashes.entries()) {
-        for (const [i, splash] of splashrow.entries()) {
-          this.ctx.beginPath();
-          this.ctx.ellipse(
-            80 * GU + splash.x / 10 * GU,
-            30 * GU + splash.z / 10 * GU,
-            this.splashRadius * GU,
-            this.splashRadius * GU,
-            0, 0, Math.PI * 2);
-          this.ctx.fill();
-        }
+      for (const splash of this.splashes) {
+        this.ctx.fillStyle = `rgba(100, 219, 132, ${splash.opacity})`;
+        this.ctx.beginPath();
+        this.ctx.ellipse(
+          10 * GU + splash.x / 60 * GU,
+          10 * GU + splash.z / 60 * GU,
+          splash.radius * GU,
+          splash.radius * GU,
+          0, 0, Math.PI * 2);
+        this.ctx.fill();
       }
       this.canvasTexture.needsUpdate = true;
       this.canvasMaterial.needsUpdate = true;
