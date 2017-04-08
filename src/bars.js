@@ -122,14 +122,14 @@
           i -= 4;
         }
         const startFrame = FRAME_FOR_BEAN(67 * 12 + 48 * i);
-        splash.opacity = easeOut(0.3, 1, (frame - startFrame) / 150);
-        splash.radius = lerp(0.1, 1, (frame - startFrame) / 150);
+        splash.opacity = easeOut(0, 1, (frame - startFrame) / 150);
+        splash.radius = lerp(0, 1, (frame - startFrame) / 150);
       }
 
       const planeColorFrame = FRAME_FOR_BEAN(98 * 12 + 12) - 10;
-      const r = lerp(255, 100, (frame - planeColorFrame) / 20);
-      const g = lerp(224, 219, (frame - planeColorFrame) / 20);
-      const b = lerp(144, 132, (frame - planeColorFrame) / 20);
+      const r = lerp(255, 0, (frame - planeColorFrame) / 20);
+      const g = lerp(224, 146, (frame - planeColorFrame) / 20);
+      const b = lerp(144, 221, (frame - planeColorFrame) / 20);
       this.backgroundColor = `rgb(${r|0}, ${g|0}, ${b|0})`;
     }
 
@@ -145,7 +145,7 @@
       this.ctx.fillRect(0, 0, 20 * GU, 20 * GU);
 
       for (const splash of this.splashes) {
-        this.ctx.fillStyle = `rgba(100, 219, 132, ${splash.opacity})`;
+        this.ctx.fillStyle = `rgba(0, 146, 221, ${splash.opacity})`;
         this.ctx.beginPath();
         this.ctx.ellipse(
           10 * GU + splash.x / 60 * GU,
