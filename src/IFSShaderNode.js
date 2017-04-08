@@ -7,8 +7,9 @@
     }
 
     update(frame) {
+      frame -= 885;
       this.uniforms.frame.value = frame - this.analysis.getValue(frame) * 6;
-      if(BEAN >= 12 * 4 * 78.5) {
+      if(BEAN >= 12 * 4 * (8 + 78.5)) {
         this.uniforms.frame.value -= 300;
       }
     }

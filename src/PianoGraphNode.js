@@ -148,6 +148,10 @@
       this.cameraDDY = 0;
       this.shakeThrob = 0;
 
+      this.firstShakeFrame = FRAME_FOR_BEAN(12 * 4 * 73 + 12 + 6);
+      this.secondShakeFrame = FRAME_FOR_BEAN(12 * 4 * 73.75);
+      this.thirdShakeFrame = FRAME_FOR_BEAN(12 * 4 * 74);
+
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
       this.resize();
@@ -236,13 +240,13 @@
       this.frame = frame;
 
       this.shakeThrob *= 0.9;
-      if(frame == 7242) {
+      if(frame == this.firstShakeFrame) {
         this.shakeThrob = -1;
       }
-      if(frame == 7283) {
+      if(frame == this.secondShakeFrame) {
         this.shakeThrob = 1;
       }
-      if(frame == 7309) {
+      if(frame == this.thirdShakeFrame) {
         this.shakeThrob = -1;
       }
 
@@ -264,7 +268,7 @@
         this.loadPolygons();
       }
 
-      if(frame == 6313) {
+      if(frame == 7199) {
         this.activePoints = 0;
       }
 
@@ -299,8 +303,8 @@
         }
       }
 
-      let analysisValue = this.pianoAnalysis.getValue(frame);
-      if(frame < 7000) {
+      let analysisValue = this.pianoAnalysis.getValue(frame - 885 /* compensate for 8 new bars in the music */);
+      if(frame < 7894) {
         while(analysisValue > 0) {
           this.spawnPoint(
             8 + (Math.random() - 0.5) * 8 * 2 / this.zoom * 1.1,
@@ -335,7 +339,7 @@
           i--;
         }
       }
-      this.zoom = smoothstep(2, 0.5, (frame - 6314) / (7309 - 6314));
+      this.zoom = smoothstep(2, 0.5, (frame - 7199) / (this.thirdShakeFrame - 7199));
     }
 
     render(renderer) {
@@ -375,13 +379,13 @@
         this.ctx.stroke();
       });
       //quadTree.debugRender(this.ctx);
-      if(this.frame > 6979) {
+      if(this.frame > 7840) {
         const scale = 2;
         const image = this.inputs.logo.getValue().image;
         this.ctx.translate(this.cameraX * GU, this.cameraY * GU);
         this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
         this.ctx.scale(scale, scale);
-        this.ctx.globalAlpha = lerp(0, 1, (this.frame - 6979) / 100);
+        this.ctx.globalAlpha = lerp(0, 1, (this.frame - 7860) / 10);
         this.ctx.save();
         this.ctx.globalCompositeOperation = 'lighter';
         this.ctx.drawImage(image, -image.width / 4, -image.height / 4);
@@ -394,21 +398,21 @@
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       }
 
-      if(this.frame > 7242 - 20) {
+      if(this.frame > this.firstShakeFrame - 20) {
         this.globalAlpha = 1;
         this.ctx.fillStyle = 'white';
-        this.ctx.fillRect(0, 0, easeIn(0, 16, (this.frame - 7242 + 20) / 20) * GU, 2.5 * GU);
+        this.ctx.fillRect(0, 0, easeIn(0, 16, (this.frame - this.firstShakeFrame + 20) / 20) * GU, 2.5 * GU);
       }
-      if(this.frame > 7283 - 20) {
+      if(this.frame > this.secondShakeFrame - 20) {
         this.globalAlpha = 1;
         this.ctx.fillStyle = 'white';
-        const value = easeIn(0, 16, (this.frame - 7283 + 20) / 20);
+        const value = easeIn(0, 16, (this.frame - this.secondShakeFrame + 20) / 20);
         this.ctx.fillRect((16 - value) * GU, (9 - 2.5) * GU, 16 * GU, 2.5 * GU);
       }
-      if(this.frame > 7309 - 20) {
+      if(this.frame > this.thirdShakeFrame - 20) {
         this.globalAlpha = 1;
         this.ctx.fillStyle = 'white';
-        this.ctx.fillRect(0, 2 * GU, easeIn(0, 16, (this.frame - 7309 + 20) / 20) * GU, 5 * GU);
+        this.ctx.fillRect(0, 2 * GU, easeIn(0, 16, (this.frame - this.thirdShakeFrame + 20) / 20) * GU, 5 * GU);
       }
 
       if(this.frame < 6500) {
