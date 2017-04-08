@@ -11,7 +11,8 @@
     update(frame) {
       super.update(frame);
 
-      this.quad.material.uniforms.tDiffuse.value = this.inputs.tDiffuse.getValue();
+      this.uniforms.tDiffuse.value = this.inputs.tDiffuse.getValue();
+      this.uniforms.frame.value = frame;
     }
   }
 
