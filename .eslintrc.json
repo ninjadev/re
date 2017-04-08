@@ -38,6 +38,8 @@
       "clamp": true,
       "demo": true,
       "smoothstep": true,
-      "lerp": true
+      "lerp": true,
+      "easeIn": true,
+      "easeOut": true
     }
 }
