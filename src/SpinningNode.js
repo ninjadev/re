@@ -66,6 +66,16 @@
       // for (const [i, circles] of this.mesh.children.entries()) {
       //   circles.rotation.x = frame / 40 / (20.1 - i);
       // }
+
+      const startBEAN = 162.75 * 12;
+      for (const [i, circles] of this.mesh.children.entries()) {
+        if ((((39 - i) / 8) | 0) < ((BEAN - startBEAN) / 3)) {
+          for (const circle of circles.children) {
+            circle.material.color = this.defaultColor;
+            circle.material.emissive = this.defaultColor;
+          }
+        }
+      }
     }
   }
 
@@ -120,7 +130,7 @@
         this.s.setNextColor(this.colors[idx]);
       }
 
-      if (frame >= 4435 && frame <= 4510) {
+      if (frame >= 4435 && frame <= 4610) {
         this.s.setNextColor(this.colors[0]);
       }
 
