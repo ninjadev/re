@@ -77,7 +77,7 @@
 
       super.update(frame);
 
-      const fft = demo.music.getFFT();
+      const fft = demo.music ? demo.music.getFFT() : [];
 
       const relativeBEAN = (BEAN / 12 - 67) | 0;
       for (const [j, cuberow] of this.cubes.entries()) {
