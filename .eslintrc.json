@@ -40,6 +40,7 @@
       "smoothstep": true,
       "lerp": true,
       "easeIn": true,
-      "easeOut": true
+      "easeOut": true,
+      "audioAnalysisSanitizer": true
     }
 }

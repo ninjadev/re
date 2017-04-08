@@ -3,59 +3,69 @@
     constructor(defaultColor) {
       this.defaultColor = defaultColor;
       this.mesh = new THREE.Object3D();
+
       const radius = 100;
-      const segmentsPerHalf = 30;
+      const sphereLayers = 40;
+      const sphereRadius = 4;
+      const sphereGeometry = new THREE.SphereBufferGeometry(sphereRadius, 32, 32);
 
-      const triangleSize = Math.PI * radius / segmentsPerHalf / 4;
-
-      for (let i=0; i<=segmentsPerHalf; i++) {
-        const angle = Math.PI * i / segmentsPerHalf;
+      for (let i=0; i<sphereLayers; i++) {
+        const angle = Math.PI * i / (sphereLayers - 1);
         const radiusOfPlane = Math.sin(angle) * radius;
-        const trianglesInPlane = Math.PI * radiusOfPlane / triangleSize;
+
+        // This is the correct version
+        const spheresInPlane = 8;
         const x = Math.cos(angle) * radius;
 
-        const trianglesOfPlane = new THREE.Object3D();
+        const spheresOfPlane = new THREE.Object3D();
 
-        for (let j=0; j<trianglesInPlane; j++) {
-          const radiansIntoPlane = 2 * Math.PI * j / trianglesInPlane;
+        for (let j=0; j<spheresInPlane; j++) {
+          const radiansIntoPlane = 2 * Math.PI * j / spheresInPlane;
           const y = Math.cos(radiansIntoPlane) * radiusOfPlane;
           const z = Math.sin(radiansIntoPlane) * radiusOfPlane;
 
           const square = new THREE.Mesh(
-            new THREE.SphereGeometry(triangleSize),
+            sphereGeometry,
             new THREE.MeshStandardMaterial({
               color: this.defaultColor,
             }));
 
           square.position.set(x, y, z);
-          trianglesOfPlane.add(square);
+          spheresOfPlane.add(square);
         }
 
-        this.mesh.add(trianglesOfPlane);
+        this.mesh.add(spheresOfPlane);
       }
     }
 
-    push(newColor) {
+    setNextColor(nextColor) {
+      this.nextColor = nextColor;
+    }
+
+    update(frame) {
       let prevColor = undefined;
-      for (const circles of this.mesh.children) {
+      let nextColor = this.nextColor || this.defaultColor;
+
+      for (const [i, circles] of this.mesh.children.entries()) {
         if (circles.children.length === 0) continue;
 
         prevColor = circles.children[0].material.color;
 
+        circles.rotation.x = Math.sin(i/9 + frame / 300);
+
         for (const circle of circles.children) {
-          circle.material.color = newColor;
-          circle.material.emissive = newColor;
+          circle.material.color = nextColor;
+          circle.material.emissive = nextColor;
         }
 
-        newColor = prevColor;
+        nextColor = prevColor;
       }
-    }
 
-    update(frame) {
-      this.push(this.defaultColor);
-      for (const [i, circles] of this.mesh.children.entries()) {
-        circles.rotation.x = frame / 40 / (20.1 - i);
-      }
+      this.nextColor = null;
+
+      // for (const [i, circles] of this.mesh.children.entries()) {
+      //   circles.rotation.x = frame / 40 / (20.1 - i);
+      // }
     }
   }
 
@@ -68,20 +78,11 @@
         }
       });
 
-      const ninTexture = new THREE.Texture();
-
-      this.cube = new THREE.Mesh(
-        new THREE.BoxGeometry(50, 50, 50),
-        new THREE.MeshBasicMaterial({
-          transparent: true,
-          map: ninTexture,
-          side: THREE.FrontSide,
-          color: 0xffffff,
-        }));
+      this.analysis = new audioAnalysisSanitizer('stem_flute.wav', 'spectral_energy', 1.0);
 
       this.background = new THREE.Mesh(
           new THREE.BoxGeometry(1000, 1000, 1000),
-          new THREE.MeshBasicMaterial({
+          new THREE.MeshToonMaterial({
             color: 0x0c0716,
             side: THREE.BackSide,
           }));
@@ -100,15 +101,10 @@
 
       this.colorIdx = 0;
       this.colors = [
-        new THREE.Color(0x94e700),
-        new THREE.Color(0x92e700),
-        new THREE.Color(0xc2e700),
-        new THREE.Color(0xc1e700),
-        new THREE.Color(0xeaa500),
-        new THREE.Color(0xe0a500),
-        new THREE.Color(0xf06d00),
-        new THREE.Color(0xef6d00),
-        new THREE.Color(0xaf4700),
+        new THREE.Color(0x961A96),
+        new THREE.Color(0x754F8E),
+        new THREE.Color(0x20db7a),
+        new THREE.Color(0x518B86),
       ];
       this.s = new Supersphere(new THREE.Color(0x000000));
       this.scene.add(this.s.mesh);
@@ -119,14 +115,16 @@
     update(frame) {
       super.update(frame);
 
-      if (this.inputs.percolator.getValue()) {
-        this.s.push(this.colors[this.colorIdx++ % this.colors.length]);
-        this.s.push(this.colors[this.colorIdx++ % this.colors.length]);
-        this.s.push(this.colors[this.colorIdx++ % this.colors.length]);
-        this.s.push(this.colors[this.colorIdx++ % this.colors.length]);
-      } else if (frame % 3 == 0) {
-        this.s.update(frame);
+      if (this.analysis.getValue(frame) > 3.5) {
+        const idx = this.colorIdx++ % this.colors.length;
+        this.s.setNextColor(this.colors[idx]);
       }
+
+      if (frame >= 4435 && frame <= 4510) {
+        this.s.setNextColor(this.colors[0]);
+      }
+
+      this.s.update(frame);
     }
   }
 
