@@ -28,8 +28,6 @@
         this.cubes.push(cuberow);
       }
 
-      this.rowStartIndices = [8,9,7,10,6,11,5,12,4,13,3,14,2,15,1,16,0];
-
       this.splashes = [];
       for (let i=0; i < 12; i++) {
         let zIndex = (i / 4 | 0);
@@ -118,7 +116,7 @@
           cube.scale.y = clamp(0.01, height, 10);
           cube.position.y = 5 * height;
 
-          if (i < relativeBEAN && (this.rowStartIndices.slice(0, this.rowStartIndex).includes(j))) {
+          if (i < relativeBEAN && Math.abs(8-j) < this.rowStartIndex) {
             cube.position.x = 10 + 20 * (i - 8);
             if (frame > endStartFrameTwo) {
               if (j !== 8 || i !== 8) {
