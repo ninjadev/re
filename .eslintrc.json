@@ -23,7 +23,8 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "no-sparse-arrays": "off"
     },
     "globals": {
       "NIN": true,
