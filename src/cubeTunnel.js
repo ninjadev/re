@@ -35,14 +35,14 @@
     }
 
     update(frame) {
-      var startBEAN = 3840;
+      var startBEAN = 4224;
 
       var relativeBEAN = BEAN - startBEAN;
 
-      var switch_time = 3936;
-      var switch_time2 = 4200;
-      var camera_move_start = 4030;
-      var camera_speed = 0.15;
+      var switch_time = 4320;
+      var switch_time2 = 4584;
+      var camera_move_start = 4414;
+      var camera_speed = 0.155;
       if (BEAN < switch_time) {
         // Spawning the first "ring" of cubes.
         this.camera.position.z = 100;
@@ -164,7 +164,7 @@
           this.create_layer(-200);
         }
 
-        if (frame > FRAME_FOR_BEAN(4030)) {
+        if (frame > FRAME_FOR_BEAN(4414)) {
           this.camera.position.y = 16 - (frame - FRAME_FOR_BEAN(camera_move_start))*camera_speed;
         }
 
