@@ -57,7 +57,7 @@
       "C": "LaneSwipeTransition.render",
       "E": "umbrellas.render",
       "F": "kaleidoscope.render",
-      "G": "galagafx_add.render",
+      "G": "galagafx_vignette.render",
       "H": "triangle.render",
       "I": "piano.render",
       "J": "LavaNode.render",
@@ -104,26 +104,6 @@
     }
   },
   {
-    "id": "galagafx_blurX",
-    "type": "BlurPassNode",
-    "options": {
-      "direction": "x"
-    },
-    "connected": {
-      "tDiffuse": "galagafx_blurY.render"
-    }
-  },
-  {
-    "id": "galagafx_blurY",
-    "type": "BlurPassNode",
-    "options": {
-      "direction": "y"
-    },
-    "connected": {
-      "tDiffuse": "galaga.render"
-    }
-  },
-  {
     "id": "add",
     "type": "AddNode",
     "options": {
@@ -136,15 +116,13 @@
     }
   },
   {
-    "id": "galagafx_add",
-    "type": "AddNode",
+    "id": "galagafx_vignette",
+    "type": "VignetteShaderNode",
     "options": {
-      "opacity": 1.5,
-      "shader": "Add"
+      "shader": "VignetteShader"
     },
     "connected": {
-      "A": "galaga.render",
-      "B": "galagafx_blurX.render"
+      "tDiffuse": "galaga.render"
     }
   },
   {
