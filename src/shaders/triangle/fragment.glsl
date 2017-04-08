@@ -41,9 +41,6 @@ vec3 shade(vec4 color, vec2 uv, vec3 rd, vec3 ro, float multiplier) {
     float l = length(uv);
     float t = frame / 60.;
 
-    //vec2 uv2 = ((-1.0 + 2.0 * uv)/l)*cos(l*12.0-t*4.0);
-    //vec2 uv2 = uv*max(0.9, cos(l*12.0-t*4.0)+shift);
-
     vec3 norm = calcNormal(rd);
     vec3 refd = refract(rd, norm, 1.0/1.33);
 
