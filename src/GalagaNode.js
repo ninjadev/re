@@ -19,13 +19,13 @@
       this.particleSprite = document.createElement('canvas');
       this.maskCanvas = document.createElement('canvas');
 
-      if (!document.getElementById('arcade-font')) {
+      if (!document.getElementById('vcr-font')) {
         var s = document.createElement('style');
-        s.setAttribute('id', 'arcade-font');
-        Loader.loadAjax('res/ARCADECLASSIC.base64', function(response) {
+        s.setAttribute('id', 'vcr-font');
+        Loader.loadAjax('res/vcr.otf.base64', function(response) {
           s.innerHTML = [
             "@font-face {",
-            "font-family: 'arcade';",
+            "font-family: 'vcr';",
             "src: url(data:application/x-font-opentype;charset=utf-8;base64," + response + ") format('opentype');",
             "}"
           ].join('\n');
@@ -233,13 +233,6 @@
         const nextNote = this.notes[i + 1];
         let noteLength = note.end - note.start;
         const notePause = nextNote.start - note.end;
-        if(notePause < beat / 4) {
-          if(noteLength > beat / 2) {
-            noteLength -= beat / 4;
-          } else {
-            noteLength *= 0.9;
-          }
-        }
         note.end = note.start + noteLength;
       }
 
@@ -273,8 +266,8 @@
         this.particleSprite.width / 2,
         this.particleSprite.width / 2,
         0);
-      gradient.addColorStop(0, 'rgba(32, 219, 122, 0)');
-      gradient.addColorStop(1, '#20db7a');
+      gradient.addColorStop(0, 'rgba(68, 250, 218, 0)');
+      gradient.addColorStop(1, '#44fada');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, this.particleSprite.width, this.particleSprite.height);
     }
@@ -306,8 +299,8 @@
       const bar = 12 * 4;
       const offset = bar * 41;
       if(BEAN > offset + beat * 14 + 6 && BEAN < offset + beat * 18) {
-        this.cameraOffsetDDX = (Math.random() - 0.5) / 4;
-        this.cameraOffsetDDY = (Math.random() - 0.5) / 4;
+        this.cameraOffsetDDX = (Math.random() - 0.5) / 6;
+        this.cameraOffsetDDY = (Math.random() - 0.5) / 6;
       }
 
       this.cameraOffsetDX = -this.cameraOffsetX / 2;
@@ -357,13 +350,13 @@
           const vibratoModifier = clamp(0, (frame - vibratoStartFrame) / (vibratoEndFrame - vibratoStartFrame), 1);
           this.spaceshipY += 0.2 * vibratoModifier * Math.sin(frame * Math.PI * 2 / 60 / 60 * 130 * 4);
 
-          for(let i = 0; i < 10; i++) {
+          for(let i = 0; i < 100; i++) {
             const particle = this.particles[this.activeParticles++];
             const angle = Math.PI / 2  + Math.random() * Math.PI;
             const spread = Math.random() / 16;
-            particle.x = this.spaceshipX + Math.cos(angle) * spread * 2;
-            particle.y = this.spaceshipY + Math.sin(angle) * spread;
-            particle.dx = -0.2;
+            particle.x = this.spaceshipX - spread * 8;
+            particle.y = this.spaceshipY;
+            particle.dx = -0.3;
             particle.dy = 0;
             particle.life = 100;
           }
@@ -388,21 +381,20 @@
 
     render(renderer) {
 
-      this.ctx.globalAlpha = 1;
-      this.ctx.fillStyle = '#210021';
-      this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
+      const beat = 12;
+      const bar = beat * 4;
+      const offset = bar * 41;
 
       let zoom = 1;
       let angle = 0;
       let x = 0;
       let y = 0;
 
-      const beat = 12;
-      const bar = 12 * 4;
-      const offset = bar * 41;
       const subeighth = beat / 8;
 
       let cameraShake = 0;
+      let stripeCrazyColors = false;
+      let stripeSpeed = 0.6;
 
       zoom = smoothstep(3, 1, (this.frame - 4583) / 36);
       y = smoothstep(zoom * 4.5 - zoom * this.spaceshipY, 0, (this.frame - 4604) / 36);
@@ -423,16 +415,22 @@
           angle = -0.1;
           y = 6;
           x = -2;
+          stripeCrazyColors = true;
+          stripeSpeed = 2.2;
         } else if(BEAN < offset + beat * 16) {
           zoom = 2;
           angle = 0.05;
           y = 1.9;
           x = -1;
+          stripeCrazyColors = true;
+          stripeSpeed = 2.2;
         } else if(BEAN < offset + beat * 18) {
           zoom = 4;
           angle = -0.1;
           y = 5;
           x = 0;
+          stripeCrazyColors = true;
+          stripeSpeed = 2.2;
         } else if(BEAN < offset + beat * 19) {
           const start = FRAME_FOR_BEAN(offset + beat * 18);
           const end = FRAME_FOR_BEAN(offset + beat * 19);
@@ -443,6 +441,31 @@
           x = smoothstep(0, 0, t);
         }
       }
+
+      let stripeRotationOffset = 0;
+      this.ctx.globalAlpha = 1;
+      this.ctx.fillStyle = '#110011';
+      this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
+      this.ctx.save();
+      this.ctx.translate(8 * GU, 4.5 * GU);
+      this.ctx.rotate(Math.PI / 4 + angle);
+      this.ctx.fillStyle = '#220022';
+      const stripeOffset = (-this.frame / 10 * stripeSpeed) % 16;
+      for(let i = 0; i < 30; i++) {
+        if(stripeCrazyColors) {
+          let digit = 1 + ((1 + Math.sin(i / 30 * Math.PI * 2 * 9)) * 4 | 0);
+          this.ctx.fillStyle = `#${9-digit}${digit}a0${digit}${digit}`;
+        }
+        const x = (20 - i + stripeOffset) * GU * 2;
+        this.ctx.fillRect(x, -x - 1 * GU, 1 * GU, 16 * GU);
+        if(stripeCrazyColors) {
+          let digit = 1 + ((1 + Math.sin((i - 8) / 30 * Math.PI * 2 * 9))  * 4 | 0);
+          this.ctx.fillStyle = `#${9-digit}${digit}a0${digit}${digit}`;
+        }
+        this.ctx.fillRect(x, -x - 17 * GU, 16 * GU, 1 * GU);
+      }
+      this.ctx.restore();
+
       this.ctx.save();
       this.ctx.translate((x + this.cameraOffsetX)* GU, (y + this.cameraOffsetY) * GU);
       this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
@@ -455,7 +478,7 @@
       let starSpeedModifier = 1;
       if(BEAN >= offset + beat * 14 + 6 && BEAN < offset + beat * 18) {
         starLengthModifier = 10;
-        starSpeedModifier = 3;
+        starSpeedModifier = 10;
       }
       for(let i = 0; i < this.stars.length; i++) {
         for(let j = 0; j < this.stars[i].length; j++) {
@@ -466,7 +489,7 @@
             ((32 * 1024 + star.x - starSpeedModifier * this.frame / 16 * (1 + i)) % 32) * GU,
             (star.y) * GU,
             length * GU,
-            size * size * GU * 0.5);
+            size * size * GU * 0.2);
         }
       }
 
@@ -504,23 +527,28 @@
       const hudShowTime = (this.frame - 4550) / 50;
       const hudOffset = easeOut(1, 0, hudShowTime);
 
-      const colorA = '#961A96';
-      const colorB = '#20db7a';
+      const colorA = '#ff00a2';
+      const colorB = '#44fada';
+
 
       this.ctx.globalAlpha = 1;
+      this.ctx.fillStyle = '#010001';
+      this.ctx.fillRect(0, -hudOffset * GU, 16 * GU, 1.3 * GU);
+      this.ctx.fillRect(0, hudOffset * GU + 9 * GU - 1.3 * GU, 16 * GU, 1.5 * GU);
       this.ctx.fillStyle = colorA;
-      this.ctx.font = 'bold ' + ((0.4 + this.kickThrob * 0.02) * GU) + 'pt arcade';
+      this.ctx.font = 'bold ' + ((0.4 + this.kickThrob * 0.05) * GU) + 'pt vcr';
       this.ctx.textBaseline = 'top';
       this.ctx.textAlign = 'center';
-      this.ctx.fillText('PLAYER 1', 1.28 * GU, (0.1 - hudOffset) * GU);
+      this.ctx.fillText('PLAYER', 1.38 * GU, (0.4 - hudOffset) * GU);
       this.ctx.fillStyle = colorB;
-      this.ctx.fillText('NINJADEV', 4.2 * GU, (0.1 - hudOffset) * GU);
+      this.ctx.fillText('NINJADEV', 4.2 * GU, (0.4 - hudOffset) * GU);
       this.ctx.fillStyle = colorA;
-      this.ctx.fillText('HIGHSCORE', 12.4 * GU, (0.1 - hudOffset) * GU);
+      this.ctx.fillText('HIGHSCORE', 12.4 * GU, (0.4 - hudOffset) * GU);
       this.ctx.fillStyle = colorB;
-      this.ctx.fillText(this.frame, 15.2 * GU, (0.1 - hudOffset) * GU);
+      this.ctx.fillText(this.frame, 15.2 * GU, (0.4 - hudOffset) * GU);
       this.ctx.fillStyle = colorA;
-      this.ctx.fillText('BULLETS', 1.26 * GU, (hudOffset + 8.35) * GU);
+      this.ctx.textBaseline = 'bottom';
+      this.ctx.fillText('BULLETS', 1.26 * GU, (hudOffset + 8.6) * GU);
       this.ctx.fillStyle = colorB;
       for(let i = 0; i < 16; i++) {
         let offset = 0;
@@ -537,11 +565,11 @@
         } else {
           this.ctx.fillStyle = colorA;
         }
-        this.ctx.fillText('o', (2.8 + 0.33 * i) * GU, (hudOffset + 8.35 - offset) * GU);
+        this.ctx.fillText('o', (2.8 + 0.33 * i) * GU, (hudOffset + 8.6 - offset) * GU);
       }
       this.ctx.globalAlpha = 1;
       this.ctx.fillStyle = colorA;
-      this.ctx.fillText('SHIP HEALTH ', 11.6 * GU, (hudOffset + 8.35) * GU);
+      this.ctx.fillText('SHIP HEALTH ', 11.6 * GU, (hudOffset + 8.6) * GU);
       this.ctx.fillStyle = colorB;
 
       let health = '';
@@ -551,7 +579,7 @@
         health += 'X';
       }
       this.ctx.textAlign = 'left';
-      this.ctx.fillText(health, 13.8 * GU, (hudOffset + 8.35) * GU);
+      this.ctx.fillText(health, 13.8 * GU, (hudOffset + 8.6) * GU);
 
       if(BEAN >= 12 * 4 * 49 - 12 - 6) {
         const ctx = this.maskCanvas.getContext('2d');
@@ -574,7 +602,7 @@
         ctx.fill();
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
-        ctx.font = (1.2 * GU) + 'pt arcade'; 
+        ctx.font = (1.2 * GU) + 'pt vcr'; 
         if(radius == 3) {
           ctx.fillText('GREETS', 8 * GU, 4.5 * GU);
         }
