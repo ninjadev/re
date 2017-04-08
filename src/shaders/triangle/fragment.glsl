@@ -53,6 +53,8 @@ vec3 shade(vec4 color, vec2 uv, vec3 rd, vec3 ro, float multiplier) {
 
     col = vec4(.35*diffusion) + .65*col;
 
+    col = max(vec4(0.15), col);
+
     // post processing
     col = smoothstep(0.0, 1.0, col);
     vec3 res = pow(col.xyz, vec3(0.45));
