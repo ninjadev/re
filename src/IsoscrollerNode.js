@@ -94,7 +94,7 @@
       this.background.material.uniforms.amount.value = easeOut(
           0,
           1,
-          (frame - 968) / (1051 - 968));
+          (frame - 968 + 10 ) / (1051 - 968));
 
       if(frame == 997) {
         this.noteNumbers = 1;

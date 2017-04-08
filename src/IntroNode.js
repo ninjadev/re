@@ -23,9 +23,13 @@
     }
 
     fire(cardinality) {
+      let sizeModifier = 1;
+      if(cardinality == 3) {
+        sizeModifier = 2.6;
+      }
       this.squares.unshift({
-        size: 0.5,
-        rotation: this.noteCount * Math.PI / 8,
+        size: 0.5 * sizeModifier,
+        rotation: this.noteCount * Math.PI / 8 * sizeModifier,
         cardinality
       });
     }
