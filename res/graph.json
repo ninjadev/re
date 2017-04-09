@@ -62,8 +62,7 @@
       "G": "galagafx_vignette.render",
       "H": "triangle.render",
       "H_and_a_half": "tunnel.render",
-      "I": "piano.render",
-      "J": "lava_SSAO.render",
+      "J": "MinecraftTransitionShader.render",
       "K": "BitGlitchShader.render",
       "L": "cubeTunnel.render"
     }
@@ -162,10 +161,10 @@
     }
   },
   {
-    "id": "lava_SSAO",
+    "id": "Minecraft_SSAO",
     "type": "SSAONode",
     "connected": {
-      "uniforms": "LavaNode.depthUniforms"
+      "uniforms": "MinecraftNode.depthUniforms"
     }
   },
   {
@@ -227,10 +226,10 @@
     }
   },
   {
-    "id": "LavaNode",
-    "type": "lavaNode",
+    "id": "MinecraftNode",
+    "type": "MinecraftNode",
     "options": {
-      "camera": "res/lavaNode.camera.json",
+      "camera": "res/MinecraftNode.camera.json",
       "shader": "water"
     },
     "connected": {
@@ -250,6 +249,17 @@
     "connected": {
       "A": "umbrellas.render",
       "B": "kaleidoscope.render"
+    }
+  },
+  {
+    "id": "MinecraftTransitionShader",
+    "type": "MinecraftTransitionShaderNode",
+    "options": {
+      "shader": "MinecraftTransitionShader"
+    },
+    "connected": {
+      "A": "piano.render",
+      "B": "Minecraft_SSAO.render"
     }
   },
   {

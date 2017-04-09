@@ -63,6 +63,8 @@ void main() {
         float mixer = (frame - start) / (stop - start);
         background = smoothstep(white, blue, vec4(mixer));
         star = smoothstep(blue, white, vec4(mixer));
+    } else if (frame > starstart) {
+        star = vec4(216./255., 12./255., 90./255., 1.0);
     } else {
         background = blue;
         star = white;

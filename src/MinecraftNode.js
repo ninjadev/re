@@ -396,7 +396,7 @@
     }
   }
 
-  class lavaNode extends NIN.THREENode {
+  class MinecraftNode extends NIN.THREENode {
     constructor(id, options) {
       super(id, {
         camera: options.camera,
@@ -518,5 +518,5 @@
     }
   }
 
-  global.lavaNode = lavaNode;
+  global.MinecraftNode = MinecraftNode;
 })(this);
