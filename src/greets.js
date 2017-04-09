@@ -22,7 +22,7 @@
       }
 
       this.frames = [];
-      for (let i=0; i <= 160; i++) {
+      for (let i=0; i <= 480; i++) {
         this.frames[i] = Loader.loadTexture(`res/morphed/${leftPad(i.toString(), 3, '0')}_interpolated.jpg`);
       }
 
@@ -80,7 +80,7 @@
       const slideIndex = clamp(0, frame - FRAME_FOR_BEAN(startBEAN + 2 * 12 * baseIndex), 27);
       const animationIndex = clamp(0, frame - FRAME_FOR_BEAN(startBEAN + 12 + 2 * 12 * baseIndex), 27);
 
-      this.screenMaterial.uniforms.tDiffuse.value = this.frames[clamp(0, baseIndex * 10 + animationIndex / 3, 160) | 0];
+      this.screenMaterial.uniforms.tDiffuse.value = this.frames[clamp(0, baseIndex * 30 + animationIndex, 480) | 0];
 
       this.screen.position.z = lerp(3390, 190, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
       this.screen.position.x = this.platformPositions[baseIndex];
