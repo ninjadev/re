@@ -397,23 +397,6 @@
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       }
 
-      if(this.frame > this.firstShakeFrame - 20) {
-        this.globalAlpha = 1;
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillRect(0, 0, easeIn(0, 16, (this.frame - this.firstShakeFrame + 20) / 20) * GU, 2.5 * GU);
-      }
-      if(this.frame > this.secondShakeFrame - 20) {
-        this.globalAlpha = 1;
-        this.ctx.fillStyle = 'white';
-        const value = easeIn(0, 16, (this.frame - this.secondShakeFrame + 20) / 20);
-        this.ctx.fillRect((16 - value) * GU, (9 - 2.5) * GU, 16 * GU, 2.5 * GU);
-      }
-      if(this.frame > this.thirdShakeFrame - 20) {
-        this.globalAlpha = 1;
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillRect(0, 2 * GU, easeIn(0, 16, (this.frame - this.thirdShakeFrame + 20) / 20) * GU, 5 * GU);
-      }
-
       if(this.frame < 6500) {
         this.ctx.save();
         this.ctx.fillStyle = 'white';

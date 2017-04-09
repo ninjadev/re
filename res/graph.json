@@ -62,8 +62,7 @@
       "G": "galagafx_vignette.render",
       "H": "triangle.render",
       "H_and_a_half": "tunnel.render",
-      "I": "piano.render",
-      "J": "lava_SSAO.render",
+      "J": "MinecraftTransitionShader.render",
       "K": "BitGlitchShader.render",
       "L": "cubeTunnel.render"
     }
@@ -250,6 +249,17 @@
     "connected": {
       "A": "umbrellas.render",
       "B": "kaleidoscope.render"
+    }
+  },
+  {
+    "id": "MinecraftTransitionShader",
+    "type": "MinecraftTransitionShaderNode",
+    "options": {
+      "shader": "MinecraftTransitionShader"
+    },
+    "connected": {
+      "A": "piano.render",
+      "B": "lava_SSAO.render"
     }
   },
   {
