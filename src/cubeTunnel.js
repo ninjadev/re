@@ -321,6 +321,8 @@
       var beats = [0, 16, 32, 48, 64, 80,                  96, 104, 112, 118, 126          , 144, 160, 176, 192, 208, 224, 240, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432]; // 432 should be last
       var passed_1 = -1;
       var passed_2 = -1;
+      var passed_3 = -1;
+      var passed_4 = -1;
       //Figure out the last two passed time stamps (for ring spawning).
       for (var i = 0; i < beats.length; i++) {
         if(BEAN > startBEAN + beats[beats.length - 1 - i]) {
@@ -328,22 +330,42 @@
             passed_1 = beats.length - 1 - i;
           } else if (passed_2 == -1) {
             passed_2 = beats.length - 1 - i;
+          } else if (passed_3 == -1) {
+            passed_3 = beats.length - 1 - i;
+          } else if (passed_4 == -1) {
+            passed_4 = beats.length - 1 - i;
           }
         }
       }
       // Calculate where on the surface of the cube the ring should be. This makes the rings shrink (quite rapidly) after spawning.
       var stripe_position = (frame - FRAME_FOR_BEAN(startBEAN + beats[passed_1])) / 60;
       var stripe_position2;
+      var stripe_position3;
+      var stripe_position4;
       if(passed_2 != -1) {
         stripe_position2 = (frame - FRAME_FOR_BEAN(startBEAN + beats[passed_2])) / 60;
       } else {
         stripe_position2 = 1;
+      }
+      if(passed_3 != -1) {
+        stripe_position3 = (frame - FRAME_FOR_BEAN(startBEAN + beats[passed_3])) / 60;
+      } else {
+        stripe_position3 = 1;
+      }
+      if(passed_4 != -1) {
+        stripe_position4 = (frame - FRAME_FOR_BEAN(startBEAN + beats[passed_4])) / 60;
+      } else {
+        stripe_position4 = 1;
       }
       // Set the properties of the top shader.
       this.top_material.uniforms.start1.value = clamp(0, stripe_position - 0.2, 1);
       this.top_material.uniforms.stop1.value = clamp(0, stripe_position, 1);
       this.top_material.uniforms.start2.value = clamp(0, stripe_position2 - 0.2, 1);
       this.top_material.uniforms.stop2.value = clamp(0, stripe_position2, 1);
+      this.top_material.uniforms.start3.value = clamp(0, stripe_position3 - 0.2, 1);
+      this.top_material.uniforms.stop3.value = clamp(0, stripe_position3, 1);
+      this.top_material.uniforms.start4.value = clamp(0, stripe_position4 - 0.2, 1);
+      this.top_material.uniforms.stop4.value = clamp(0, stripe_position4, 1);
       // Set the number tiles in the shader. Can be set to more or less anything, but small numbers are best IMO.
       if (BEAN < switch_time) {
         this.top_material.uniforms.tiles.value = 1;
