@@ -61,6 +61,7 @@
       "F": "SphereTransitionShader.render",
       "H": "triangle.render",
       "H_and_a_half": "tunnel.render",
+      "I": "piano.render",
       "J": "MinecraftTransitionShader.render",
       "K": "BitGlitchShader.render",
       "L": "cubeTunnel.render"
@@ -266,8 +267,7 @@
       "shader": "MinecraftTransitionShader"
     },
     "connected": {
-      "A": "piano.render",
-      "B": "Minecraft_SSAO.render"
+      "A": "Minecraft_SSAO.render"
     }
   },
   {
