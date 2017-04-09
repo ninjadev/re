@@ -48,7 +48,7 @@
       for (let i=0; i < 16; i++) {
         const platform = new THREE.Mesh(
           new THREE.BoxGeometry(10, 4, 80),
-          new THREE.MeshFaceMaterial([
+          new THREE.MultiMaterial([
             material,
             material,
             this.createCanvas(this.crews[i].toUpperCase()),
