@@ -90,7 +90,7 @@
       for (let i=0; i < 5; i++) {
         this.twobbles[i] = {
           x: 8 + (2 - i) * 8,
-          y: 6,
+          y: 4.5,
           radius: 0.1,
           progress: Math.PI * 2,
           opacity: 0,
@@ -193,7 +193,7 @@
         bubble.radius = clamp(0, (i * 12 + frame - startFrame) / 8, 100);
         const yolo = clamp(0, (BEAN - 30 * 12 - 6 - startBEAN) / 1 | 0, 4);
         const yolo2 = (BEAN - 31 * 12 + 6 - startBEAN) / 3 | 0;
-        bubble.progress = clamp(0, 1 - yolo * 0.125 - yolo2 * 0.125, 1) * Math.PI * 2;
+        bubble.progress = clamp(0, yolo + 1 * clamp(-1, 1 - yolo2 * 0.25, 1) * Math.PI * 2, 100);
       }
 
       this.rotation = clamp(0, (frame - FRAME_FOR_BEAN(startBEAN + 8 * 12)) / 70, Math.PI);
