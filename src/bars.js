@@ -9,7 +9,19 @@
         camera: options.camera,
       });
 
+      //this.scene.background = new THREE.Color(0x1a001a);
       this.scene.background = new THREE.Color(0x1a001a);
+      this.background = new THREE.Mesh(
+        new THREE.BoxGeometry(1000, 1000, 1000),
+        new THREE.ShaderMaterial(SHADERS.zigzag));
+      this.background.material.side = THREE.BackSide;
+        /*
+        new THREE.MeshBasicMaterial({
+          color: 0x1b0922,
+          side: THREE.BackSide
+        }));
+        */
+      this.scene.add(this.background);
 
       this.numBars = 16;  // per row
       this.avgBarPower = [
@@ -44,7 +56,7 @@
       this.freqPerBin = this.nyquistFreq / this.numBins;
 
       this.cubes = [];
-      for (let j = 0; j < 17; j++) {
+      for (let j = 0; j < this.numBars; j++) {
         const cuberow = [];
         for (let i = 0; i < this.numBars; i++) {
           const cube = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, 10, 32),
@@ -55,26 +67,22 @@
           cube.rotation.y = 1;
           cube.scale.y = 0.01;
           cube.position.x = 100000;
-          cube.position.z = 20 * (j - 8);
+          cube.position.z = -20 * j;
           cube.castShadow = true;
           cube.receiveShadow = true;
           this.scene.add(cube);
           cuberow.push(cube);
-
         }
         this.cubes.push(cuberow);
       }
 
+      this.splashStartFrames = [];
       this.splashes = [];
-      for (let i = 0; i < 12; i++) {
-        let zIndex = (i / 4 | 0);
-        if (zIndex == 2) {
-          zIndex = -1;
-        }
+      for (let i = 0; i < 8; i++) {
         const splash = {
           radius: 0,
-          x: 10 + 80 * ((i % 4) - 2),
-          z: 80 * zIndex,
+          x: 21.42 + 42.86 * (i - 4),
+          z: 0,
           opacity: 0,
         };
         this.splashes.push(splash);
@@ -135,18 +143,15 @@
         this.camera.up = new THREE.Vector3(0, 1, 0);
       }
 
-      if (this.inputs.percolator.getValue()) {
-        this.rowStartIndex++;
-      }
-
       super.update(frame);
 
+      this.background.material.uniforms.frame.value = frame;
+      this.background.material.uniforms.amount.value = easeOut(
+          0,
+          1,
+          (frame - 968 + 10 ) / (1051 - 968));
+
       const fft = demo.music ? demo.music.getFFT() : [];
-
-
-      if (frame < 1880) {
-        this.rowStartIndex = 0;
-      }
 
       let currentHeights = [];
       for (let i = 0; i < this.numBars; i++) {
@@ -176,17 +181,17 @@
           height = smoothstep(height, 0, (frame - endStartFrameTwo) / 20);
 
           const middleFrame = FRAME_FOR_BEAN((67 + 9) * 12);
-          if (j !== 8) {
-            height = smoothstep(0, (1 - Math.abs(j - 8) / 8) * height, (frame - middleFrame) / 240);
+          if (j !== 0) {
+            height = smoothstep(0, (1 - j / this.numBars) * height, (frame - middleFrame) / 240);
           }
 
-          cube.scale.y = clamp(0.01, height, 10);
+          cube.scale.y = clamp(0.01, height, 20);
           cube.position.y = 5 * height;
 
-          if (i < relativeBEAN && Math.abs(8 - j) < this.rowStartIndex) {
+          if (i < relativeBEAN && j < relativeBEAN) {
             cube.position.x = 10 + 20 * (i - 8);
             if (frame > endStartFrameTwo) {
-              if (j !== 8 || i !== 8) {
+              if (j !== 5 || i !== 8) {
                 cube.scale.x = lerp(1, 0, (frame - endStartFrameTwo - 0) / 20);
                 cube.scale.z = lerp(1, 0, (frame - endStartFrameTwo - 0) / 20);
               } else {
@@ -203,19 +208,25 @@
         }
       }
 
+      if (frame < 1880) {
+        this.splashStartIndex = 0;
+        this.splashStartFrames = [];
+      }
+      if (this.inputs.percolator.getValue()) {
+        this.splashStartFrames[this.splashStartIndex] = frame;
+        this.splashStartIndex = (this.splashStartIndex + 1) % 8;
+      }
+
       for (let [i, splash] of this.splashes.entries()) {
-        if (i >= 8) {
-          i -= 4;
-        }
-        const startFrame = FRAME_FOR_BEAN(67 * 12 + 48 * i + 8);
-        splash.opacity = easeOut(0, 1, (frame - startFrame) / 150);
-        splash.radius = lerp(0, 1 * 10, (frame - startFrame) / 150 / 10);
+        const startFrame = this.splashStartFrames[i] || frame;
+        splash.opacity = easeOut(easeOut(0, 1, (frame - startFrame) / 150), 0, (frame - startFrame - 25) / 50);
+        splash.radius = easeOut(0, 8, (frame - startFrame) / 500);
       }
 
       const planeColorFrame = FRAME_FOR_BEAN(98 * 12);
       const r = lerp(0, 0, (frame - planeColorFrame) / 54);
-      const g = lerp(97, 66, (frame - planeColorFrame) / 54);
-      const b = lerp(255, 234, (frame - planeColorFrame) / 54);
+      const g = lerp(97, 146, (frame - planeColorFrame) / 54);
+      const b = lerp(255, 221, (frame - planeColorFrame) / 54);
       this.backgroundColor = `rgb(${r|0}, ${g|0}, ${b|0})`;
     }
 
@@ -232,10 +243,11 @@
 
       const planeColorFrame = FRAME_FOR_BEAN(98 * 12);
       const r = lerp(0, 0, (this.frame - planeColorFrame) / 54);
-      const g = lerp(146, 100, (this.frame - planeColorFrame) / 54);
+      const g = lerp(146, 162, (this.frame - planeColorFrame) / 54);
       const b = lerp(221, 255, (this.frame - planeColorFrame) / 54);
       for (const splash of this.splashes) {
-        this.ctx.fillStyle = `rgba(${r|0}, ${g|0}, ${b|0}, ${0.5})`;
+        const opacity = Math.round(splash.opacity * 100) / 100;
+        this.ctx.fillStyle = `rgba(${r|0}, ${g|0}, ${b|0}, ${opacity})`;
         this.ctx.beginPath();
         this.ctx.ellipse(
           10 * GU + splash.x / 60 * GU,
