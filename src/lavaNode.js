@@ -9,7 +9,7 @@
 
       const obsidian = Loader.loadTexture('res/obsidian564x564.jpg');
       const lava = Loader.loadTexture('res/lava128x128.jpg');
-      const cubeGeometry = new THREE.BoxBufferGeometry(width, width, width);
+      const cubeGeometry = new THREE.BoxGeometry(width, width, width);
 
       let grassMap = Loader.loadTexture('res/grass01.jpg');
       let grassNormalMap = Loader.loadTexture('res/grass01_n.jpg');
@@ -19,16 +19,17 @@
       let dirtMap = Loader.loadTexture('res/dirt.png');
       let dirtNormalMap = Loader.loadTexture('res/dirt_n.png');
 
+      let grassBillboardMap = Loader.loadTexture('res/grass-billboard.png');
+
       const materials = {
         /* water */
         0: new THREE.MeshStandardMaterial({
-          color: 'blue'
+          roughness: 0.2,
         }),
         /* grass */
         1: new THREE.MeshStandardMaterial({
           map: grassMap,
           normalMap: grassNormalMap,
-          specularMap: grassSpecularMap,
           metalness: 0.1,
           roughness: 0.9,
         }),
@@ -59,6 +60,12 @@
           map: lava
         }),
       };
+      this.materials = materials;
+
+      let geometries = [];
+      for(let i = 0; i < 7; i++) {
+        geometries[i] = new THREE.Geometry();
+      }
 
       for (let [y, plane] of this.pattern.entries()) {
         const x_width = plane.length;
@@ -67,18 +74,29 @@
           for (let [z, elm] of row.entries()) {
             if (elm === undefined) { continue;  }
 
-            const cube = new THREE.Mesh(cubeGeometry, materials[elm]);
-            cube.castShadow = true;
-            cube.receiveShadow = true;
+            const cube = new THREE.Mesh(cubeGeometry);
 
             cube.position.set(
               (z - z_width / 2) * (width + padding),
               (width + padding) * y,
               (x - x_width / 2) * (width + padding));
-            this.mesh.add(cube);
+
+            let geometry = geometries[elm];
+            cube.updateMatrix();
+            geometry.merge(cubeGeometry, cube.matrix);
           }
         }
       }
+
+      for(let i = 0; i < geometries.length; i++) {
+        const mesh = new THREE.Mesh(geometries[i], materials[i]);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        this.mesh.add(mesh);
+      }
+    }
+
+    update(frame) {
     }
   }
 
@@ -436,6 +454,9 @@
     constructor(id, options) {
       super(id, {
         camera: options.camera,
+        inputs: {
+          water: new NIN.TextureInput(),
+        }
       });
 
       this.outputs.depthUniforms = new NIN.Output();
@@ -483,7 +504,7 @@
 
       this.skybox = new THREE.Mesh(
         new THREE.BoxBufferGeometry(1600, 900, 1600),
-        new THREE.ShaderMaterial(SHADERS[options.shader])
+        new THREE.ShaderMaterial(SHADERS.starrySky)
       );
 
       this.skybox.position.y = 100;
@@ -497,6 +518,8 @@
     update(frame) {
       const baseFrame = 8200;
 
+      this.minecraftIsland.materials[0].map = this.inputs.water.getValue();
+
       let angle = (frame - baseFrame) / 400;
       let daylight = Math.cos(Math.PI + Math.PI / 2 + angle * 1.5);
 
@@ -509,8 +532,10 @@
       this.directionalLight.shadow.camera.position.copy(this.directionalLight.position);
       this.directionalLight.shadow.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-      this.camera.position.set(0.5, 15, 20);
-      this.camera.lookAt(new THREE.Vector3(0, 0, -10));
+      this.minecraftIsland.update(frame); 
+
+      this.camera.position.set(0.5, 5, 20);
+      this.camera.lookAt(new THREE.Vector3(0, -10, -10));
 
       if (frame < baseFrame + 900) {
         this.minecraftIsland.mesh.visible = true;
