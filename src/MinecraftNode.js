@@ -19,6 +19,9 @@
       let dirtMap = Loader.loadTexture('res/dirt.png');
       let dirtNormalMap = Loader.loadTexture('res/dirt_n.png');
 
+      let woodMap = Loader.loadTexture('res/wood.jpg');
+      let woodNormalMap = Loader.loadTexture('res/wood_n.jpg');
+
       const materials = {
         /* water */
         0: new THREE.MeshStandardMaterial({
@@ -33,14 +36,18 @@
         }),
         /* dirt */
         2: new THREE.MeshStandardMaterial({
-          map: dirtMap,
-          normalMap: dirtNormalMap,
+          map: woodMap,
+          normalMap: woodNormalMap,
           roughness: 0.7,
           metalness: 0.2,
         }),
         /* dunno */
         3: new THREE.MeshStandardMaterial({
-          color: 'black'
+          map: woodMap,
+          normalMap: woodNormalMap,
+          color: 0x888888,
+          roughness: 0.7,
+          metalness: 0.2,
         }),
           /* window */
         4: new THREE.MeshStandardMaterial({
