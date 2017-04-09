@@ -424,10 +424,10 @@
         this.ctx.globalCompositeOperation = 'lighter';
 
         if (this.frame < 7250) {
-          this.ctx.globalAlpha = easeOut(0.4, 0, (this.frame - 7199) / 20);
+          this.ctx.globalAlpha = easeOut(0.4, 0, (this.frame - 7199) / 50);
           this.ctx.drawImage(this.outracksTexture.image, 4.1 * GU, 3.45 * GU, 1.5 * GU, 1.5 * GU);
         }
-        this.ctx.globalAlpha = easeOut(0.5, 0, (this.frame - 7210) / 150);
+        this.ctx.globalAlpha = easeOut(0.5, 0, (this.frame - 7210) / 170);
         this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
         this.ctx.restore();
       }
