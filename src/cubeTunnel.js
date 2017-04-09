@@ -27,7 +27,6 @@
                                      this.top_material);
         this.spawningCubes.push(newCube);
         this.spawningCubes[i].position.x = 1000;
-        this.scene.add(this.spawningCubes[i]);
       }
 
 
@@ -43,7 +42,14 @@
       var switch_time2 = 4584;
       var camera_move_start = 4414;
       var camera_speed = 0.155;
+
       if (BEAN < switch_time) {
+        if (frame == FRAME_FOR_BEAN(startBEAN) + 1) {
+          this.scene = new THREE.Scene();
+          for(var i=0; i<12; i++) {
+            this.scene.add(this.spawningCubes[i]);
+          }
+        }
         // Spawning the first "ring" of cubes.
         this.camera.position.z = 100;
         this.camera.position.y = 0;
