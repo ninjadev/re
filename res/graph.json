@@ -59,7 +59,6 @@
       "A": "intro_add.render",
       "C": "LaneSwipeTransition.render",
       "F": "SphereTransitionShader.render",
-      "G": "galagafx_vignette.render",
       "H": "triangle.render",
       "H_and_a_half": "tunnel.render",
       "J": "MinecraftTransitionShader.render",
@@ -143,7 +142,8 @@
       "shader": "triangle"
     },
     "connected": {
-      "A": "jules.render"
+      "A": "galagafx_vignette.render",
+      "B": "jules.render"
     }
   },
   {

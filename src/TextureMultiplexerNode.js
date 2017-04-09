@@ -8,7 +8,6 @@
           C: new NIN.TextureInput(),
           D: new NIN.TextureInput(),
           F: new NIN.TextureInput(),
-          G: new NIN.TextureInput(),
           H: new NIN.TextureInput(),
           H_and_a_half: new NIN.TextureInput(),
           J: new NIN.TextureInput(),
@@ -29,7 +28,6 @@
       this.inputs.C.enabled = false;
       this.inputs.D.enabled = false;
       this.inputs.F.enabled = false;
-      this.inputs.G.enabled = false;
       this.inputs.H.enabled = false;
       this.inputs.J.enabled = false;
       this.inputs.K.enabled = false;
@@ -44,9 +42,6 @@
         this.inputs.F.enabled = true;
         this.outputs.selected.setValue(this.inputs.F.getValue());
         // Bass starts here again
-      } else if(BEAN < offset + bar * 48) {
-        this.inputs.G.enabled = true;
-        this.outputs.selected.setValue(this.inputs.G.getValue());
       } else if(BEAN < offset + bar * 56) {
         this.inputs.H.enabled = true;
         this.outputs.selected.setValue(this.inputs.H.getValue());

@@ -1,6 +1,7 @@
 uniform float frame;
 uniform sampler2D A;
 uniform vec2 resolution;
+uniform float amount;
 
 uniform float big;
 uniform float extra;
@@ -97,5 +98,5 @@ void main() {
         c = shade(bg, vUv, rd, ro, t);
     }
 
-    gl_FragColor = vec4(c, 1.0);
+    gl_FragColor = mix(bg, vec4(c, 1.0), amount);
 }
