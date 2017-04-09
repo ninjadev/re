@@ -264,8 +264,7 @@
       "shader": "MinecraftTransitionShader"
     },
     "connected": {
-      "A": "piano.render",
-      "B": "Minecraft_SSAO.render"
+      "A": "Minecraft_SSAO.render"
     }
   },
   {
