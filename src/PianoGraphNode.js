@@ -172,7 +172,7 @@
       }
       this.activePoints = 0;
 
-      this.outracksTexture = Loader.loadTexture('/res/morphed/480_interpolated.jpg');
+      this.outracksTexture = Loader.loadTexture('res/morphed/480_interpolated.jpg');
     }
 
     loadPolygons() {
