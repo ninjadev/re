@@ -9,6 +9,9 @@
       const sphereRadius = 4;
       const sphereGeometry = new THREE.SphereBufferGeometry(sphereRadius, 32, 32);
 
+      this.cache = {};
+      this.black = new THREE.Color('black');
+
       for (let i=0; i<sphereLayers; i++) {
         const angle = Math.PI * i / (sphereLayers - 1);
         const radiusOfPlane = Math.sin(angle) * radius;
@@ -18,6 +21,7 @@
         const x = Math.cos(angle) * radius;
 
         const spheresOfPlane = new THREE.Object3D();
+        spheresOfPlane.intensity = 0.0;
 
         for (let j=0; j<spheresInPlane; j++) {
           const radiansIntoPlane = 2 * Math.PI * j / spheresInPlane;
@@ -38,36 +42,44 @@
       }
     }
 
-    setNextColor(nextColor) {
-      this.nextColor = nextColor;
-    }
-
-    update(frame) {
-      let prevColor = undefined;
-      let nextColor = this.nextColor || this.defaultColor;
+    update(frame, intensity) {
+      let prevIntensity;
+      let nextIntensity = intensity;
 
       for (const [i, circles] of this.mesh.children.entries()) {
         if (circles.children.length === 0) continue;
 
-        prevColor = circles.children[0].material.color;
-
         circles.rotation.x = Math.sin(i/9 + frame / 300);
 
-        for (const circle of circles.children) {
-          circle.material.color = nextColor;
-          circle.material.emissive = nextColor;
+        prevIntensity = circles.intensity;
+        circles.intensity = nextIntensity;
+
+        let color;
+        if (nextIntensity < 3.0) {
+          color = this.black;
+        } else if (nextIntensity in this.cache) {
+          color = this.cache[nextIntensity];
+        } else {
+          const mixer = (nextIntensity - 3.0) / 1.0;
+          const newColor = new THREE.Color(
+            0.588 * mixer + 0.125 * (1 - mixer),
+            0.101 * mixer + 0.858 * (1 - mixer),
+            0.588 * mixer + 0.478 * (1 - mixer)
+          );
+          color = this.cache[nextIntensity] = newColor;
         }
 
-        nextColor = prevColor;
+        for (const circle of circles.children) {
+          circle.material.color = color;
+          circle.material.emissive = color;
+        }
+
+        nextIntensity = prevIntensity;
       }
 
-      this.nextColor = null;
-
-      // for (const [i, circles] of this.mesh.children.entries()) {
-      //   circles.rotation.x = frame / 40 / (20.1 - i);
-      // }
-
       const startBEAN = 162.75 * 12;
+      if (BEAN < startBEAN) return;
+
       for (const [i, circles] of this.mesh.children.entries()) {
         if ((((39 - i) / 8) | 0) < ((BEAN - startBEAN) / 3)) {
           for (const circle of circles.children) {
@@ -109,13 +121,6 @@
       pointLight.position.z = 130;
       this.scene.add(pointLight);
 
-      this.colorIdx = 0;
-      this.colors = [
-        new THREE.Color(0x961A96),
-        new THREE.Color(0x754F8E),
-        new THREE.Color(0x20db7a),
-        new THREE.Color(0x518B86),
-      ];
       this.s = new Supersphere(new THREE.Color(0x000000));
       this.scene.add(this.s.mesh);
 
@@ -125,16 +130,11 @@
     update(frame) {
       super.update(frame);
 
-      if (this.analysis.getValue(frame) > 3.5) {
-        const idx = this.colorIdx++ % this.colors.length;
-        this.s.setNextColor(this.colors[idx]);
-      }
-
       if (frame >= 4435 && frame <= 4610) {
-        this.s.setNextColor(this.colors[0]);
+        this.s.update(frame, 4.0);
+      } else {
+        this.s.update(frame, this.analysis.getValue(frame));
       }
-
-      this.s.update(frame);
     }
   }
 
