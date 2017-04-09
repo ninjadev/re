@@ -5,13 +5,6 @@
 
       this.scene.background = new THREE.Color(0x5599ff);
 
-      this.canvas = document.createElement('canvas');
-      this.ctx = this.canvas.getContext('2d');
-      this.canvasTexture = new THREE.CanvasTexture(this.canvas);
-      this.canvasTexture.minFilter = THREE.LinearFilter;
-      this.canvasTexture.magFilter = THREE.LinearFilter;
-      this.canvasMaterial = new THREE.MeshBasicMaterial({map: this.canvasTexture, side: THREE.DoubleSide});
-
       this.screenMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
       this.screen = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), this.screenMaterial);
       this.scene.add(this.screen);
@@ -30,21 +23,6 @@
       for (let i=0; i <= 160; i++) {
         this.frames[i] = Loader.loadTexture(`/res/morphed/${leftPad(i.toString(), 3, '0')}_interpolated.jpg`);
       }
-
-      this.platforms = [];
-      for (let i=0; i < 16; i++) {
-        const platform = new THREE.Mesh(
-          new THREE.BoxGeometry(10, 4, 80),
-          new THREE.MeshToonMaterial({color: 0xffff00})
-        );
-        platform.position.set(i % 2 ? 7 : -7, 3, 1610 - i * 100);
-        this.scene.add(platform);
-        this.platforms.push(platform);
-      }
-
-      this.light = new THREE.DirectionalLight(0xffffff, 0.8);
-      this.light.position.y = 10;
-      this.scene.add(this.light);
 
       this.crews = [
         'mercury',
@@ -65,23 +43,28 @@
         'outracks'
       ];
 
-      this.resize();
+      const material = new THREE.MeshToonMaterial({color: 0xffff00});
+      this.platforms = [];
+      for (let i=0; i < 16; i++) {
+        const platform = new THREE.Mesh(
+          new THREE.BoxGeometry(10, 4, 80),
+          new THREE.MeshFaceMaterial([
+            material,
+            material,
+            this.createCanvas(this.crews[i].toUpperCase()),
+            material,
+            material,
+            material,
+          ])
+        );
+        platform.position.set(i % 2 ? 7 : -7, 3, 1610 - i * 100);
+        this.scene.add(platform);
+        this.platforms.push(platform);
+      }
 
-      this.ctx.fillStyle = '#660066';
-      this.ctx.fillRect(0, 0, 10 * GU, 100 * GU);
-
-      this.ctx.scale(-1, 1);
-
-      this.ctx.font = '20px arial';
-      this.ctx.textBaseline = 'middle';
-      this.ctx.textAlign = 'center';
-      this.ctx.fillStyle = '#ffffff';
-      this.ctx.fillText('MERCURY', 5 * GU, 15 * GU);
-      this.ctx.fillText('REVISION', 5 * GU, 35 * GU);
-      this.ctx.fillText('PANDACUBE', 5 * GU, 55 * GU);
-
-      this.canvasTexture.needsUpdate = true;
-      this.canvasMaterial.needsUpdate = true;
+      this.light = new THREE.DirectionalLight(0xffffff, 0.8);
+      this.light.position.y = 10;
+      this.scene.add(this.light);
     }
 
     update(frame) {
@@ -108,9 +91,32 @@
 
     resize() {
       super.resize();
+    }
 
-      this.canvas.width = 10 * GU;
-      this.canvas.height = 100 * GU;
+    createCanvas(text) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 100;
+      canvas.height = 800;
+
+      const ctx = canvas.getContext('2d');
+      const canvasTexture = new THREE.CanvasTexture(canvas);
+      canvasTexture.minFilter = THREE.LinearFilter;
+      canvasTexture.magFilter = THREE.LinearFilter;
+
+      ctx.fillStyle = '#ffff00';
+      ctx.fillRect(0, 0, 10 * GU, 100 * GU);
+
+      ctx.font = '60px arial';
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#000000';
+      for (let i = 0; i < text.length; i++) {
+        ctx.fillText(text[i], 50, 750 - i * 750 / text.length);
+      }
+
+      canvasTexture.needsUpdate = true;
+
+      return new THREE.MeshToonMaterial({map: canvasTexture});
     }
   }
 
