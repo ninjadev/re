@@ -21,7 +21,7 @@
 
       this.frames = [];
       for (let i=0; i <= 160; i++) {
-        this.frames[i] = Loader.loadTexture(`/res/morphed/${leftPad(i.toString(), 3, '0')}_interpolated.jpg`);
+        this.frames[i] = Loader.loadTexture(`res/morphed/${leftPad(i.toString(), 3, '0')}_interpolated.jpg`);
       }
 
       this.crews = [
