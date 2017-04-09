@@ -62,7 +62,7 @@
       "G": "galagafx_vignette.render",
       "H": "triangle.render",
       "I": "piano.render",
-      "J": "LavaNode.render",
+      "J": "lava_SSAO.render",
       "K": "BitGlitchShader.render",
       "L": "cubeTunnel.render"
     }
@@ -161,10 +161,10 @@
     }
   },
   {
-    "id": "intro_SSAO",
+    "id": "lava_SSAO",
     "type": "SSAONode",
     "connected": {
-      "uniforms": "CubeFloor.depthUniforms"
+        "uniforms": "LavaNode.depthUniforms"
     }
   },
   {
