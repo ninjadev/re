@@ -74,20 +74,20 @@ void main() {
         animationStage = 10;
     }
 
-    if (stage > 12. || frame >= starstart) {
+    if (stage > 12. || frame >= starfreeze - 30.) {
         s = max(insideStar(pos, vec2(40 + 3 * int(sin(frame)), -15), animationStage), s);
         s = max(insideStar(pos, vec2(-10, 30 + 4 * int(sin(frame))), animationStage), s);
         s = max(insideStar(pos, vec2(-70 + 3 * int(sin(frame)), 5), animationStage), s);
         s = max(insideStar(pos, vec2(40, 40 + 4 * int(sin(frame))), animationStage), s);
         s = max(insideStar(pos, vec2(10 + 4 * int(sin(frame)), -8), animationStage), s);
         s = max(insideStar(pos, vec2(-40, -30 + 3 * int(sin(frame))), animationStage), s);
+        s = max(insideStar(pos, vec2(-30, 10 + 3 * int(sin(frame))), animationStage), s);
     }
 
-    if (stage <= 12. || frame >= starstart) {
+    if (stage <= 12. || frame >= starfreeze - 30.) {
         s = max(insideStar(pos, vec2(-20, 40), animationStage), s);
         s = max(insideStar(pos, vec2( 40, 0), animationStage), s);
         s = max(insideStar(pos, vec2( 20, 30), animationStage), s);
-        s = max(insideStar(pos, vec2( 20, 35), animationStage), s);
         s = max(insideStar(pos, vec2( 50, 20), animationStage), s);
         s = max(insideStar(pos, vec2( 0,  10), animationStage), s);
     }
