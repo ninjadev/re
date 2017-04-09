@@ -317,7 +317,7 @@
 
       // When BEAN is equal to startBEAN + one of the numbers in the list, a ring is spawned on the texture on top of the cubes.
       // Only two rings at a time is supported. Modify topshader to add more if neccessary.
-      var beats = [0,   24,   48,   72,                 96, 104, 112, 118, 126          , 144, 160, 176, 192, 208, 224, 240, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432]; // 432 should be last
+      var beats = [0, 9, 18, 24, 33, 42, 48, 57, 66, 72,                 88, 97, 106, 113, 122         ,144, 168, 192, 216, 240, 264, 288, 312, 336, 360, 384, 408, 432]; // 432 should be last
       var passed_1 = -1;
       var passed_2 = -1;
       var passed_3 = -1;
