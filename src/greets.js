@@ -5,7 +5,15 @@
 
       this.scene.background = new THREE.Color(0x5599ff);
 
-      this.screenMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+      this.canvas = document.createElement('canvas');
+      this.ctx = this.canvas.getContext('2d');
+      this.canvasTexture = new THREE.CanvasTexture(this.canvas);
+      this.canvasTexture.minFilter = THREE.LinearFilter;
+      this.canvasTexture.magFilter = THREE.LinearFilter;
+      this.canvasMaterial = new THREE.MeshBasicMaterial({map: this.canvasTexture, side: THREE.DoubleSide});
+
+      this.screenMaterial = new THREE.ShaderMaterial(SHADERS.greets);
+      this.screenMaterial.transparent = true;
       this.screen = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), this.screenMaterial);
       this.scene.add(this.screen);
 
@@ -78,16 +86,19 @@
       const slideIndex = clamp(0, frame - FRAME_FOR_BEAN(startBEAN + 2 * 12 * baseIndex), 27);
       const animationIndex = clamp(0, frame - FRAME_FOR_BEAN(startBEAN + 12 + 2 * 12 * baseIndex), 27);
 
-      this.screenMaterial.map = this.frames[clamp(0, baseIndex * 10 + animationIndex / 3, 160) | 0];
+      this.screenMaterial.uniforms.tDiffuse.value = this.frames[clamp(0, baseIndex * 10 + animationIndex / 3, 160) | 0];
 
       this.screen.position.z = lerp(1695, 95, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
       this.screen.position.x = this.platformPositions[baseIndex];
+      this.screen.scale.y = 1.1 + 0.2 * Math.sin(frame * Math.PI * 2 / 60 / 60 * 130 / 2);
       if (this.platformPositions[baseIndex + 1] > this.platformPositions[baseIndex]) {
         this.screen.position.x += slideIndex * 14 / 27;
       } else if (this.platformPositions[baseIndex + 1] < this.platformPositions[baseIndex]) {
         this.screen.position.x -= slideIndex * 14 / 27;
       }
       this.screen.position.y = easeIn(easeOut(10, 15, slideIndex / 14), 10, (slideIndex - 14) / 13);
+      this.screen.position.y -= 5 - 10 * this.screen.scale.y / 2;
+      this.screen.rotation.y = Math.PI / 2 * easeIn(easeOut(0, 0.5, slideIndex / 14), 1, (slideIndex - 14) / 13);
 
       this.camera.position.x = this.screen.position.x / 2;
       this.camera.position.z = this.screen.position.z + easeIn(lerp(50, 25, (frame - FRAME_FOR_BEAN(startBEAN)) / 885), 65, (frame - 7150) / 50);

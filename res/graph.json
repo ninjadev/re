@@ -254,7 +254,10 @@
   },
   {
     "id": "greets",
-    "type": "greets"
+    "type": "greets",
+    "options": {
+        "shader": "greets"
+    }
   },
   {
     "id": "water",
