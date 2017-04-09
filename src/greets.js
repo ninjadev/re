@@ -5,13 +5,6 @@
 
       this.scene.background = new THREE.Color(0x5599ff);
 
-      this.canvas = document.createElement('canvas');
-      this.ctx = this.canvas.getContext('2d');
-      this.canvasTexture = new THREE.CanvasTexture(this.canvas);
-      this.canvasTexture.minFilter = THREE.LinearFilter;
-      this.canvasTexture.magFilter = THREE.LinearFilter;
-      this.canvasMaterial = new THREE.MeshBasicMaterial({map: this.canvasTexture, side: THREE.DoubleSide});
-
       this.screenMaterial = new THREE.ShaderMaterial(SHADERS.greets);
       this.screenMaterial.transparent = true;
       this.screen = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), this.screenMaterial);
