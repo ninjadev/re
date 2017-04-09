@@ -9,18 +9,19 @@
         camera: options.camera,
       });
 
-      this.scene.background = new THREE.Color(0x6C92B4);
+      this.scene.background = new THREE.Color(0x1a001a);
 
       this.cubes = [];
       for (let j=0; j < 17; j++) {
         const cuberow = [];
         for (let i=0; i < 16; i++) {
           const cube = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, 10, 32),
-                                      new THREE.MeshToonMaterial({color: 0xaa4839 }));
+                                      new THREE.MeshToonMaterial({color: 0xff14c9 }));
           cube.rotation.y = 1;
           cube.scale.y = 0.01;
           cube.position.x = 100000;
           cube.position.z = 20 * (j - 8);
+          cube.castShadow = true;
           this.scene.add(cube);
           cuberow.push(cube);
 
@@ -46,8 +47,9 @@
       const light = new THREE.AmbientLight(0xffffff, 0.1);
       this.scene.add(light);
 
-      const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
       dirLight.position.set(0, 100, 100);
+      dirLight.castShadow = true;
       this.scene.add(dirLight);
 
       this.canvas = document.createElement('canvas');
@@ -146,9 +148,9 @@
       }
 
       const planeColorFrame = FRAME_FOR_BEAN(98 * 12 + 12) - 10;
-      const r = lerp(255, 0, (frame - planeColorFrame) / 20);
-      const g = lerp(224, 146, (frame - planeColorFrame) / 20);
-      const b = lerp(144, 221, (frame - planeColorFrame) / 20);
+      const r = lerp(77, 0, (frame - planeColorFrame) / 20);
+      const g = lerp(166, 146, (frame - planeColorFrame) / 20);
+      const b = lerp(255, 221, (frame - planeColorFrame) / 20);
       this.backgroundColor = `rgb(${r|0}, ${g|0}, ${b|0})`;
     }
 
