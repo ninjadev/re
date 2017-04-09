@@ -1,4 +1,4 @@
 gen
 bin
-*.swp
+*.sw*
 .idea
