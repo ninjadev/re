@@ -59,18 +59,18 @@
               this.group[i][j].scale.set(xyz, xyz, xyz);
             }
           }
-          else if (frame < 6000 && frame > 5500) {
+          else if (frame < 6020 && frame > 5500) {
             if (BEAN % 12 == 0) { 
               let temp = (i + j) % 2 == 0 ? 1 + 0.8 * scale : 1 + -0.8 * scale;
               this.group[i][j].scale.set(temp, temp, temp);
               this.group[i][j].position.z = 0;
             }
           }
-          else if (frame > 6000 && frame < 6300 && BEAT) {
+          else if (frame > 5990 && frame < 6300 && BEAT) {
             let pos = Math.sin(frame/100);
             this.group[i][j].position.x = -(i-25)*10*((pos+3)/3);
             this.group[i][j].position.y = -(j-25)*10*((pos+3)/3);  
-            this.group[i][j].rotation.z = this.hexagonRotation * ((i + j) % 2 == 0 ? 1 : -1);
+            this.group[i][j].rotation.z = this.hexagonRotation * ((i + j) % 2 == 0 ? 1 : 0);
             if (frame > 6140 && frame < 6290) {    
               let xyz = (i+j) % 2 == 0 ? 1.5 * scale : 0.5 * scale;
               this.group[i][j].scale.set(xyz, xyz, xyz);
