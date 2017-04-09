@@ -44,13 +44,13 @@
       ];
 
       this.sampleFreq = 44100;  // fallback in case of incompatible nin
-      if (demo.music.audioContext && demo.music.audioContext.sampleRate) {
+      if (demo.music && demo.music.audioContext && demo.music.audioContext.sampleRate) {
         this.sampleFreq = demo.music.audioContext.sampleRate;
       }
       this.nyquistFreq = this.sampleFreq / 2;
       this.maxMel = 2595 * Math.log10(1 + this.nyquistFreq / 700);
       this.numBins = 1024;  // fallback in case of incompatible nin
-      if (demo.music.getFftSize) {
+      if (demo.music && demo.music.getFftSize) {
         this.numBins = demo.music.getFftSize() / 2;
       }
       this.freqPerBin = this.nyquistFreq / this.numBins;
