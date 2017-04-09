@@ -5,16 +5,14 @@
         A: new NIN.TextureInput(),
       };
       super(id, options);
+
+      this.analysis = new audioAnalysisSanitizer('stem_snare.wav', 'spectral_energy', 0.03);
     }
     update(frame) {
       this.uniforms.A.value = this.inputs.A.getValue();
-      this.uniforms.frame.value = frame;
       this.uniforms.big.value = Math.max(Math.sin(frame/100), 0.5);
-      if(BEAT && (BEAN%12==0)) {
-        this.uniforms.shift.value = 1.0;
-      }
-      // this value needs to change to follow the rythm
-      //this.uniforms.extra.value = smoothstep(0, 1, BEAT);
+
+      this.uniforms.frame.value = frame - this.analysis.getValue(frame) * 18;
     }
   }
 

@@ -15,7 +15,7 @@ varying vec2 vUv;
 
 float map(vec3 p) {
     float v = frame / 60.;
-    float r = max((0.9*big + 1.0*extra), 0.5) +
+    float r = max((0.9*big + extra), 0.5) +
                0.35*cos(8.3*p.y + v) +
                0.35*cos(2.3*p.x + v);
     return length(p) - r;
