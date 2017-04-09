@@ -44,6 +44,7 @@
       ];
 
       const material = new THREE.MeshToonMaterial({color: 0xffff00});
+      this.platformPositions = [-7, -7, -21, -7, 7, -7, 7, 21, 7, 21, 7, -7, 7, -7, -21, -7, -7];
       this.platforms = [];
       for (let i=0; i < 16; i++) {
         const platform = new THREE.Mesh(
@@ -57,7 +58,7 @@
             material,
           ])
         );
-        platform.position.set(i % 2 ? 7 : -7, 3, 1610 - i * 100);
+        platform.position.set(this.platformPositions[i + 1], 3, 1610 - i * 100);
         this.scene.add(platform);
         this.platforms.push(platform);
       }
@@ -80,9 +81,15 @@
       this.screenMaterial.map = this.frames[clamp(0, baseIndex * 10 + animationIndex / 3, 160) | 0];
 
       this.screen.position.z = lerp(1695, 95, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
-      this.screen.position.x = (baseIndex % 2 ? -7 : 7) + (baseIndex % 2 ? 1 : -1) * slideIndex * 14 / 27;
+      this.screen.position.x = this.platformPositions[baseIndex];
+      if (this.platformPositions[baseIndex + 1] > this.platformPositions[baseIndex]) {
+        this.screen.position.x += slideIndex * 14 / 27;
+      } else if (this.platformPositions[baseIndex + 1] < this.platformPositions[baseIndex]) {
+        this.screen.position.x -= slideIndex * 14 / 27;
+      }
       this.screen.position.y = easeIn(easeOut(10, 15, slideIndex / 14), 10, (slideIndex - 14) / 13);
 
+      this.camera.position.x = this.screen.position.x / 2;
       this.camera.position.z = this.screen.position.z + easeIn(lerp(50, 25, (frame - FRAME_FOR_BEAN(startBEAN)) / 885), 65, (frame - 7150) / 50);
       this.camera.position.y = lerp(20, 10, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
 
