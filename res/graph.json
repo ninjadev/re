@@ -235,7 +235,7 @@
     "type": "MinecraftNode",
     "options": {
       "camera": "res/MinecraftNode.camera.json",
-      "shader": "water"
+      "shader": "starrySky"
     },
     "connected": {
         "water": "water.render"
