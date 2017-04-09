@@ -4,25 +4,24 @@
       "startFrame": 8000,
       "endFrame": 8417,
       "points": [
-        [-21, 9, 27],
-        [-19, 10, 27],
-        [-25, 16, 32]
+        [-24, 23, 25],
+        [-22, 11, 29]
       ]
     },
     {
       "startFrame": 8418,
       "endFrame": 8864,
       "points": [
-        [7,2.5,26],
-        [19,14,16]
+        [5,2.5,23],
+        [-5,14,16]
       ]
     },
     {
       "startFrame": 8865,
       "endFrame": 8918,
       "points": [
-        [-4.5,5, 10],
-        [-4.6, 5, 12]
+        [-4.5,5, 9],
+        [-4.6, 5, 11]
       ]
     },
     {
@@ -30,12 +29,12 @@
       "endFrame": 8959,
       "points": [
         [-16,6.5,2],
-        [-18, 8, 4]
+        [-18, 7.5, 3.5]
       ]
     },
     {
       "startFrame": 8960,
-      "endFrame": 9150,
+      "endFrame": 9250,
       "easing": "easeOut",
       "points": [
         [-3,4,23],
@@ -47,28 +46,17 @@
     {
       "startFrame": 8000,
       "endFrame": 8417,
-      "easing": "easeOut",
       "points": [
-        [502, 200, -800],
-        [0, 6, 0]
+        [0, 5, 0],
+        [0, 2, 0]
       ]
     },
     {
       "startFrame": 8418,
-      "endFrame": 8664,
-      "easing": "easeOut",
+      "endFrame": 8864,
       "points": [
         [-1.74,3.66,3.25],
-        [1.92,10.5,-0.05]
-      ]
-    },
-    {
-      "startFrame": 8665,
-      "endFrame": 8864,
-      "easing": "easeIn",
-      "points": [
-        [1.92,10.5,-0.05],
-        [1.92,6.5,-1.85]
+        [-2.32,6.5,-1.85]
       ]
     },
     {
@@ -80,26 +68,26 @@
       "startFrame": 8919,
       "endFrame": 8959,
       "points": [
-        [3.5, 3.5, 7.5],
-        [3, 5, 6]
+        [3.5, 3.5, 7],
+        [3, 4, 6.5]
       ]
     },
     {
       "startFrame": 8960,
-      "endFrame": 9150,
+      "endFrame": 9250,
       "easing": "easeOut",
       "points": [
         [0, 8, 4],
-        [-1, 7, 0]
+        [-0.5, 7, 0]
       ]
     },
     {
-      "startFrame": 9240,
-      "endFrame": 9305,
+      "startFrame": 9235,
+      "endFrame": 9303,
       "easing": "smoothstep",
       "points": [
-        [-1, 7, 0],
-        [-1, 11, 0]
+        [-0.5, 7, 0],
+        [3, 14, 0]
       ]
     }
   ]
