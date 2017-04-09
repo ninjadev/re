@@ -51,12 +51,12 @@
         'outracks'
       ];
 
-      const material = new THREE.MeshToonMaterial({color: 0xffff00});
+      const material = new THREE.MeshToonMaterial({color: 0x20db7a});
       this.platformPositions = [-7, -7, -21, -7, 7, -7, 7, 21, 7, 21, 7, -7, 7, -7, -21, -7, -7];
       this.platforms = [];
       for (let i=0; i < 16; i++) {
         const platform = new THREE.Mesh(
-          new THREE.BoxGeometry(10, 4, 80),
+          new THREE.BoxGeometry(10, 4, 160),
           new THREE.MultiMaterial([
             material,
             material,
@@ -66,7 +66,7 @@
             material,
           ])
         );
-        platform.position.set(this.platformPositions[i + 1], 3, 1610 - i * 100);
+        platform.position.set(this.platformPositions[i + 1], -1000, 3220 - i * 200);
         this.scene.add(platform);
         this.platforms.push(platform);
       }
@@ -88,7 +88,7 @@
 
       this.screenMaterial.uniforms.tDiffuse.value = this.frames[clamp(0, baseIndex * 10 + animationIndex / 3, 160) | 0];
 
-      this.screen.position.z = lerp(1695, 95, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
+      this.screen.position.z = lerp(3390, 190, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
       this.screen.position.x = this.platformPositions[baseIndex];
       this.screen.scale.y = 1.1 + 0.2 * Math.sin(frame * Math.PI * 2 / 60 / 60 * 130 / 2);
       if (this.platformPositions[baseIndex + 1] > this.platformPositions[baseIndex]) {
@@ -100,15 +100,21 @@
       this.screen.position.y -= 5 - 10 * this.screen.scale.y / 2;
       this.screen.rotation.y = Math.PI / 2 * easeIn(easeOut(0, 0.5, slideIndex / 14), 1, (slideIndex - 14) / 13);
 
+      for (const [i, platform] of this.platforms.entries()) {
+        if (frame < FRAME_FOR_BEAN(startBEAN - 18 + 2 * 12 * i)) {
+          platform.position.y = -10000;
+        } else {
+          platform.position.y = easeOut(-40, 3, (frame - FRAME_FOR_BEAN(startBEAN - 18 + 2 * 12 * i)) / 20);
+        }
+      }
+
       this.camera.position.x = this.screen.position.x / 2;
       this.camera.position.z = this.screen.position.z + easeIn(lerp(50, 25, (frame - FRAME_FOR_BEAN(startBEAN)) / 885), 65, (frame - 7150) / 50);
-      this.camera.position.y = lerp(20, 10, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
+      this.camera.position.y = lerp(25, 12, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
+
+      this.camera.rotation.x = -0.2;
 
       this.light.position.z = this.camera.position.z;
-    }
-
-    resize() {
-      super.resize();
     }
 
     createCanvas(text) {
@@ -121,13 +127,13 @@
       canvasTexture.minFilter = THREE.LinearFilter;
       canvasTexture.magFilter = THREE.LinearFilter;
 
-      ctx.fillStyle = '#ffff00';
+      ctx.fillStyle = '#20db7a';
       ctx.fillRect(0, 0, 10 * GU, 100 * GU);
 
-      ctx.font = '60px arial';
+      ctx.font = 'bold 60px arial';
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'center';
-      ctx.fillStyle = '#000000';
+      ctx.fillStyle = '#ffffff';
       for (let i = 0; i < text.length; i++) {
         ctx.fillText(text[i], 50, 750 - i * 750 / text.length);
       }
