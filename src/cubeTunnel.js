@@ -83,31 +83,31 @@
         this.spawningCubes[0].scale.x = 
         this.spawningCubes[0].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 0) + slideDuration)/ slideDuration);
         this.spawningCubes[1].scale.x = 
-        this.spawningCubes[1].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 6) + slideDuration)/ slideDuration);
+        this.spawningCubes[1].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 8) + slideDuration)/ slideDuration);
 
         this.spawningCubes[3].scale.x =
         this.spawningCubes[3].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 24) + slideDuration)/ slideDuration);
         this.spawningCubes[4].scale.x =
-        this.spawningCubes[4].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 30) + slideDuration)/ slideDuration);
+        this.spawningCubes[4].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 32) + slideDuration)/ slideDuration);
 
         this.spawningCubes[6].scale.x =
-        this.spawningCubes[6].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 42) + slideDuration)/ slideDuration);
+        this.spawningCubes[6].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 48) + slideDuration)/ slideDuration);
         this.spawningCubes[7].scale.x =
-        this.spawningCubes[7].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 48) + slideDuration)/ slideDuration);
+        this.spawningCubes[7].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 56) + slideDuration)/ slideDuration);
    
         this.spawningCubes[9].scale.x =
-        this.spawningCubes[9].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 60) + slideDuration)/ slideDuration);
+        this.spawningCubes[9].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 72) + slideDuration)/ slideDuration);
         this.spawningCubes[10].scale.x =
-        this.spawningCubes[10].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 66) + slideDuration)/ slideDuration);
+        this.spawningCubes[10].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 80) + slideDuration)/ slideDuration);
 
         // Fly in the corner cubes.
         this.spawningCubes[2].position.x = 12;
-        this.spawningCubes[2].position.y = easeIn(-100, -12, (frame - FRAME_FOR_BEAN(startBEAN + 12) + cornerSlideDuration)/ cornerSlideDuration);
-        this.spawningCubes[5].position.x = easeIn(100, 12, (frame - FRAME_FOR_BEAN(startBEAN + 36) + cornerSlideDuration)/ cornerSlideDuration);
+        this.spawningCubes[2].position.y = easeIn(-100, -12, (frame - FRAME_FOR_BEAN(startBEAN + 16) + cornerSlideDuration)/ cornerSlideDuration);
+        this.spawningCubes[5].position.x = easeIn(100, 12, (frame - FRAME_FOR_BEAN(startBEAN + 40) + cornerSlideDuration)/ cornerSlideDuration);
         this.spawningCubes[5].position.y = 12;
         this.spawningCubes[8].position.x = -12;
-        this.spawningCubes[8].position.y = easeIn(100, 12, (frame - FRAME_FOR_BEAN(startBEAN + 54) + cornerSlideDuration)/ cornerSlideDuration);
-        this.spawningCubes[11].position.x = easeIn(-100, -12, (frame - FRAME_FOR_BEAN(startBEAN + 72) + cornerSlideDuration)/ cornerSlideDuration);
+        this.spawningCubes[8].position.y = easeIn(100, 12, (frame - FRAME_FOR_BEAN(startBEAN + 64) + cornerSlideDuration)/ cornerSlideDuration);
+        this.spawningCubes[11].position.x = easeIn(-100, -12, (frame - FRAME_FOR_BEAN(startBEAN + 88) + cornerSlideDuration)/ cornerSlideDuration);
         this.spawningCubes[11].position.y = -12;
       
 
@@ -120,7 +120,7 @@
 
         this.camera.lookAt(new THREE.Vector3(0,0,0));
 
-        var beats2 = [0, 8, 16, 24, 30,      48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68];
+        var beats2 = [0, 8, 16, 24, 36,      48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68];
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[0])) {
           this.scene = new THREE.Scene();
           this.create_layer_first_layer(0);
@@ -317,9 +317,11 @@
 
       // When BEAN is equal to startBEAN + one of the numbers in the list, a ring is spawned on the texture on top of the cubes.
       // Only two rings at a time is supported. Modify topshader to add more if neccessary.
-      var beats = [0, 12,  24,  36,  48,  60,  72,  84,  96,  108,  120,  132,  144,  156,  168,  180,  192,  204,  216,  228,  240,  252,  264,  276,  288,  300,  312,  324,  336,  348,  360,  372,  384,  396,  408,  420,  432];
+      var beats = [0, 9, 18, 24, 33, 42, 48, 57, 66, 72,                 88, 97, 106, 113, 122         ,144, 168, 192, 216, 240, 264, 288, 312, 336, 360, 384, 408, 432]; // 432 should be last
       var passed_1 = -1;
       var passed_2 = -1;
+      var passed_3 = -1;
+      var passed_4 = -1;
       //Figure out the last two passed time stamps (for ring spawning).
       for (var i = 0; i < beats.length; i++) {
         if(BEAN > startBEAN + beats[beats.length - 1 - i]) {
@@ -327,22 +329,42 @@
             passed_1 = beats.length - 1 - i;
           } else if (passed_2 == -1) {
             passed_2 = beats.length - 1 - i;
+          } else if (passed_3 == -1) {
+            passed_3 = beats.length - 1 - i;
+          } else if (passed_4 == -1) {
+            passed_4 = beats.length - 1 - i;
           }
         }
       }
       // Calculate where on the surface of the cube the ring should be. This makes the rings shrink (quite rapidly) after spawning.
-      var stripe_position = (frame - FRAME_FOR_BEAN(startBEAN + beats[passed_1])) / 48;
+      var stripe_position = (frame - FRAME_FOR_BEAN(startBEAN + beats[passed_1])) / 60;
       var stripe_position2;
+      var stripe_position3;
+      var stripe_position4;
       if(passed_2 != -1) {
-        stripe_position2 = (frame - FRAME_FOR_BEAN(startBEAN + beats[passed_2])) / 48;
+        stripe_position2 = (frame - FRAME_FOR_BEAN(startBEAN + beats[passed_2])) / 60;
       } else {
-        stripe_position2 = 1;
+        stripe_position2 = 0;
+      }
+      if(passed_3 != -1) {
+        stripe_position3 = (frame - FRAME_FOR_BEAN(startBEAN + beats[passed_3])) / 60;
+      } else {
+        stripe_position3 = 0;
+      }
+      if(passed_4 != -1) {
+        stripe_position4 = (frame - FRAME_FOR_BEAN(startBEAN + beats[passed_4])) / 60;
+      } else {
+        stripe_position4 = 0
       }
       // Set the properties of the top shader.
       this.top_material.uniforms.start1.value = clamp(0, stripe_position - 0.2, 1);
       this.top_material.uniforms.stop1.value = clamp(0, stripe_position, 1);
       this.top_material.uniforms.start2.value = clamp(0, stripe_position2 - 0.2, 1);
       this.top_material.uniforms.stop2.value = clamp(0, stripe_position2, 1);
+      this.top_material.uniforms.start3.value = clamp(0, stripe_position3 - 0.2, 1);
+      this.top_material.uniforms.stop3.value = clamp(0, stripe_position3, 1);
+      this.top_material.uniforms.start4.value = clamp(0, stripe_position4 - 0.2, 1);
+      this.top_material.uniforms.stop4.value = clamp(0, stripe_position4, 1);
       // Set the number tiles in the shader. Can be set to more or less anything, but small numbers are best IMO.
       if (BEAN < switch_time) {
         this.top_material.uniforms.tiles.value = 1;
