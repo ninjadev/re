@@ -61,7 +61,7 @@
       "F": "SphereTransitionShader.render",
       "G": "galagafx_vignette.render",
       "H": "triangle.render",
-      "H_and_a_half": "greets.render",
+      "H_and_a_half": "tunnel.render",
       "I": "piano.render",
       "J": "lava_SSAO.render",
       "K": "BitGlitchShader.render",
@@ -264,6 +264,16 @@
     "type": "waterNode",
     "options": {
         "shader": "water"
+    }
+  },
+  {
+    "id": "tunnel",
+    "type": "TunnelShader",
+    "options": {
+        "shader": "tunnel"
+    },
+    "connected": {
+        "tDiffuse": "greets.render"
     }
   }
 ]
