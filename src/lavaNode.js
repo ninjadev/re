@@ -19,8 +19,6 @@
       let dirtMap = Loader.loadTexture('res/dirt.png');
       let dirtNormalMap = Loader.loadTexture('res/dirt_n.png');
 
-      let grassBillboardMap = Loader.loadTexture('res/grass-billboard.png');
-
       const materials = {
         /* water */
         0: new THREE.MeshStandardMaterial({
