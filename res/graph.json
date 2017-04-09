@@ -109,7 +109,12 @@
     "id": "add",
     "type": "AddNode",
     "options": {
-      "opacity": 0.5,
+      "opacity": {
+        "from": 3654,
+        "to": 4540,
+        "value": 1.4,
+        "default": 0.5
+      },
       "shader": "Add"
     },
     "connected": {
