@@ -5,7 +5,7 @@
   const DISTANCE_THRESHOLD = 5;
 
   const easeOutExpo = function (t, b, c, d) {
-      return c * ( -Math.pow( 2, -10 * t/d ) + 1 ) + b;
+    return c * ( -Math.pow( 2, -10 * t/d ) + 1 ) + b;
   };
 
   const MAX_OBJECTS = 10;
@@ -171,6 +171,8 @@
         });
       }
       this.activePoints = 0;
+
+      this.outracksTexture = Loader.loadTexture('/res/morphed/160_interpolated.jpg');
     }
 
     loadPolygons() {
@@ -397,11 +399,16 @@
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       }
 
-      if(this.frame < 6500) {
+      if(this.frame < 7360) {
         this.ctx.save();
         this.ctx.fillStyle = 'white';
         this.ctx.globalCompositeOperation = 'lighter';
-        this.ctx.globalAlpha = easeOut(0.5, 0, (this.frame - 6313) / 60);
+
+        if (this.frame < 7250) {
+          this.ctx.globalAlpha = easeOut(0.4, 0, (this.frame - 7199) / 20);
+          this.ctx.drawImage(this.outracksTexture.image, 6.3 * GU, 1.7 * GU, 2 * GU, 2 * GU);
+        }
+        this.ctx.globalAlpha = easeOut(0.5, 0, (this.frame - 7210) / 150);
         this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
         this.ctx.restore();
       }
