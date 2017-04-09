@@ -161,10 +161,10 @@
     }
   },
   {
-    "id": "lava_SSAO",
+    "id": "Minecraft_SSAO",
     "type": "SSAONode",
     "connected": {
-      "uniforms": "LavaNode.depthUniforms"
+      "uniforms": "MinecraftNode.depthUniforms"
     }
   },
   {
@@ -226,10 +226,10 @@
     }
   },
   {
-    "id": "LavaNode",
-    "type": "lavaNode",
+    "id": "MinecraftNode",
+    "type": "MinecraftNode",
     "options": {
-      "camera": "res/lavaNode.camera.json",
+      "camera": "res/MinecraftNode.camera.json",
       "shader": "water"
     },
     "connected": {
@@ -259,7 +259,7 @@
     },
     "connected": {
       "A": "piano.render",
-      "B": "lava_SSAO.render"
+      "B": "Minecraft_SSAO.render"
     }
   },
   {
