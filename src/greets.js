@@ -51,15 +51,7 @@
       for (let i=0; i < 16; i++) {
         const platform = new THREE.Mesh(
           new THREE.BoxGeometry(10, 4, 160),
-          new THREE.MultiMaterial([
-            material,
-            material,
-            this.createCanvas(this.crews[i].toUpperCase()),
-            material,
-            material,
-            material,
-          ])
-        );
+          material);
         platform.position.set(this.platformPositions[i + 1], -1000, 3220 - i * 200);
         this.scene.add(platform);
         this.platforms.push(platform);
@@ -108,33 +100,9 @@
 
       this.camera.rotation.x = -0.2;
 
+      this.light.position.x = this.camera.position.x;
+      this.light.position.y = this.camera.position.y + 10;
       this.light.position.z = this.camera.position.z;
-    }
-
-    createCanvas(text) {
-      const canvas = document.createElement('canvas');
-      canvas.width = 100;
-      canvas.height = 800;
-
-      const ctx = canvas.getContext('2d');
-      const canvasTexture = new THREE.CanvasTexture(canvas);
-      canvasTexture.minFilter = THREE.LinearFilter;
-      canvasTexture.magFilter = THREE.LinearFilter;
-
-      ctx.fillStyle = '#00a2ff';
-      ctx.fillRect(0, 0, 10 * GU, 100 * GU);
-
-      ctx.font = 'bold 60px arial';
-      ctx.textBaseline = 'middle';
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#ffffff';
-      for (let i = 0; i < text.length; i++) {
-        ctx.fillText(text[i], 50, 750 - i * 750 / text.length);
-      }
-
-      canvasTexture.needsUpdate = true;
-
-      return new THREE.MeshToonMaterial({map: canvasTexture});
     }
 
     render(renderer) {
