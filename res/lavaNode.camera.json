@@ -10,14 +10,36 @@
       ]
     },
     {
-      "startFrame": 8350,
-      "endFrame": 8640,
-      "type": "easeOut",
+      "startFrame": 8360,
+      "endFrame": 8580,
+      "type": "easeIn",
       "points": [
         [-30, 16, 35],
         [-8, 9, 36],
-        [24, 4, 15],
-        [25, 5, 16]
+        [20, 4, 15]
+      ]
+    },
+    {
+      "startFrame": 8640,
+      "endFrame": 8670,
+      "points": [0,7,-7]
+    },
+    {
+      "startFrame": 8670,
+      "endFrame": 8865,
+      "type": "easeOut",
+      "points": [
+        [0,7,-7],
+        [-4.88,6.38,-5.41],
+        [-6,5,2]
+      ]
+    },
+    {
+      "startFrame": 8865,
+      "endFrame": 9150,
+      "points": [
+        [-6,5,2],
+        [-3, 8, 35]
       ]
     }
   ],
@@ -33,10 +55,34 @@
     },
     {
       "startFrame": 8350,
-      "endFrame": 8640,
+      "endFrame": 8620,
       "points": [
         [0, 6, 0],
         [-5, 6, 6]
+      ]
+    },
+    {
+      "startFrame": 8640,
+      "endFrame": 8670,
+      "points": [1.15,6.36,-5.12]
+    },
+    {
+      "startFrame": 8670,
+      "endFrame": 8900,
+      "points": [
+        [1.15,6.36,-5.12],
+        [-6.65,5.84, 10],
+        [-5, 4.27, 20],
+        [3.5, 3.0, 7.5]
+      ]
+    },
+    {
+      "startFrame": 8900,
+      "endFrame": 9100,
+      "points": [
+        [3.5, 3.0, 7.5],
+        [0, 8, 4],
+        [0, 8, 0]
       ]
     }
   ]
