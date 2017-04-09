@@ -1,6 +1,6 @@
 (function(global) {
   class jules extends NIN.THREENode {
-    constructor(id, options) {
+    constructor(id) {
       super(id, {
         outputs: {
           render: new NIN.TextureOutput()
@@ -36,45 +36,47 @@
 
     update(frame) {
       super.update(frame);
-      if (BEAT && (BEAN % 12) == 0) {
-        this.hexagonRotation += Math.PI/3/4;
+
+      const startBEAN = 196 * 12;
+
+      if (BEAN < startBEAN + 12 * 16 || BEAN > startBEAN + 12 * 24) {
+        if (BEAT && (BEAN % 12) == 0) {
+          this.hexagonRotation += Math.PI/3/4;
+        }
+      } else {
+        if (BEAT && (BEAN % 8) == 0) {
+          this.hexagonRotation += Math.PI/3/4;
+        }
       }
-      let scale = Math.sin(frame*Math.PI*2/60/60*130/3)
-      for (let i=0;i<50;i++) {
-        for (let j=0;j<50;j++) {
-          if (frame < 5700) { 
-            if (BEAT) {
-              this.group[i][j].position.x = (i-25)*10*((Math.sin(frame/100)+3)/3);
-              this.group[i][j].position.y = (j-25)*10*((Math.sin(frame/100)+3)/3);
-              if(BEAN % 12 == 0 && (i+j) % 2 == 0) {
-                let z = this.group[i][j].position.z;
-                z += 3;
-                if(z > 0) { z = -z; }
-                this.group[i][j].position.z = z;
-              }
-              this.group[i][j].rotation.z = this.hexagonRotation * ((i + j) % 2 == 0 ? 1 : -1);
-            }
-            if (frame < 5500 && BEAT) { 
-              let xyz = (i+j) % 2 == 0 ? 1.5 : 0.5;
-              this.group[i][j].scale.set(xyz, xyz, xyz);
-            }
+
+      let scale = 1 + Math.sin((frame - FRAME_FOR_BEAN(startBEAN + 12 * 32)) * Math.PI * 2 / 60 / 60 * 130 / 6) / 4;
+      for (let i=0; i<50; i++) {
+        for (let j=0; j<50; j++) {
+          if (BEAT) {
+            this.group[i][j].rotation.z = this.hexagonRotation * ((i + j) % 2 == 0 ? 1 : -1);
           }
-          else if (frame < 6020 && frame > 5500) {
-            if (BEAN % 12 == 0) { 
-              let temp = (i + j) % 2 == 0 ? 1 + 0.8 * scale : 1 + -0.8 * scale;
+
+          if (BEAN < startBEAN + 12 * 8) {
+            const endBEAN = startBEAN + 12 * 8;
+            const xyz = (i+j) % 2 == 0 ? 1.5 : 0.5;
+            this.group[i][j].scale.set(xyz, xyz, xyz);
+
+            this.group[i][j].position.x = (i - 25) * 10 * (0.5 + (frame - FRAME_FOR_BEAN(startBEAN)) / (FRAME_FOR_BEAN(endBEAN) - FRAME_FOR_BEAN(startBEAN)));
+            this.group[i][j].position.y = (j - 25) * 10 * (0.5 + (frame - FRAME_FOR_BEAN(startBEAN)) / (FRAME_FOR_BEAN(endBEAN) - FRAME_FOR_BEAN(startBEAN)));
+          } else if (BEAN < startBEAN + 12 * 16) {
+            this.group[i][j].position.x = lerp((i - 25) * 10 * 1.5, (i - 25) * 10 * 1.5 - 50, (frame - FRAME_FOR_BEAN(startBEAN + 12 * 8)) / (FRAME_FOR_BEAN(startBEAN + 12 * 16) - FRAME_FOR_BEAN(startBEAN + 12 * 8)));
+            if (BEAN % 12 == 0) {
+              const temp = (i + j + (BEAN / 12 % 2)) % 2 == 0 ? 1.5 : 0.5;
               this.group[i][j].scale.set(temp, temp, temp);
               this.group[i][j].position.z = 0;
             }
-          }
-          else if (frame > 5990 && frame < 6300 && BEAT) {
-            let pos = Math.sin(frame/100);
-            this.group[i][j].position.x = -(i-25)*10*((pos+3)/3);
-            this.group[i][j].position.y = -(j-25)*10*((pos+3)/3);  
-            this.group[i][j].rotation.z = this.hexagonRotation * ((i + j) % 2 == 0 ? 1 : 0);
-            if (frame > 6140 && frame < 6290) {    
-              let xyz = (i+j) % 2 == 0 ? 1.5 * scale : 0.5 * scale;
-              this.group[i][j].scale.set(xyz, xyz, xyz);
-            }
+          } else if (BEAN < startBEAN + 12 * 32 && BEAT) {
+            const endBEAN = startBEAN + 12 * 32;
+            this.group[i][j].position.x = -50 + (i - 25) * 10 * 1.5 - (i - 25) * 10 * (frame - FRAME_FOR_BEAN(startBEAN + 12 * 16)) / (FRAME_FOR_BEAN(endBEAN) - FRAME_FOR_BEAN(startBEAN + 12 * 16));
+            this.group[i][j].position.y = (j - 25) * 10 * 1.5 - (j - 25) * 10 * (frame - FRAME_FOR_BEAN(startBEAN + 12 * 16)) / (FRAME_FOR_BEAN(endBEAN) - FRAME_FOR_BEAN(startBEAN + 12 * 16));
+
+            const xyz = (i+j) % 2 == 0 ? 1.5 * scale : 0.5 * scale;
+            this.group[i][j].scale.set(xyz, xyz, xyz);
           }
         }
       }
