@@ -11,10 +11,42 @@
 
       this.scene.background = new THREE.Color(0x1a001a);
 
+      this.numBars = 16;  // per row
+      this.avgBarPower = [
+        0.009078874982284765,
+        0.008483158601577038,
+        0.0037441145397272457,
+        0.0023338213808967237,
+        0.0012133696247049364,
+        0.0012292039311328129,
+        0.0007307594487203212,
+        0.0006105713962976541,
+        0.0004710757868021734,
+        0.0003082225009977584,
+        0.00030216972748115824,
+        0.00021645827442290329,
+        0.00017606663537522761,
+        0.00008073090271394498,
+        0.000017557109822553474,
+        4.363201143910552e-7
+      ];
+
+      this.sampleFreq = 44100;  // fallback in case of incompatible nin
+      if (demo.music.audioContext && demo.music.audioContext.sampleRate) {
+        this.sampleFreq = demo.music.audioContext.sampleRate;
+      }
+      this.nyquistFreq = this.sampleFreq / 2;
+      this.maxMel = 2595 * Math.log10(1 + this.nyquistFreq / 700);
+      this.numBins = 1024;  // fallback in case of incompatible nin
+      if (demo.music.getFftSize) {
+        this.numBins = demo.music.getFftSize() / 2;
+      }
+      this.freqPerBin = this.nyquistFreq / this.numBins;
+
       this.cubes = [];
-      for (let j=0; j < 17; j++) {
+      for (let j = 0; j < 17; j++) {
         const cuberow = [];
-        for (let i=0; i < 16; i++) {
+        for (let i = 0; i < this.numBars; i++) {
           const cube = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, 10, 32),
                                       new THREE.MeshStandardMaterial({
                                         color: 0xff00a2,
@@ -34,7 +66,7 @@
       }
 
       this.splashes = [];
-      for (let i=0; i < 12; i++) {
+      for (let i = 0; i < 12; i++) {
         let zIndex = (i / 4 | 0);
         if (zIndex == 2) {
           zIndex = -1;
@@ -88,7 +120,7 @@
       //this.scene.add(helper);
 
       this.chordFrames = [];
-      for (let i=0; i < 8; i++) {
+      for (let i = 0; i < 8; i++) {
         this.chordFrames.push(FRAME_FOR_BEAN(67 * 12 + i * 12 * 4));
       }
 
@@ -116,17 +148,27 @@
         this.rowStartIndex = 0;
       }
 
+      let currentHeights = [];
+      for (let i = 0; i < this.numBars; i++) {
+        const fraction = i / this.numBars;
+        const mel = this.maxMel * fraction;
+        const nextMel = mel + this.maxMel / this.numBars;
+        const lowerFreqBound = 700 * (Math.pow(10, mel / 2595) - 1);
+        const upperFreqBound = 700 * (Math.pow(10, nextMel / 2595) - 1);
+        const lowerBin = 0 | Math.round(lowerFreqBound / this.freqPerBin);
+        const upperBin = 0 | Math.round(upperFreqBound / this.freqPerBin);
+        const numBins = upperBin - lowerBin;
+        const fftSlice = fft.slice(lowerBin, upperBin);
+        const fftAvgDb = fftSlice.reduce((a, b) => a + b, 0) / numBins;
+        const linearAvg = Math.pow(10, fftAvgDb / 20);  // ranges from 0 to 1
+        let height = 1.337 * Math.pow(linearAvg / this.avgBarPower[i], 2);
+        currentHeights.push(height);
+      }
+
       const relativeBEAN = (BEAN / 12 - 67) | 0;
       for (const [j, cuberow] of this.cubes.entries()) {
         for (const [i, cube] of cuberow.entries()) {
-          const index = 15 - i;
-          const fftSlice = fft.slice(
-            index * 55,
-            index * 55 + 55
-          );
-          const fftAvg = fftSlice.reduce((a, b) => a + b, 0) / 55;
-          let height = clamp(0, 150 + fftAvg, 150);
-          height = height * 0.001 * (index + 30);
+          let height = currentHeights[i];
 
           const endStartFrame = FRAME_FOR_BEAN(97 * 12 + 6) - 10;
           const endStartFrameTwo = FRAME_FOR_BEAN(98 * 12 + 6) - 10;
@@ -141,7 +183,7 @@
           cube.scale.y = clamp(0.01, height, 10);
           cube.position.y = 5 * height;
 
-          if (i < relativeBEAN && Math.abs(8-j) < this.rowStartIndex) {
+          if (i < relativeBEAN && Math.abs(8 - j) < this.rowStartIndex) {
             cube.position.x = 10 + 20 * (i - 8);
             if (frame > endStartFrameTwo) {
               if (j !== 8 || i !== 8) {
