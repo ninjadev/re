@@ -530,16 +530,16 @@
       this.ctx.font = 'bold ' + ((0.4 + this.kickThrob * 0.05) * GU) + 'pt vcr';
       this.ctx.textBaseline = 'top';
       this.ctx.textAlign = 'center';
-      this.ctx.fillText('PLAYER', 1.38 * GU, (0.4 - hudOffset) * GU);
+      this.ctx.fillText('PLAYER', 1.75 * GU, (0.4 - hudOffset) * GU);
       this.ctx.fillStyle = colorB;
-      this.ctx.fillText('NINJADEV', 4.2 * GU, (0.4 - hudOffset) * GU);
+      this.ctx.fillText('NINJADEV', 4.8 * GU, (0.4 - hudOffset) * GU);
       this.ctx.fillStyle = colorA;
-      this.ctx.fillText('HIGHSCORE', 12.4 * GU, (0.4 - hudOffset) * GU);
+      this.ctx.fillText('HIGHSCORE', 11.9 * GU, (0.4 - hudOffset) * GU);
       this.ctx.fillStyle = colorB;
-      this.ctx.fillText(this.frame, 15.2 * GU, (0.4 - hudOffset) * GU);
+      this.ctx.fillText(this.frame, 14.6 * GU, (0.4 - hudOffset) * GU);
       this.ctx.fillStyle = colorA;
       this.ctx.textBaseline = 'bottom';
-      this.ctx.fillText('BULLETS', 1.26 * GU, (hudOffset + 8.6) * GU);
+      this.ctx.fillText('BULLETS', 1.89 * GU, (hudOffset + 8.6) * GU);
       this.ctx.fillStyle = colorB;
       for(let i = 0; i < 16; i++) {
         let offset = 0;
@@ -556,11 +556,11 @@
         } else {
           this.ctx.fillStyle = colorA;
         }
-        this.ctx.fillText('o', (2.8 + 0.33 * i) * GU, (hudOffset + 8.6 - offset) * GU);
+        this.ctx.fillText('O', (3.6 + 0.33 * i) * GU, (hudOffset + 8.6 - offset) * GU);
       }
       this.ctx.globalAlpha = 1;
       this.ctx.fillStyle = colorA;
-      this.ctx.fillText('SHIP HEALTH ', 11.6 * GU, (hudOffset + 8.6) * GU);
+      this.ctx.fillText('SHIP HEALTH ', 11.7 * GU, (hudOffset + 8.6) * GU);
       this.ctx.fillStyle = colorB;
 
       let health = '';
