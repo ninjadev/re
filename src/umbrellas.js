@@ -284,9 +284,7 @@
         if(umbrella.opacity == 0) {
           continue;
         }
-        this.ctx.strokeStyle = '#002244';
         this.ctx.fillStyle = colorB;
-        this.ctx.lineWidth = 0.1 * GU;
         this.ctx.beginPath();
         const radius = umbrella.progress * 0.3 * GU * zoomSwitchUmbrellaScaler;
         this.ctx.arc(umbrella.x * GU, umbrella.y * GU, radius, 0, Math.PI * 2);
