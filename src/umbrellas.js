@@ -213,7 +213,6 @@
     }
 
     render() {
-
       let zoomSwitchStart = FRAME_FOR_BEAN(12 * 4 * 26.5);
       let zoomSwitchEnd = FRAME_FOR_BEAN(12 * 4 * 26.75 + 6);
       let zoomSwitchPivotEnd = FRAME_FOR_BEAN(12 * 4 * 27);

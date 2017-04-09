@@ -399,7 +399,24 @@
         this.top_material.uniforms.tiles.value = 4;
       }
 
-      this.wall_material.uniforms.time.value = Math.floor((BEAN / 6) % 4) * 100;
+      var divider = 24;
+      if ( Math.floor((BEAN / divider) % 4) == 0) {
+        this.wall_material.uniforms.r.value = 0/256;
+        this.wall_material.uniforms.g.value = 206/256;
+        this.wall_material.uniforms.b.value = 209/256;
+      } else  if ( Math.floor((BEAN / divider) % 4) == 1) {
+        this.wall_material.uniforms.r.value = 1;
+        this.wall_material.uniforms.g.value = 0;
+        this.wall_material.uniforms.b.value = 0;
+      } else if ( Math.floor((BEAN / divider) % 4) == 2) {
+        this.wall_material.uniforms.r.value = 0;
+        this.wall_material.uniforms.g.value = 1;
+        this.wall_material.uniforms.b.value = 0;
+      } else if ( Math.floor((BEAN / divider) % 4) == 3) {
+        this.wall_material.uniforms.r.value = 0;
+        this.wall_material.uniforms.g.value = 0;
+        this.wall_material.uniforms.b.value = 1;
+      }
     }
 
     render(renderer) {
