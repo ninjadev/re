@@ -3,7 +3,7 @@
     constructor(pattern) {
       this.pattern = pattern;
       const width = 1;
-      const padding = 0.1;
+      const padding = 0.08;
 
       this.mesh = new THREE.Object3D();
 
@@ -452,6 +452,23 @@
         new THREE.BoxBufferGeometry(1600, 900, 1600),
         new THREE.ShaderMaterial(SHADERS.starrySky)
       );
+
+      this.bottomPlane = new THREE.Mesh(
+        new THREE.PlaneBufferGeometry(50, 49),
+        new THREE.MeshBasicMaterial({color: '#2e7b86'})
+      );
+      this.bottomPlane.rotation.x = -Math.PI / 2;
+      this.bottomPlane.position.y = -0.5;
+      this.bottomPlane.position.z = -1;
+      this.scene.add(this.bottomPlane);
+
+      this.backingPlane = new THREE.Mesh(
+        new THREE.PlaneBufferGeometry(26, 8),
+        new THREE.MeshBasicMaterial({color: '#787343'})
+      );
+      this.backingPlane.position.y = 4.0;
+      this.backingPlane.position.z = -14;
+      this.scene.add(this.backingPlane);
 
       this.skybox.position.y = 100;
 
