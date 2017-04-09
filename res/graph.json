@@ -148,7 +148,10 @@
   },
   {
     "id": "cubeTunnel",
-    "type": "cubeTunnel"
+    "type": "cubeTunnel",
+    "options": {
+      "shader": "zigzug"
+    }
   },
   {
     "id": "CubeFloor",

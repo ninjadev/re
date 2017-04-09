@@ -29,15 +29,34 @@
         this.spawningCubes[i].position.x = 1000;
       }
 
-
         this.create_geoms();
+
+              this.background = new THREE.Mesh(
+        new THREE.BoxGeometry(1000, 1000, 1000),
+        /*new THREE.MeshBasicMaterial({
+          color: 0x1b0922,
+          side: THREE.BackSide
+        }));*/
+        new THREE.ShaderMaterial(SHADERS.zigzug));
+        this.background.material.side = THREE.BackSide;        /*
+        new THREE.MeshBasicMaterial({
+          color: 0x1b0922,
+          side: THREE.BackSide
+        }));
+        */
     }
 
     update(frame) {
       var startBEAN = 4224;
 
-      var relativeBEAN = BEAN - startBEAN;
+      this.background.material.uniforms.frame.value = frame;
+      this.background.material.uniforms.amount.value = easeOut(
+        0,
+        1,
+        (frame - 968 + 10 ) / (1051 - 968)
+      );
 
+      var relativeBEAN = BEAN - startBEAN;
       var switch_time = 4320;
       var switch_time2 = 4584;
       var camera_move_start = 4414;
@@ -49,13 +68,18 @@
           for(var i=0; i<12; i++) {
             this.scene.add(this.spawningCubes[i]);
           }
+          this.scene.add(this.background);
+
+          this.background.position.z = 100;
+          this.background.position.y = 0;
+
         }
         // Spawning the first "ring" of cubes.
         this.camera.position.z = 100;
         this.camera.position.y = 0;
         this.camera.lookAt(new THREE.Vector3(0,0,0));
 
-        var slideDuration = 12;
+        var slideDuration = 4;
         var cornerSlideDuration = 24;
 
         // Set the poistion of the cubes which grow into existence.
@@ -123,7 +147,10 @@
         var beats2 = [0, 8, 16, 24, 36,      48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68];
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[0])) {
           this.scene = new THREE.Scene();
-          this.create_layer_first_layer(0);
+          this.create_layer_first_layer(0); 
+          this.scene.add(this.background);
+          this.background.position.z = 0;
+          this.background.position.y = 16;
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[1])) {
           this.create_layer_first_layer(1);
