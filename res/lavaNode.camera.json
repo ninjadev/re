@@ -1,55 +1,43 @@
 {
   "position": [
     {
-      "startFrame": 8195,
-      "endFrame": 8300,
+      "startFrame": 8000,
+      "endFrame": 8350,
       "points": [
-        [-46.56, 63.16, -300.71],
-        [-46.56, 150.16, 100.71],
-        [0, 250, 0]
+        [-21, 9, 27],
+        [-19, 10, 27],
+        [-30, 16, 35]
+      ]
+    },
+    {
+      "startFrame": 8350,
+      "endFrame": 8640,
+      "type": "easeOut",
+      "points": [
+        [-30, 16, 35],
+        [-8, 9, 36],
+        [24, 4, 15],
+        [25, 5, 16]
       ]
     }
   ],
   "lookAt": [
     {
-      "startFrame": 8195,
-      "endFrame": 8500,
+      "startFrame": 8000,
+      "easing": "easeOut",
+      "endFrame": 8350,
       "points": [
-        [-46.56, 63.16, -310],
-        [-46.56, 200.16, -110],
-        [-46.56, 300.16, -110]]
-    }
-  ],
-  "shake": [
-    {
-      "startFrame": 8135,
-      "endFrame": 8205,
-      "value": 10
+        [502, 200, -800],
+        [0, 6, 0]
+      ]
     },
     {
-      "startFrame": 8205,
-      "endFrame": 8275,
-      "value": 4
-    },
-    {
-      "startFrame": 8275,
-      "endFrame": 8385,
-      "value": 1
-    },
-    {
-      "startFrame": 8385,
-      "endFrame": 8497,
-      "value": 10
-    },
-    {
-      "startFrame": 8497,
-      "endFrame": 8555,
-      "value": 1
-    },
-    {
-      "startFrame": 8555,
-      "endFrame": 9225,
-      "value": 0
+      "startFrame": 8350,
+      "endFrame": 8640,
+      "points": [
+        [0, 6, 0],
+        [-5, 6, 6]
+      ]
     }
   ]
 }
