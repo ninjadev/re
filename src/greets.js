@@ -13,13 +13,13 @@
       this.canvasMaterial = new THREE.MeshBasicMaterial({map: this.canvasTexture, side: THREE.DoubleSide});
 
       this.screenMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
-      this.screen = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), this.screenMaterial);
+      this.screen = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), this.screenMaterial);
       this.scene.add(this.screen);
 
       this.camera.position.y = 10;
 
       this.frames = [];
-      for (let i=0; i < 161; i++) {
+      for (let i=0; i <= 160; i++) {
         this.frames[i] = Loader.loadTexture(`/res/morphed/${i.toString().padStart(3, '0')}_interpolated.jpg`);
       }
 
@@ -88,12 +88,12 @@
 
       this.screenMaterial.map = this.frames[clamp(0, baseIndex * 10 + animationIndex / 3, 160) | 0];
 
-      this.screen.position.z = lerp(1700, 100, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
+      this.screen.position.z = lerp(1695, 95, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
       this.screen.position.x = (baseIndex % 2 ? -7 : 7) + (baseIndex % 2 ? 1 : -1) * slideIndex * 14 / 27;
       this.screen.position.y = easeIn(easeOut(10, 15, slideIndex / 14), 10, (slideIndex - 14) / 13);
 
-      this.camera.position.z = this.screen.position.z + lerp(50, 25, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
-      this.camera.position.y = lerp(15, 10, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
+      this.camera.position.z = this.screen.position.z + easeIn(lerp(50, 25, (frame - FRAME_FOR_BEAN(startBEAN)) / 885), 65, (frame - 7150) / 50);
+      this.camera.position.y = lerp(20, 10, (frame - FRAME_FOR_BEAN(startBEAN)) / 885);
 
       this.light.position.z = this.camera.position.z;
     }
