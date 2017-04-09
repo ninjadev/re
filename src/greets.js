@@ -3,7 +3,8 @@
     constructor(id, options) {
       super(id, options);
 
-      this.scene.background = new THREE.Color(0x5599ff);
+      /* overwrite to get transparency */
+      this.renderTarget = new THREE.WebGLRenderTarget(640, 360, {format: THREE.RGBAFormat});
 
       this.screenMaterial = new THREE.ShaderMaterial(SHADERS.greets);
       this.screenMaterial.transparent = true;
@@ -44,7 +45,7 @@
         'outracks'
       ];
 
-      const material = new THREE.MeshToonMaterial({color: 0x20db7a});
+      const material = new THREE.MeshStandardMaterial({color: 0x00a2ff});
       this.platformPositions = [-7, -7, -21, -7, 7, -7, 7, 21, 7, 21, 7, -7, 7, -7, -21, -7, -7];
       this.platforms = [];
       for (let i=0; i < 16; i++) {
@@ -120,8 +121,8 @@
       canvasTexture.minFilter = THREE.LinearFilter;
       canvasTexture.magFilter = THREE.LinearFilter;
 
-      ctx.fillStyle = '#20db7a';
-      ctx.fillRect(0, 0, 100, 800);
+      ctx.fillStyle = '#00a2ff';
+      ctx.fillRect(0, 0, 10 * GU, 100 * GU);
 
       ctx.font = 'bold 60px arial';
       ctx.textBaseline = 'middle';
@@ -134,6 +135,11 @@
       canvasTexture.needsUpdate = true;
 
       return new THREE.MeshToonMaterial({map: canvasTexture});
+    }
+
+    render(renderer) {
+      renderer.clearTarget(this.renderTarget, true, true, true);
+      super.render(renderer);
     }
   }
 
