@@ -15,10 +15,10 @@
         for (let j=0;j<50;j++) {
           let mat = {};
           if ((i+j) % 2 == 0) {
-            mat = new THREE.MeshBasicMaterial({color: 0xc94c4c});
+            mat = new THREE.MeshBasicMaterial({color: 0xff00a2});
           }
           else if ((i+j) % 2 == 1) {
-            mat = new THREE.MeshBasicMaterial({color: 0xb1cbbb});
+            mat = new THREE.MeshBasicMaterial({color: 0x0092dd});
           }
           let mesh = new THREE.Mesh(geo, mat);
           mesh.position.set((i-25)*30,(j-25)*30,-3);
@@ -63,6 +63,7 @@
             if (BEAN % 12 == 0) { 
               let temp = (i + j) % 2 == 0 ? 1 + 0.8 * scale : 1 + -0.8 * scale;
               this.group[i][j].scale.set(temp, temp, temp);
+              this.group[i][j].position.z = 0;
             }
           }
           else if (frame > 6000 && frame < 6300 && BEAT) {
