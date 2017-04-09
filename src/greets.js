@@ -18,9 +18,17 @@
 
       this.camera.position.y = 10;
 
+      function leftPad(input, length, str) {
+        if (input.length >= length) {
+          return input;
+        }
+        str = str || ' ';
+        return (new Array(Math.ceil((length - input.length) / str.length) + 1).join(str)).substr(0, (length - input.length)) + input;
+      }
+
       this.frames = [];
       for (let i=0; i <= 160; i++) {
-        this.frames[i] = Loader.loadTexture(`/res/morphed/${i.toString().padStart(3, '0')}_interpolated.jpg`);
+        this.frames[i] = Loader.loadTexture(`/res/morphed/${leftPad(i.toString(), 3, '0')}_interpolated.jpg`);
       }
 
       this.platforms = [];
