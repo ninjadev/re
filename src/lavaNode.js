@@ -361,10 +361,10 @@
         [ , , , , , , , , , , , , , , , , , , , , , , , , ,],
         [ , , , , , , , , , , , , , , , , , , , , , , , , ,],
         [ , , , , , , , , , , , , , , , ,1,1, , , , , , , ,],
-        [ , , , , , , , , , , , , , , , ,1,1, , , , , , , ,],
+        [ , , , , , , , , , , , , , , ,1,1,1,1, , , , , , ,],
         [ , , , , , , , , , , , , , ,1,1,1,1,1,1, , , , , ,],
         [ , , , , , , , , , , , , , ,1,1,1,1,1,1, , , , , ,],
-        [ , , , , , , , , , , , , , , , ,1,1, , , , , , , ,],
+        [ , , , , , , , , , , , , , , ,1,1,1,1, , , , , , ,],
         [ , , , , , , , , , , , , , , , ,1,1, , , , , , , ,]];
 
       const f10 = [
@@ -488,7 +488,12 @@
         this.minecraftIsland.mesh.visible = true;
       }
 
-      this.skybox.material.uniforms.stage.value = (BEAN - 2 + 5 * 3) % 24;
+      let stageBean = BEAN - 2 + 5 * 3;
+      if (frame < 8810) {
+        stageBean = stageBean / 2;
+      }
+
+      this.skybox.material.uniforms.stage.value = stageBean % 24;
       this.skybox.material.uniforms.frame.value = frame;
     }
 
