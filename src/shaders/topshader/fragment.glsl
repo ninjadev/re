@@ -32,6 +32,7 @@ void main() {
     color = floor(color / 2.0);
     color += color4;
     color = floor(color / 2.0);
+    color += 0.05;
 
     gl_FragColor = vec4(color, color, color, 1.);
 }
