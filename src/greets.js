@@ -121,7 +121,7 @@
       canvasTexture.magFilter = THREE.LinearFilter;
 
       ctx.fillStyle = '#20db7a';
-      ctx.fillRect(0, 0, 10 * GU, 100 * GU);
+      ctx.fillRect(0, 0, 100, 800);
 
       ctx.font = 'bold 60px arial';
       ctx.textBaseline = 'middle';
