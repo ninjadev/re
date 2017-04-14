@@ -27,10 +27,16 @@ float dots(vec2 uv, float radius) {
 void main(void) {
     vec2 uv = vUv;
 
+    float dotTweaker = smoothstep(0., 10., (frame - 6690.) / 3.);
+    if(frame > 6730.) {
+        dotTweaker = smoothstep(10., 0., (frame - 6730.) / 3.);
+    }
+
     vec2 windowCoords = uv * 3. / 2.;
 
 
     uv = windowCoords;
+    uv.x += sin(frame / 60. / 60. + 130.) * 0.5;
 
     vec2 center = vec2(0.5, 0.85);
 
@@ -75,7 +81,10 @@ void main(void) {
 
     vec4 content = texture2D(tDiffuse, windowCoords - vec2(0., .1));
 
-    if(windowCoords.x > 1. || windowCoords.x < 0.0 || windowCoords.y < 0.05 * 16. / 9. || windowCoords.y > 1. * 3. / 2. - 0.05 * 16. / 9. ) {
+    if(windowCoords.x > 1. ||
+            windowCoords.x < 0.0 ||
+            windowCoords.y < 0.05 * 16. / 9. ||
+            windowCoords.y > 1. * 3. / 2. - 0.05 * 16. / 9. ) {
         outp = vec4(0.05, 0., 0.05, 1.);
     } else {
         outp = mix(outp, content, content.a);
@@ -87,9 +96,12 @@ void main(void) {
     dotAmount *= clamp(((0.80 - vUv.y  + 0.15 * vUv.x) / 0.1), 0., 1.);
     dotAmount *= clamp(((vUv.y - 0.05  - vUv.x * 0.15) / 0.1), 0., 1.);
     dotAmount *= dotFadeInAmount;
-    float dotPattern = dots(vec2(frame * 0.003, frame * 0.006) + vUv * vec2(16. / 9., 1.) * 3., 1.5 * dotAmount);
+    float dotPattern = dots(
+            vec2(frame * 0.003, frame * 0.006) + vUv * vec2(16. / 9., 1.) * 3.,
+            1.5 * dotAmount + 2. * dotAmount * dotTweaker * sin(cos(vUv.x * 11.) + vUv.y * 13. + frame / 4.));
     //dotPattern *= 1.5 + 1.5 * sin(frame / 60. / 60. * 130.);
     outp = mix(outp, vec4(0.05, 0., 0.05, 1.), dotPattern);
+    outp += vec4(.01) * throb;
 
     if(windowCoords.x > .95) {
         vec4 text = texture2D(textCanvas, (vUv - vec2(0.95 * 2. / 3., 0.)) * vec2(16. / 6., 1.));
