@@ -41,7 +41,7 @@ void main() {
     vec2 pos = vec2(x, y);
 
     vec4 white = vec4(.5, .8, .9, 1.);
-    vec4 blue = vec4(0.0, 0.0, 0.1, 1.0);
+    vec4 blue = vec4(0.0, 0.0, 0.1, 1.);
 
     vec4 star;
     vec4 background;
@@ -57,12 +57,12 @@ void main() {
 
     if (frame < start) {
         background = white;
-        star = blue;//moonColor;
+        star = blue;
         animationStage = 8;
     } else if (frame < stop) {
-        float mixer = (frame - start) / (stop - start);
-        background = smoothstep(white, blue, vec4(mixer));
-        star = smoothstep(blue, white, vec4(mixer));
+        float mixer = max(min((frame - start) / (stop - start), 1.0), 0.0);
+        background = mix(white, blue, mixer);
+        star = mix(blue, white, mixer);
     } else if (frame > starstart) {
         background = blue;
         star = vec4(216./255., 12./255., 90./255., 1.0);
