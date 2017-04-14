@@ -32,16 +32,12 @@
       if(BEAN >= 12 * 4 * 53 - 12) {
         if(BEAN < 12 * 4 * 53 - 8) {
           this.uniforms.frame.value = 0;
-          this.uniforms.amount.value = 0;
         } else if(BEAN < 12 * 4 * 53 - 6) {
           this.uniforms.big.value = 0.3;
-          this.uniforms.amount.value = 0;
         } else if(BEAN < 12 * 4 * 53 - 3) {
           this.uniforms.frame.value = 600;
-          this.uniforms.amount.value = 0;
         } else if(BEAN < 12 * 4 * 53) {
           this.uniforms.frame.value = 300;
-          this.uniforms.amount.value = 0;
         }
       }
     }
