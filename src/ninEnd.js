@@ -32,7 +32,6 @@
 
       this.scene = new THREE.Scene();
       this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 10000);
-      this.scene.add(this.cube);
 
       var light = new THREE.PointLight( 0xffffff, 1, 100 );
       light.position.set( -50, -50, -50 );
@@ -46,7 +45,7 @@
 
       this.camera.position.z = 100;
       this.frame = 0;
-      
+
       this.black = '#000000';
       this.white = '#ffffff';
       this.pink = '#ff00a2';
@@ -68,22 +67,21 @@
           this.colorDEV = this.black;
         }
         if (BEAN == 12 * 4 * 98 + 24 || BEAN == 12 * 4 * 98 + 24 + 9 || BEAN == 12 * 4 * 98 + 24 + 9+ 8) {
-          this.flippState()
+          this.flippState();
         }
       }
     }
 
     render() {
-      
       this.ctx.fillStyle = this.bgcolor;
-      this.ctx.fillRect(0, 0, 10*GU, 10*GU);  
-     
+      this.ctx.fillRect(0, 0, 10*GU, 10*GU);
+
       this.ctx.fillStyle = this.bgcolor;
-      this.ctx.fillRect(0, 0, 10*GU, 10*GU);  
+      this.ctx.fillRect(0, 0, 10*GU, 10*GU);
       this.ctx.fillStyle = this.colorNIN;
       this.ctx.fillText('NIN', 20, 230);
       this.ctx.font = 'bold ' + (1 * GU) + 'pt outrun';
-      
+
       this.ctx.fillStyle = this.colorJA;
       this.ctx.fillText('JA', 3.6*GU, 230);
 
