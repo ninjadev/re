@@ -480,7 +480,7 @@
 
       this.minecraftIsland.materials[0].map = this.inputs.water.getValue();
 
-      let angle = (frame - baseFrame) / 400;
+      let angle = (clamp(0, frame, 9193) - baseFrame) / 400;
       let daylight = Math.cos(Math.PI + Math.PI / 2 + angle * 1.5);
 
       this.hemisphereLight.intensity = clamp(0, daylight / 2, 1);
