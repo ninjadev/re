@@ -45,7 +45,7 @@
           this.hexagonRotation += Math.PI/3/4;
         }
       } else {
-        if (BEAT && (BEAN % 8) == 0) {
+        if (BEAT && [0, 9, 18].includes(BEAN % 24)) {
           this.hexagonRotation += Math.PI/3/4;
         }
       }
@@ -54,13 +54,13 @@
       if(BEAN >= 12 * 4 * 53 - 12 && BEAN < 12 * 4 * 53) {
         this.scene.background.setRGB(1, 1, 1);
         if(BEAN < 12 * 4 * 53 - 9) {
-        this.scene.background.setHex(0xff00a2);
+          this.scene.background.setHex(0xff00a2);
         } else if(BEAN < 12 * 4 * 53 - 6) {
-        this.scene.background.setHex(0x0092dd);
+          this.scene.background.setHex(0x0092dd);
         } else if(BEAN < 12 * 4 * 53 - 3) {
-        this.scene.background.setHex(0xff00a2);
+          this.scene.background.setHex(0xff00a2);
         } else {
-        this.scene.background.setHex(0x0092dd);
+          this.scene.background.setHex(0x0092dd);
         }
       }
 
