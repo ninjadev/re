@@ -1,6 +1,30 @@
 (function(global) {
   class cubeTunnel extends NIN.Node {
 
+    addLights(scene) {
+      scene.add(new THREE.AmbientLight(0x222222));
+      let directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+      scene.add(directionalLight);
+      directionalLight.position.x = 1;
+      directionalLight.position.y = 0;
+      directionalLight.position.z = 1;
+      directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+      scene.add(directionalLight);
+      directionalLight.position.x = -1;
+      directionalLight.position.y = 0;
+      directionalLight.position.z = -1;
+      directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+      scene.add(directionalLight);
+      directionalLight.position.x = -1;
+      directionalLight.position.y = 0;
+      directionalLight.position.z = 1;
+      directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+      scene.add(directionalLight);
+      directionalLight.position.x = 1;
+      directionalLight.position.y = 0;
+      directionalLight.position.z = -1;
+    }
+
     constructor(id, options) {
       super(id, {
         outputs: {
@@ -9,6 +33,7 @@
       });
 
       this.scene = new THREE.Scene();
+      this.addLights(this.scene);
       this.renderTarget = new THREE.WebGLRenderTarget(640, 360, {
         minFilter: THREE.LinearFilter,
         magFilter: THREE.LinearFilter,
@@ -17,7 +42,9 @@
       this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 10000);
 
       this.top_material = new THREE.ShaderMaterial(SHADERS.topshader);
-      this.wall_material = new THREE.ShaderMaterial(SHADERS.wallshader);
+
+
+
 
       // Things used when spawning the first ring of cubes.
       this.spawningCubes = [];
@@ -38,12 +65,17 @@
           side: THREE.BackSide
         }));*/
         new THREE.ShaderMaterial(SHADERS.zigzug));
-        this.background.material.side = THREE.BackSide;        /*
+        this.background.material.side = THREE.DoubleSide;        /*
         new THREE.MeshBasicMaterial({
           color: 0x1b0922,
           side: THREE.BackSide
         }));
         */
+      this.wall_material = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        metalness: 0,
+        roughness: 1,
+      });
     }
 
     update(frame) {
@@ -60,11 +92,12 @@
       var switch_time = 4320;
       var switch_time2 = 4584;
       var camera_move_start = 4414;
-      var camera_speed = 0.155;
+      var camera_speed = frame / 20 / 60 / 60 * 130;
 
       if (BEAN < switch_time) {
         if (frame == FRAME_FOR_BEAN(startBEAN) + 1) {
           this.scene = new THREE.Scene();
+          this.addLights(this.scene);
           for(var i=0; i<12; i++) {
             this.scene.add(this.spawningCubes[i]);
           }
@@ -79,8 +112,8 @@
         this.camera.position.y = 0;
         this.camera.lookAt(new THREE.Vector3(0,0,0));
 
-        var slideDuration = 4;
-        var cornerSlideDuration = 24;
+        var slideDuration = 0;
+        var cornerSlideDuration = 0;
 
         // Set the poistion of the cubes which grow into existence.
         this.spawningCubes[0].position.x = -4;
@@ -107,31 +140,30 @@
         this.spawningCubes[0].scale.x = 
         this.spawningCubes[0].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 0) + slideDuration)/ slideDuration);
         this.spawningCubes[1].scale.x = 
-        this.spawningCubes[1].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 8) + slideDuration)/ slideDuration);
+        this.spawningCubes[1].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 9) + slideDuration)/ slideDuration);
 
         this.spawningCubes[3].scale.x =
         this.spawningCubes[3].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 24) + slideDuration)/ slideDuration);
         this.spawningCubes[4].scale.x =
-        this.spawningCubes[4].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 32) + slideDuration)/ slideDuration);
+        this.spawningCubes[4].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 33) + slideDuration)/ slideDuration);
 
         this.spawningCubes[6].scale.x =
         this.spawningCubes[6].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 48) + slideDuration)/ slideDuration);
         this.spawningCubes[7].scale.x =
-        this.spawningCubes[7].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 56) + slideDuration)/ slideDuration);
+        this.spawningCubes[7].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 57) + slideDuration)/ slideDuration);
    
         this.spawningCubes[9].scale.x =
         this.spawningCubes[9].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 72) + slideDuration)/ slideDuration);
         this.spawningCubes[10].scale.x =
-        this.spawningCubes[10].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 80) + slideDuration)/ slideDuration);
+        this.spawningCubes[10].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 84) + slideDuration)/ slideDuration);
 
-        // Fly in the corner cubes.
         this.spawningCubes[2].position.x = 12;
-        this.spawningCubes[2].position.y = easeIn(-100, -12, (frame - FRAME_FOR_BEAN(startBEAN + 16) + cornerSlideDuration)/ cornerSlideDuration);
-        this.spawningCubes[5].position.x = easeIn(100, 12, (frame - FRAME_FOR_BEAN(startBEAN + 40) + cornerSlideDuration)/ cornerSlideDuration);
+        this.spawningCubes[2].position.y = easeIn(-100, -12, (frame - FRAME_FOR_BEAN(startBEAN + 18) + cornerSlideDuration)/ cornerSlideDuration);
+        this.spawningCubes[5].position.x = easeIn(100, 12, (frame - FRAME_FOR_BEAN(startBEAN + 42) + cornerSlideDuration)/ cornerSlideDuration);
         this.spawningCubes[5].position.y = 12;
         this.spawningCubes[8].position.x = -12;
-        this.spawningCubes[8].position.y = easeIn(100, 12, (frame - FRAME_FOR_BEAN(startBEAN + 64) + cornerSlideDuration)/ cornerSlideDuration);
-        this.spawningCubes[11].position.x = easeIn(-100, -12, (frame - FRAME_FOR_BEAN(startBEAN + 88) + cornerSlideDuration)/ cornerSlideDuration);
+        this.spawningCubes[8].position.y = easeIn(100, 12, (frame - FRAME_FOR_BEAN(startBEAN + 66) + cornerSlideDuration)/ cornerSlideDuration);
+        this.spawningCubes[11].position.x = easeIn(-100, -12, (frame - FRAME_FOR_BEAN(startBEAN + 90) + cornerSlideDuration)/ cornerSlideDuration);
         this.spawningCubes[11].position.y = -12;
       
 
@@ -144,9 +176,10 @@
 
         this.camera.lookAt(new THREE.Vector3(0,0,0));
 
-        var beats2 = [0, 8, 16, 24, 36,      48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68];
+        var beats2 = [0, 9, 18, 27, 36,      48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68];
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[0])) {
           this.scene = new THREE.Scene();
+          this.addLights(this.scene);
           this.create_layer_first_layer(0); 
           this.scene.add(this.background);
           this.background.position.z = 0;
@@ -198,7 +231,7 @@
         }
 
         if (frame > FRAME_FOR_BEAN(4414)) {
-          this.camera.position.y = 16 - (frame - FRAME_FOR_BEAN(camera_move_start))*camera_speed;
+          this.camera.position.y = 16 + 15 - 20 * (frame - FRAME_FOR_BEAN(camera_move_start)) / 60 / 60 * 130;
         }
 
       } else {
@@ -401,21 +434,19 @@
 
       var divider = 24;
       if ( Math.floor((BEAN / divider) % 4) == 0) {
-        this.wall_material.uniforms.r.value = 0/256;
-        this.wall_material.uniforms.g.value = 206/256;
-        this.wall_material.uniforms.b.value = 209/256;
+        this.wall_material.color.setRGB(0.9, 0.2 , 0.4);
       } else  if ( Math.floor((BEAN / divider) % 4) == 1) {
-        this.wall_material.uniforms.r.value = 1;
-        this.wall_material.uniforms.g.value = 0;
-        this.wall_material.uniforms.b.value = 0;
+        this.wall_material.color.setHex(0x00a2ff);
+
+        this.wall_material.color.setRGB(0.9, 0.2 , 0.4);
       } else if ( Math.floor((BEAN / divider) % 4) == 2) {
-        this.wall_material.uniforms.r.value = 0;
-        this.wall_material.uniforms.g.value = 1;
-        this.wall_material.uniforms.b.value = 0;
+        this.wall_material.color.setHex(0xff00a2);
+
+        this.wall_material.color.setRGB(0.9, 0.2 , 0.4);
       } else if ( Math.floor((BEAN / divider) % 4) == 3) {
-        this.wall_material.uniforms.r.value = 0;
-        this.wall_material.uniforms.g.value = 0;
-        this.wall_material.uniforms.b.value = 1;
+        this.wall_material.color.setHex(0x00a2ff);
+
+        this.wall_material.color.setRGB(0.9, 0.2 , 0.4);
       }
     }
 
