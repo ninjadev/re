@@ -71,11 +71,12 @@
           side: THREE.BackSide
         }));
         */
-      this.wall_material = new THREE.MeshBasicMaterial({
+      this.wall_material = new THREE.ShaderMaterial(SHADERS.wallshader);
+      /*new THREE.MeshBasicMaterial({
         color: 0xffffff,
         metalness: 0,
         roughness: 1,
-      });
+      });*/
     }
 
     update(frame) {
@@ -228,6 +229,15 @@
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[15])) {
           this.create_layer(-200);
+          this.create_layer(-220);
+          this.create_layer(-240);
+          this.create_layer(-260);
+          this.create_layer(-280);
+          this.create_layer(-300);
+          this.create_layer(-320);
+          this.create_layer(-340);
+          this.create_layer(-360);
+          this.create_layer(-380);
         }
 
         if (frame > FRAME_FOR_BEAN(4414)) {
@@ -431,7 +441,7 @@
       } else {        
         this.top_material.uniforms.tiles.value = 4;
       }
-
+/*
       var divider = 24;
       if ( Math.floor((BEAN / divider) % 4) == 0) {
         this.wall_material.color.setRGB(0.9, 0.2 , 0.4);
@@ -447,6 +457,24 @@
         this.wall_material.color.setHex(0x00a2ff);
 
         this.wall_material.color.setRGB(0.9, 0.2 , 0.4);
+      }*/
+      var divider = 24;
+      if ( Math.floor((BEAN / divider) % 4) == 0) {
+        this.wall_material.uniforms.r.value = 0/256;
+        this.wall_material.uniforms.g.value = 206/256;
+        this.wall_material.uniforms.b.value = 209/256;
+      } else  if ( Math.floor((BEAN / divider) % 4) == 1) {
+        this.wall_material.uniforms.r.value = 46/256;
+        this.wall_material.uniforms.g.value = 204/256;
+        this.wall_material.uniforms.b.value = 113/256;
+      } else if ( Math.floor((BEAN / divider) % 4) == 2) {
+        this.wall_material.uniforms.r.value = 155/256;
+        this.wall_material.uniforms.g.value = 89/256;
+        this.wall_material.uniforms.b.value = 182/256;
+      } else if ( Math.floor((BEAN / divider) % 4) == 3) {
+        this.wall_material.uniforms.r.value = 230/256;
+        this.wall_material.uniforms.g.value = 126/256;
+        this.wall_material.uniforms.b.value = 34/256;
       }
     }
 
