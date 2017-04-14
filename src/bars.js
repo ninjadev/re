@@ -26,8 +26,8 @@
       this.numBars = 16;  // per row
       this.avgBarPower = [
         0.0090788,
-        0.0084831,
-        0.0037441,
+        0.0070831,
+        0.0030441,
         0.0023338,
         0.0012133,
         0.0012292,
@@ -40,9 +40,8 @@
         0.0001760,
         0.0000807,
         0.0000175,
-        4.3632e-7
+        0.0000055
       ];
-      this.barHeightDecayFactor = 0.9;
       this.fftRingBuffer = [];
       this.fftRingBufferSize = 32;
       for (let i = 0; i < this.fftRingBufferSize; i++) {
@@ -164,7 +163,7 @@
 
       const fft = demo.music ? demo.music.getFFT() : [];
 
-      let currentRingBufferIndex = frame % this.fftRingBufferSize;
+      let currentRingBufferIndex = BEAN % this.fftRingBufferSize;
       let previousRingBufferIndex = (
         currentRingBufferIndex === 0
           ? this.fftRingBufferSize - 1
@@ -183,24 +182,23 @@
         const fftAvgDb = fftSlice.reduce((a, b) => a + b, 0) / numBins;
         const linearAvg = Math.pow(10, fftAvgDb / 20);  // ranges from 0 to 1
         const height = 1.337 * Math.pow(linearAvg / this.avgBarPower[i], 2);
-        this.fftRingBuffer[currentRingBufferIndex][i] = height;  // TODO
-        /*this.fftRingBuffer[currentRingBufferIndex][i] = this.fftRingBuffer[previousRingBufferIndex][i] * this.barHeightDecayFactor;
+        this.fftRingBuffer[currentRingBufferIndex][i] = this.fftRingBuffer[previousRingBufferIndex][i] * 0.99 - 0.1;
         if (height > this.fftRingBuffer[previousRingBufferIndex][i]) {
           this.fftRingBuffer[currentRingBufferIndex][i] = height;
-        }*/
+        }
       }
 
       const relativeBEAN = (BEAN / 12 - 67) | 0;
       for (const [j, cuberow] of this.cubes.entries()) {
-        let thatRingBufferIndex = currentRingBufferIndex - j;
+        const endStartFrame = FRAME_FOR_BEAN(97 * 12 + 6) - 10;
+        const endStartFrameTwo = FRAME_FOR_BEAN(98 * 12 + 6) - 10;
+        let thatRingBufferIndex = frame > endStartFrameTwo ? currentRingBufferIndex : currentRingBufferIndex - j;
         if (thatRingBufferIndex < 0) {
           thatRingBufferIndex = this.fftRingBufferSize - 1 + thatRingBufferIndex;
         }
         for (const [i, cube] of cuberow.entries()) {
           let height = this.fftRingBuffer[thatRingBufferIndex][i];
 
-          const endStartFrame = FRAME_FOR_BEAN(97 * 12 + 6) - 10;
-          const endStartFrameTwo = FRAME_FOR_BEAN(98 * 12 + 6) - 10;
           height = smoothstep(height, 1, (frame - endStartFrame) / 20);
           height = smoothstep(height, 0, (frame - endStartFrameTwo) / 20);
 
