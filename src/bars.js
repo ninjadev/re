@@ -231,7 +231,7 @@
         this.splashStartIndex = 0;
         this.splashStartFrames = [];
       }
-      if (this.inputs.percolator.getValue() && frame < 2750) {
+      if (this.inputs.percolator.getValue() && frame < 2550) {
         this.splashStartFrames[this.splashStartIndex] = frame;
         this.splashStartIndex = (this.splashStartIndex + 1) % 8;
       }
