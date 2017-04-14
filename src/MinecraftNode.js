@@ -79,8 +79,10 @@
         }
       }
 
+      this.meshes = [];
       for(let i = 0; i < geometries.length; i++) {
         const mesh = new THREE.Mesh(geometries[i], materials[i]);
+        this.meshes[i] = mesh;
         mesh.castShadow = true;
         mesh.receiveShadow = true;
         this.mesh.add(mesh);
@@ -438,7 +440,7 @@
       this.scene.add(new THREE.AmbientLight(0x111111));
 
       this.minecraftIsland = new MinecraftIsland();
-      this.minecraftIsland.mesh.visible = false;
+      //this.minecraftIsland.mesh.visible = false;
       this.scene.add(this.minecraftIsland.mesh);
 
       this.skybox = new THREE.Mesh(
