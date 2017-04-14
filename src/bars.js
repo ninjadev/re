@@ -181,7 +181,7 @@
         const fftSlice = fft.slice(lowerBin, upperBin);
         const fftAvgDb = fftSlice.reduce((a, b) => a + b, 0) / numBins;
         const linearAvg = Math.pow(10, fftAvgDb / 20);  // ranges from 0 to 1
-        const height = 1.337 * Math.pow(linearAvg / this.avgBarPower[i], 2);
+        const height = clamp(0.01, 1.337 * Math.pow(linearAvg / this.avgBarPower[i], 2), 5.5);
         this.fftRingBuffer[currentRingBufferIndex][i] = this.fftRingBuffer[previousRingBufferIndex][i] * 0.99 - 0.1;
         if (height > this.fftRingBuffer[previousRingBufferIndex][i]) {
           this.fftRingBuffer[currentRingBufferIndex][i] = height;
