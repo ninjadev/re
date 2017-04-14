@@ -52,7 +52,7 @@
         const platform = new THREE.Mesh(
           new THREE.BoxGeometry(10, 4, 160),
           material);
-        platform.position.set(this.platformPositions[i + 1], -1000, 3220 - i * 200);
+        platform.position.set(this.platformPositions[i + 1], -1000, 3235 - i * 200);
         this.scene.add(platform);
         this.platforms.push(platform);
       }
