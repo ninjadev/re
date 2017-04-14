@@ -60,6 +60,7 @@
       this.light = new THREE.DirectionalLight(0xffffff, 0.8);
       this.light.position.y = 10;
       this.scene.add(this.light);
+      this.scene.add(new THREE.AmbientLight(0xffffff, 0.6));
     }
 
     update(frame) {
