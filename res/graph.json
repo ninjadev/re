@@ -156,10 +156,6 @@
     }
   },
   {
-    "id": "CubeFloor",
-    "type": "cubeFloor"
-  },
-  {
     "id": "intro_add",
     "type": "AddNode",
     "options": {
