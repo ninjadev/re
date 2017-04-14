@@ -7,17 +7,10 @@
 
       this.mesh = new THREE.Object3D();
 
-      const obsidian = Loader.loadTexture('res/obsidian564x564.jpg');
-      const lava = Loader.loadTexture('res/lava128x128.jpg');
       const cubeGeometry = new THREE.BoxGeometry(width, width, width);
 
       let grassMap = Loader.loadTexture('res/grass01.jpg');
       let grassNormalMap = Loader.loadTexture('res/grass01_n.jpg');
-      let grassHeightMap = Loader.loadTexture('res/grass01_h.jpg');
-      let grassSpecularMap = Loader.loadTexture('res/grass01_s.jpg');
-
-      let dirtMap = Loader.loadTexture('res/dirt.png');
-      let dirtNormalMap = Loader.loadTexture('res/dirt_n.png');
 
       let woodMap = Loader.loadTexture('res/wood.jpg');
       let woodNormalMap = Loader.loadTexture('res/wood_n.jpg');
@@ -56,13 +49,6 @@
           transparent: true,
           metalness: 0.5,
           roughness: 0,
-        }),
-
-        5: new THREE.MeshStandardMaterial({
-          map: obsidian
-        }),
-        6: new THREE.MeshStandardMaterial({
-          map: lava
         }),
       };
       this.materials = materials;
@@ -483,6 +469,8 @@
       this.scene.add(this.skybox);
 
       this.resize();
+      this.update(8200);
+      this.render(demo.renderer);
     }
 
     update(frame) {
