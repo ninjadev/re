@@ -68,20 +68,29 @@
       this.frame = frame;
 
       if (BEAT) {
-        if (BEAN == 12 * 4 * 98 || BEAN == 4849) {
+        if (BEAN == 12 * 4 * 97 + 9) this.colorNIN = this.black;
+        if (BEAN == 12 * 4 * 97 + 9 + 9) this.colorJA = this.black;
+        if (BEAN == 12 * 4 * 97 + 9 + 9 + 9) this.colorDEV = this.black;
+        if (BEAN == 4849) {
           this.colorNIN = this.black;
           this.colorJA = this.black;
           this.colorDEV = this.black;
         }
-        if (BEAN == 12 * 4 * 98 + 24 || BEAN == 12 * 4 * 98 + 24 + 9 || BEAN == 12 * 4 * 98 + 24 + 9+ 8) {
+        if (BEAN == 12 * 4 * 98 + 24 || BEAN == 12 * 4 * 98 + 24 + 9 || BEAN == 12 * 4 * 98 + 24 + 9 + 8) {
           this.flippState();
         }
       }
     }
 
     render() {
+      var startFrame = FRAME_FOR_BEAN(12 * 4 * 99);
+      
       this.ctx.fillStyle = this.bgcolor;
       this.ctx.fillRect(0, 0, 16*GU, 9*GU);
+     
+      this.ctx.save();
+      this.ctx.translate(-0.5 * GU + 1.2 * GU * Math.random() * smoothstep(0, 1, (this.frame - startFrame)/100), -0.5 * GU + 1.2 * GU * Math.random() * smoothstep(0, 1, (this.frame - startFrame)/100));
+      
       this.ctx.fillStyle = this.colorNIN;
       this.ctx.font = 'bold ' + (1.5 * GU) + 'pt outrun';
       this.ctx.textBaseline = 'middle';
@@ -93,6 +102,8 @@
 
       this.ctx.fillStyle = this.colorDEV;
       this.ctx.fillText('DEV', 9.2 * GU, 4.5 * GU);
+      
+      this.ctx.restore();
 
       this.output.needsUpdate = true;
       this.outputs.render.setValue(this.output);
