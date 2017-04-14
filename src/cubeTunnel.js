@@ -236,8 +236,6 @@
           this.create_layer(-340);
           this.create_layer(-360);
           this.create_layer(-380);
-          this.create_layer(-400);
-          this.create_layer(-420);
         }
         
         if (frame > 10185 && frame <10206 ) {
@@ -248,7 +246,6 @@
           this.camera.position.y = Math.max( 16 + 15 - (20 * (frame - FRAME_FOR_BEAN(camera_move_start)) / 60 / 60 * 130),
                                              16 + 22.5 - (20 * (FRAME_FOR_BEAN(switch_time2) - FRAME_FOR_BEAN(camera_move_start)) / 60 / 60 * 130)
                                            );
-          console.log(FRAME_FOR_BEAN(4414));
 
         }
 
