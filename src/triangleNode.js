@@ -15,10 +15,17 @@
       } else {
         this.uniforms.A.value = this.inputs.B.getValue();
       }
-      this.uniforms.big.value = lerp(0, Math.max(Math.sin(frame/100), 0.4), (frame - FRAME_FOR_BEAN(12 * 4 * 49)) / 100);
-      this.uniforms.amount.value = lerp(0, 1.0, (frame - FRAME_FOR_BEAN(12 * 4 * 48.5)) / 50);
 
-      this.uniforms.frame.value = frame * 2 - this.analysis.getValue(frame) * 100 * (BEAN >= 12 * 4 * 49);
+      let frameOffset = 0;
+      if(BEAN > 12 * 4 * 51 && BEAN < 12 * 4 * 54) {
+        frameOffset = this.analysis.getValue(frame) * 32 * (BEAN >= 12 * 4 * 49) * (BEAN % 12 == 0 ? 1 : -1);
+      }
+
+      this.uniforms.big.value = lerp(0, Math.max(Math.sin(frame/100), 0.3), (frame - FRAME_FOR_BEAN(12 * 4 * 49)) / 100);
+      this.uniforms.frame.value = frame * 2 - frameOffset;
+
+      this.uniforms.amount.value = lerp(0, 1., (frame - FRAME_FOR_BEAN(12 * 4 * 48.5)) / 50);
+
       if(BEAN >= 12 * 4 * 53 - 12) {
         if(BEAN < 12 * 4 * 53 - 8) {
           this.uniforms.frame.value = 0;
