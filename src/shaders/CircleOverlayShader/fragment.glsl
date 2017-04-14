@@ -31,10 +31,8 @@ void main() {
         if (abs(uv.x) + 2.*abs(uv.y) > 1.3) {
             bg = vec4(0.0);
         }
-    } else {
-        if (2.*abs(uv.x) + abs(uv.y) > 0.53) {
-            bg = vec4(0.0);
-        }
+    } else if (frame < 6320.) {
+        bg = vec4(0.0);
     }
 
 
