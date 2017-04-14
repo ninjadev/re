@@ -9,8 +9,10 @@ void main() {
     uv.x *= 16.0/9.0;
 
     if (length(uv) > radius) {
-      gl_FragColor = vec4(0.125, 0.859, 0.478, 1.0);
-    } else {
-      gl_FragColor = bg;
+        bg = vec4(0.125, 0.859, 0.478, 1.0);
+        vec3 c = mix(vec3(0.0), bg.xyz, 2.0 - length(uv));
+        bg = vec4(c, 1.);
     }
+
+    gl_FragColor = bg;
 }
