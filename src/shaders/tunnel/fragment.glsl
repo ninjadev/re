@@ -85,7 +85,7 @@ void main(void) {
             windowCoords.x < 0.0 ||
             windowCoords.y < 0.05 * 16. / 9. ||
             windowCoords.y > 1. * 3. / 2. - 0.05 * 16. / 9. ) {
-        outp = vec4(0.05, 0., 0.05, 1.);
+        outp = vec4(0.1, 0., 0.1, 1.);
     } else {
         outp = mix(outp, content, content.a);
     }
@@ -100,7 +100,7 @@ void main(void) {
             vec2(frame * 0.003, frame * 0.006) + vUv * vec2(16. / 9., 1.) * 3.,
             1.5 * dotAmount + 2. * dotAmount * dotTweaker * sin(cos(vUv.x * 11.) + vUv.y * 13. + frame / 4.));
     //dotPattern *= 1.5 + 1.5 * sin(frame / 60. / 60. * 130.);
-    outp = mix(outp, vec4(0.05, 0., 0.05, 1.), dotPattern);
+    outp = mix(outp, vec4(0.1, 0., 0.1, 1.), dotPattern);
     outp += vec4(.01) * throb;
 
     if(windowCoords.x > .95) {

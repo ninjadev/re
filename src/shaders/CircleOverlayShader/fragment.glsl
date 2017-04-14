@@ -13,26 +13,30 @@ void main() {
     vec2 uv = -1.0 + 2.0 * vUv;
     uv.x *= 16.0/9.0;
 
-    if (frame < 6200.) {
+    vec4 blackground = vec4(0.1, 0., 0.1, 1.);
+
+    if (frame < 6202.) {
         if (length(uv) > radius) {
             bg = vec4(0.125, 0.859, 0.478, 1.0);
             vec3 c = mix(vec3(0.0), bg.xyz, 2.0 - length(uv));
             bg = vec4(c, 1.);
         }
-    } else if (frame < 6260.) {
+    } else if (frame < 6257.) {
         if (abs(uv.x) + 2.*abs(uv.y) > 2.1) {
-            bg = vec4(0.0);
+            bg = blackground;
         }
-    } else if (frame < 6280.) {
+    } else if (frame < 6278.) {
         if (2.*abs(uv.x) + abs(uv.y) > 1.6) {
-            bg = vec4(0.0);
+            bg = blackground;
         }
-    } else if (frame < 6300.) {
+    } else if (frame < 6299.) {
         if (abs(uv.x) + 2.*abs(uv.y) > 1.3) {
-            bg = vec4(0.0);
+            bg = blackground;
         }
-    } else if (frame < 6320.) {
-        bg = vec4(0.0);
+    } else {
+        if (2.*abs(uv.x) + abs(uv.y) > 0.53) {
+            bg = blackground;
+        }
     }
 
 
