@@ -166,7 +166,9 @@
       }
 
       for (const [i, bubble] of this.bubbles.entries()) {
-        const startFrame = FRAME_FOR_BEAN(startBEAN + i * 8 + 16 * 12);
+        let step = [0, 9, 18, 24, 33, 42, 48, 57, 66, 72, 81, 90, 96][i];
+        
+        const startFrame = FRAME_FOR_BEAN(startBEAN + step + 16 * 12);
         if (frame > startFrame) {
           bubble.opacity = 1;
         } else {
