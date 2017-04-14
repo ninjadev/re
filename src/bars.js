@@ -15,33 +15,43 @@
         new THREE.BoxGeometry(1000, 1000, 1000),
         new THREE.ShaderMaterial(SHADERS.zigzag));
       this.background.material.side = THREE.BackSide;
-        /*
-        new THREE.MeshBasicMaterial({
-          color: 0x1b0922,
-          side: THREE.BackSide
-        }));
-        */
+      /*
+       new THREE.MeshBasicMaterial({
+       color: 0x1b0922,
+       side: THREE.BackSide
+       }));
+       */
       this.scene.add(this.background);
 
       this.numBars = 16;  // per row
       this.avgBarPower = [
-        0.009078874982284765,
-        0.008483158601577038,
-        0.0037441145397272457,
-        0.0023338213808967237,
-        0.0012133696247049364,
-        0.0012292039311328129,
-        0.0007307594487203212,
-        0.0006105713962976541,
-        0.0004710757868021734,
-        0.0003082225009977584,
-        0.00030216972748115824,
-        0.00021645827442290329,
-        0.00017606663537522761,
-        0.00008073090271394498,
-        0.000017557109822553474,
-        4.363201143910552e-7
+        0.0090788,
+        0.0084831,
+        0.0037441,
+        0.0023338,
+        0.0012133,
+        0.0012292,
+        0.0007307,
+        0.0006105,
+        0.0004710,
+        0.0003082,
+        0.0003021,
+        0.0002164,
+        0.0001760,
+        0.0000807,
+        0.0000175,
+        4.3632e-7
       ];
+      this.barHeightDecayFactor = 0.9;
+      this.fftRingBuffer = [];
+      this.fftRingBufferSize = 32;
+      for (let i = 0; i < this.fftRingBufferSize; i++) {
+        let vector = [];
+        for (let j = 0; j < this.numBars; j++) {
+          vector.push(0);
+        }
+        this.fftRingBuffer.push(vector);
+      }
 
       this.sampleFreq = 44100;  // fallback in case of incompatible nin
       if (demo.music && demo.music.audioContext && demo.music.audioContext.sampleRate) {
@@ -60,10 +70,10 @@
         const cuberow = [];
         for (let i = 0; i < this.numBars; i++) {
           const cube = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, 10, 32),
-                                      new THREE.MeshStandardMaterial({
-                                        color: 0xff00a2,
-                                        emissive: 0x440022
-                                      }));
+            new THREE.MeshStandardMaterial({
+              color: 0xff00a2,
+              emissive: 0x440022
+            }));
           cube.rotation.y = 1;
           cube.scale.y = 0.01;
           cube.position.x = 100000;
@@ -147,13 +157,19 @@
 
       this.background.material.uniforms.frame.value = frame;
       this.background.material.uniforms.amount.value = easeOut(
-          0,
-          1,
-          (frame - 968 + 10 ) / (1051 - 968));
+        0,
+        1,
+        (frame - 968 + 10 ) / (1051 - 968)
+      );
 
       const fft = demo.music ? demo.music.getFFT() : [];
 
-      let currentHeights = [];
+      let currentRingBufferIndex = frame % this.fftRingBufferSize;
+      let previousRingBufferIndex = (
+        currentRingBufferIndex === 0
+          ? this.fftRingBufferSize - 1
+          : currentRingBufferIndex - 1
+      );
       for (let i = 0; i < this.numBars; i++) {
         const fraction = i / this.numBars;
         const mel = this.maxMel * fraction;
@@ -166,14 +182,22 @@
         const fftSlice = fft.slice(lowerBin, upperBin);
         const fftAvgDb = fftSlice.reduce((a, b) => a + b, 0) / numBins;
         const linearAvg = Math.pow(10, fftAvgDb / 20);  // ranges from 0 to 1
-        let height = 1.337 * Math.pow(linearAvg / this.avgBarPower[i], 2);
-        currentHeights.push(height);
+        const height = 1.337 * Math.pow(linearAvg / this.avgBarPower[i], 2);
+        this.fftRingBuffer[currentRingBufferIndex][i] = height;  // TODO
+        /*this.fftRingBuffer[currentRingBufferIndex][i] = this.fftRingBuffer[previousRingBufferIndex][i] * this.barHeightDecayFactor;
+        if (height > this.fftRingBuffer[previousRingBufferIndex][i]) {
+          this.fftRingBuffer[currentRingBufferIndex][i] = height;
+        }*/
       }
 
       const relativeBEAN = (BEAN / 12 - 67) | 0;
       for (const [j, cuberow] of this.cubes.entries()) {
+        let thatRingBufferIndex = currentRingBufferIndex - j;
+        if (thatRingBufferIndex < 0) {
+          thatRingBufferIndex = this.fftRingBufferSize - 1 + thatRingBufferIndex;
+        }
         for (const [i, cube] of cuberow.entries()) {
-          let height = currentHeights[i];
+          let height = this.fftRingBuffer[thatRingBufferIndex][i];
 
           const endStartFrame = FRAME_FOR_BEAN(97 * 12 + 6) - 10;
           const endStartFrameTwo = FRAME_FOR_BEAN(98 * 12 + 6) - 10;
@@ -227,7 +251,7 @@
       const r = lerp(0, 0, (frame - planeColorFrame) / 54);
       const g = lerp(97, 146, (frame - planeColorFrame) / 54);
       const b = lerp(255, 221, (frame - planeColorFrame) / 54);
-      this.backgroundColor = `rgb(${r|0}, ${g|0}, ${b|0})`;
+      this.backgroundColor = `rgb(${r | 0}, ${g | 0}, ${b | 0})`;
     }
 
     resize() {
@@ -247,7 +271,7 @@
       const b = lerp(221, 255, (this.frame - planeColorFrame) / 54);
       for (const splash of this.splashes) {
         const opacity = Math.round(splash.opacity * 100) / 100;
-        this.ctx.fillStyle = `rgba(${r|0}, ${g|0}, ${b|0}, ${opacity})`;
+        this.ctx.fillStyle = `rgba(${r | 0}, ${g | 0}, ${b | 0}, ${opacity})`;
         this.ctx.beginPath();
         this.ctx.ellipse(
           10 * GU + splash.x / 60 * GU,
