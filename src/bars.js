@@ -204,11 +204,6 @@
           height = smoothstep(height, 1, (frame - endStartFrame) / 20);
           height = smoothstep(height, 0, (frame - endStartFrameTwo) / 20);
 
-          const middleFrame = FRAME_FOR_BEAN(67 * 12);
-          if (j !== 0) {
-            height = smoothstep(0, (1 - j / this.numBars) * height, (frame - middleFrame) / 240);
-          }
-
           cube.scale.y = clamp(0.01, height, 20);
           cube.position.y = 5 * height;
 
@@ -236,7 +231,7 @@
         this.splashStartIndex = 0;
         this.splashStartFrames = [];
       }
-      if (this.inputs.percolator.getValue()) {
+      if (this.inputs.percolator.getValue() && frame < 2750) {
         this.splashStartFrames[this.splashStartIndex] = frame;
         this.splashStartIndex = (this.splashStartIndex + 1) % 8;
       }
@@ -249,8 +244,8 @@
 
       const planeColorFrame = FRAME_FOR_BEAN(98 * 12);
       const r = lerp(0, 0, (frame - planeColorFrame) / 54);
-      const g = lerp(97, 146, (frame - planeColorFrame) / 54);
-      const b = lerp(255, 221, (frame - planeColorFrame) / 54);
+      const g = lerp(97, 111, (frame - planeColorFrame) / 54);
+      const b = lerp(255, 222, (frame - planeColorFrame) / 54);
       this.backgroundColor = `rgb(${r | 0}, ${g | 0}, ${b | 0})`;
     }
 
