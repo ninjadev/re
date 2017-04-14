@@ -20,19 +20,19 @@ void main() {
             bg = vec4(c, 1.);
         }
     } else if (frame < 6260.) {
-        if (abs(uv.x) + abs(uv.y) > 2.1) {
+        if (abs(uv.x) + 2.*abs(uv.y) > 2.1) {
             bg = vec4(0.0);
         }
     } else if (frame < 6280.) {
-        if (abs(uv.x) + abs(uv.y) > 1.6) {
+        if (2.*abs(uv.x) + abs(uv.y) > 1.6) {
             bg = vec4(0.0);
         }
     } else if (frame < 6300.) {
-        if (abs(uv.x) + abs(uv.y) > 1.3) {
+        if (abs(uv.x) + 2.*abs(uv.y) > 1.3) {
             bg = vec4(0.0);
         }
     } else {
-        if (abs(uv.x) + abs(uv.y) > 0.53) {
+        if (2.*abs(uv.x) + abs(uv.y) > 0.53) {
             bg = vec4(0.0);
         }
     }
