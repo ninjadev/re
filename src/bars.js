@@ -204,11 +204,6 @@
           height = smoothstep(height, 1, (frame - endStartFrame) / 20);
           height = smoothstep(height, 0, (frame - endStartFrameTwo) / 20);
 
-          const middleFrame = FRAME_FOR_BEAN(67 * 12);
-          if (j !== 0) {
-            height = smoothstep(0, (1 - j / this.numBars) * height, (frame - middleFrame) / 240);
-          }
-
           cube.scale.y = clamp(0.01, height, 20);
           cube.position.y = 5 * height;
 
