@@ -24,6 +24,7 @@
         radius = 10;
       }
       this.uniforms.radius.value = radius;
+      this.uniforms.frame.value = frame;
     }
   }
 
