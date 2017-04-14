@@ -64,7 +64,8 @@
       "I": "piano.render",
       "J": "MinecraftTransitionShader.render",
       "K": "BitGlitchShader.render",
-      "L": "cubeTunnel.render"
+      "L": "cubeTunnel.render",
+      "M": "ninEnd.render"
     }
   },
   {
@@ -242,7 +243,7 @@
       "shader": "starrySky"
     },
     "connected": {
-        "water": "water.render"
+      "water": "water.render"
     }
   },
   {
@@ -274,21 +275,21 @@
     "id": "greets",
     "type": "greets",
     "options": {
-        "shader": "greets"
+      "shader": "greets"
     }
   },
   {
     "id": "water",
     "type": "waterNode",
     "options": {
-        "shader": "water"
+      "shader": "water"
     }
   },
   {
     "id": "tunnel",
     "type": "TunnelShader",
     "options": {
-        "shader": "tunnel"
+      "shader": "tunnel"
     },
     "connected": {
       "tDiffuse": "greets.render"
@@ -303,5 +304,9 @@
     "connected": {
       "A": "triangle.render"
     }
+  },
+  {
+    "id": "ninEnd",
+    "type": "ninEnd"
   }
 ]
