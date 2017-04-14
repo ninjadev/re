@@ -314,7 +314,7 @@
 
       let analysisValue = this.pianoAnalysis.getValue(frame - 885 /* compensate for 8 new bars in the music */);
       if(frame < 7894) {
-        while(analysisValue > 0) {
+        while(analysisValue > 1) {
           this.spawnPoint(
             8 + (Math.random() - 0.5) * 8 * 2 / this.zoom * 1.1,
             4.5 + (Math.random() - 0.5) * 4.5 * 2 / this.zoom * 1.1);
