@@ -32,6 +32,7 @@
       this.scene.add(light);
 
       this.camera.position.z = 100;
+      this.scene.background = new THREE.Color(0, 0, 0);
     }
 
     update(frame) {
@@ -46,6 +47,20 @@
       } else {
         if (BEAT && (BEAN % 8) == 0) {
           this.hexagonRotation += Math.PI/3/4;
+        }
+      }
+
+      this.scene.background.setRGB(0.1, 0.0, 0.1);
+      if(BEAN >= 12 * 4 * 53 - 12 && BEAN < 12 * 4 * 53) {
+        this.scene.background.setRGB(1, 1, 1);
+        if(BEAN < 12 * 4 * 53 - 9) {
+        this.scene.background.setHex(0xff00a2);
+        } else if(BEAN < 12 * 4 * 53 - 6) {
+        this.scene.background.setHex(0x0092dd);
+        } else if(BEAN < 12 * 4 * 53 - 3) {
+        this.scene.background.setHex(0xff00a2);
+        } else {
+        this.scene.background.setHex(0x0092dd);
         }
       }
 
