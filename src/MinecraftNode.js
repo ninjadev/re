@@ -479,6 +479,7 @@
       const baseFrame = 8200;
 
       this.minecraftIsland.materials[0].map = this.inputs.water.getValue();
+      this.minecraftIsland.materials[0].needsUpdate = true;
 
       let angle = (clamp(0, frame, 9193) - baseFrame) / 400;
       let daylight = Math.cos(Math.PI + Math.PI / 2 + angle * 1.5);
