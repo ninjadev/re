@@ -42,7 +42,7 @@
       this.cube = new THREE.Mesh(
         new THREE.BoxGeometry(5, 0.5, 1000),
         new THREE.MeshStandardMaterial({
-          color: 0x00a2ff
+          color: 0xff00a2
       }));
       this.scene.add(this.cube);
 
@@ -64,7 +64,7 @@
         const box = new THREE.Mesh(
           new THREE.BoxGeometry(1, 1, 1),
           new THREE.MeshStandardMaterial({
-            color: 0xff00a2,
+            color: 0x00a2ff,
             roughness: 1,
             shading: THREE.SmoothShading
           }));
@@ -74,7 +74,7 @@
         const boxShadow = new THREE.Mesh(
           new THREE.BoxGeometry(1, 0.1, 1),
           new THREE.MeshStandardMaterial({
-            color: 0x00263c,
+            color: 0x3c0026,
             roughness: 1,
             shading: THREE.SmoothShading
           }));
