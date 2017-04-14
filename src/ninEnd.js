@@ -68,10 +68,10 @@
       this.frame = frame;
 
       if (BEAT) {
-        if (BEAN == 12 * 4 * 97 + 9) this.colorNIN = this.black;
-        if (BEAN == 12 * 4 * 97 + 9 + 9) this.colorJA = this.black;
-        if (BEAN == 12 * 4 * 97 + 9 + 9 + 9) this.colorDEV = this.black;
-        if (BEAN == 4849) {
+        //if (BEAN == 12 * 4 * 97 + 32) this.colorNIN = this.black;
+        //if (BEAN == 12 * 4 * 97 + 32 + 5) this.colorJA = this.black;
+        //if (BEAN == 12 * 4 * 97 + 32 + 5 + 5) this.colorDEV = this.black;
+        if (BEAN == 12 * 4 * 98 || BEAN == 4849) {
           this.colorNIN = this.black;
           this.colorJA = this.black;
           this.colorDEV = this.black;
@@ -89,7 +89,7 @@
       this.ctx.fillRect(0, 0, 16*GU, 9*GU);
      
       this.ctx.save();
-      this.ctx.translate(-0.5 * GU + 1.2 * GU * Math.random() * smoothstep(0, 1, (this.frame - startFrame)/100), -0.5 * GU + 1.2 * GU * Math.random() * smoothstep(0, 1, (this.frame - startFrame)/100));
+      this.ctx.translate(-0.5 * GU + 0.8 * GU * Math.random() * smoothstep(0, 1, (this.frame - startFrame)/100), -0.5 * GU + 0.8 * GU * Math.random() * smoothstep(0, 1, (this.frame - startFrame)/100));
       
       this.ctx.fillStyle = this.colorNIN;
       this.ctx.font = 'bold ' + (1.5 * GU) + 'pt outrun';
