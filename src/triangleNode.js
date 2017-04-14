@@ -17,8 +17,11 @@
       }
 
       let frameOffset = 0;
-      if(BEAN > 12 * 4 * 51 && BEAN < 12 * 4 * 54) {
+      if(BEAN > 12 * 4 * 51) {
         frameOffset = this.analysis.getValue(frame) * 32 * (BEAN >= 12 * 4 * 49) * (BEAN % 12 == 0 ? 1 : -1);
+        if(BEAN < 12 * 4 * 54) {
+          frameOffset = this.analysis.getValue(frame) * 87 * (BEAN >= 12 * 4 * 49) * (BEAN % 12 == 0 ? 1 : -1);
+        }
       }
 
       this.uniforms.big.value = lerp(0, Math.max(Math.sin(frame/100), 0.3), (frame - FRAME_FOR_BEAN(12 * 4 * 49)) / 100);
