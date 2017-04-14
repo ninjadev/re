@@ -1,4 +1,5 @@
 {
     "tDiffuse": { "type": "t", "value": null },
-    "radius": { "type": "f", "value": 0.0 }
+    "radius": { "type": "f", "value": 0.0 },
+    "frame": { "type": "f", "value": 0.0 }
 }
