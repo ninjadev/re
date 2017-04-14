@@ -12,7 +12,9 @@
       super.update(frame);
 
       this.uniforms.tDiffuse.value = this.inputs.tDiffuse.getValue();
-      this.uniforms.frame.value = frame;
+      if(BEAN < 12 * 4 * 41 - 12) {
+        this.uniforms.frame.value = frame;
+      }
     }
   }
 
