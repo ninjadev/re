@@ -59,7 +59,7 @@
       "A": "intro_add.render",
       "C": "LaneSwipeTransition.render",
       "F": "SphereTransitionShader.render",
-      "H": "triangle.render",
+      "H": "CircleOverlayShader.render",
       "H_and_a_half": "tunnel.render",
       "I": "piano.render",
       "J": "MinecraftTransitionShader.render",
@@ -291,7 +291,17 @@
         "shader": "tunnel"
     },
     "connected": {
-        "tDiffuse": "greets.render"
+      "tDiffuse": "greets.render"
+    }
+  },
+  {
+    "id": "CircleOverlayShader",
+    "type": "CircleOverlayShaderNode",
+    "options": {
+      "shader": "CircleOverlayShader"
+    },
+    "connected": {
+      "A": "triangle.render"
     }
   }
 ]

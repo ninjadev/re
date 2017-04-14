@@ -572,31 +572,6 @@
       this.ctx.textAlign = 'left';
       this.ctx.fillText(health, 13.8 * GU, (hudOffset + 8.6) * GU);
 
-      if(BEAN >= 12 * 4 * 49 - 12 - 6) {
-        const ctx = this.maskCanvas.getContext('2d');
-        ctx.clearRect(0, 0, this.maskCanvas.width, this.maskCanvas.height);
-        ctx.fillRect(0, 0, this.maskCanvas.width, this.maskCanvas.height);
-        ctx.globalCompositeOperation = 'xor';
-        ctx.fillStyle = '#20db7a';
-        let radius;
-        if(BEAN < 12 * 4 * 49 - 12 - 4) {
-          radius = 7.5;
-        } else if(BEAN < 12 * 4 * 49 - 12 - 2) {
-          radius = 6;
-        } else if(BEAN < 12 * 4 * 49 - 12) {
-          radius = 4.2;
-        } else {
-          radius = 3;
-        }
-        ctx.beginPath();
-        ctx.ellipse(8 * GU, 4.5 * GU, radius * GU, radius * GU, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.textBaseline = 'middle';
-        ctx.textAlign = 'center';
-        ctx.font = (1.2 * GU) + 'pt vcr'; 
-        this.ctx.drawImage(this.maskCanvas, 0, 0);
-      }
-
       this.output.needsUpdate = true;
       this.outputs.render.setValue(this.output);
     }
