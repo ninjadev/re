@@ -167,9 +167,7 @@
         this.spawningCubes[11].position.x = easeIn(-100, -12, (frame - FRAME_FOR_BEAN(startBEAN + 90) + cornerSlideDuration)/ cornerSlideDuration);
         this.spawningCubes[11].position.y = -12;
       
-
       } else if (BEAN < switch_time2) {
-
 
         // Spawning the rest of the scene and start playing with camera.
         this.camera.position.z = 0;
@@ -238,24 +236,35 @@
           this.create_layer(-340);
           this.create_layer(-360);
           this.create_layer(-380);
+          this.create_layer(-400);
+          this.create_layer(-420);
         }
+        
+        if (frame > 10185 && frame <10206 ) {
+          // 10185 camera starts moving.
+          // 10206 første camera const speed frame
+          this.camera.position.y = 16;// + easeIn(0, 10, (frame - 10185)/(10206 - 10185));
+        } else if (frame > FRAME_FOR_BEAN(4414)) {
+          this.camera.position.y = Math.max( 16 + 15 - (20 * (frame - FRAME_FOR_BEAN(camera_move_start)) / 60 / 60 * 130),
+                                             16 + 22.5 - (20 * (FRAME_FOR_BEAN(switch_time2) - FRAME_FOR_BEAN(camera_move_start)) / 60 / 60 * 130)
+                                           );
+          console.log(FRAME_FOR_BEAN(4414));
 
-        if (frame > FRAME_FOR_BEAN(4414)) {
-          this.camera.position.y = 16 + 15 - 20 * (frame - FRAME_FOR_BEAN(camera_move_start)) / 60 / 60 * 130;
         }
 
       } else {
         this.camera.position.z = 0;
 
-        this.camera.lookAt(new THREE.Vector3(0,-200,0));
-        this.camera.position.y = 16 - (FRAME_FOR_BEAN(switch_time2) - FRAME_FOR_BEAN(camera_move_start))*camera_speed;
+        this.camera.lookAt(new THREE.Vector3(0,-2000,0));
+        this.camera.position.y = 16 + 22.5 - (20 * (FRAME_FOR_BEAN(switch_time2) - FRAME_FOR_BEAN(camera_move_start)) / 60 / 60 * 130);
+        console.log(this.camera.position.y);
 
         var elevation = 1;
         var beats3 = [24, 36, 48, 60, 72, 94];
         if (frame == FRAME_FOR_BEAN(switch_time2 + beats3[0])) {
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = 0;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = 0;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -265,7 +274,7 @@
         if (frame == FRAME_FOR_BEAN(switch_time2 + beats3[1])) {
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = 4*1.2;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = 0;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -273,7 +282,7 @@
 
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = -4*1.2;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = 0;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -284,7 +293,7 @@
         if (frame == FRAME_FOR_BEAN(switch_time2 + beats3[2])) {
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = 0;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = 4*1.2;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -292,7 +301,7 @@
 
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = 0;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = -4*1.2;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -302,7 +311,7 @@
         if (frame == FRAME_FOR_BEAN(switch_time2 + beats3[3])) {
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = 8*1.2;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = 4*1.2;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -310,7 +319,7 @@
 
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = 8*1.2;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = -4*1.2;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -318,7 +327,7 @@
 
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = -8*1.2;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = 4*1.2;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -326,7 +335,7 @@
 
                     var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = -8*1.2;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = -4*1.2;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -336,7 +345,7 @@
         if (frame == FRAME_FOR_BEAN(switch_time2 + beats3[4])) {
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = 4*1.2;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = 4*1.2;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -344,7 +353,7 @@
 
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = 4*1.2;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = -4*1.2;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -352,7 +361,7 @@
 
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = -4*1.2;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = 4*1.2;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -360,7 +369,7 @@
 
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = -4*1.2;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = -4*1.2;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -369,7 +378,7 @@
 
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = 8*1.2;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = 0;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -377,7 +386,7 @@
 
           var newPlane = new THREE.Mesh(new THREE.PlaneGeometry(4*1.2, 4*1.2), this.top_material);
           newPlane.position.x = -8*1.2;
-          newPlane.position.y = -58.99;
+          newPlane.position.y = -258.99;
           newPlane.position.z = 0;
           newPlane.rotation.x = -Math.PI/2;
           newPlane.rotation.z = Math.PI;
@@ -472,9 +481,9 @@
         this.wall_material.uniforms.g.value = 89/256;
         this.wall_material.uniforms.b.value = 182/256;
       } else if ( Math.floor((BEAN / divider) % 4) == 3) {
-        this.wall_material.uniforms.r.value = 230/256;
-        this.wall_material.uniforms.g.value = 126/256;
-        this.wall_material.uniforms.b.value = 34/256;
+        this.wall_material.uniforms.r.value = 22/256;
+        this.wall_material.uniforms.g.value = 160/256;
+        this.wall_material.uniforms.b.value = 133/256;
       }
     }
 
