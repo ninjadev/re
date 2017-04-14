@@ -23,8 +23,8 @@
 
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
-      this.canvas.height = 10 * GU; 
-      this.canvas.width = 10 * GU; 
+      this.canvas.width = 16 * GU; 
+      this.canvas.height = 9 * GU; 
       this.output = new THREE.VideoTexture(this.canvas);
       this.output.minFilter = THREE.LinearFilter;
       this.output.magFilter = THREE.LinearFilter;
@@ -55,6 +55,13 @@
       this.colorNIN = this.white;
       this.colorJA = this.white;
       this.colorDEV = this.white;
+      this.resize();
+    }
+
+    resize() {
+      super.resize();
+      this.canvas.width = 16 * GU;
+      this.canvas.height = 9 * GU;
     }
 
     update(frame) {
@@ -74,19 +81,18 @@
 
     render() {
       this.ctx.fillStyle = this.bgcolor;
-      this.ctx.fillRect(0, 0, 10*GU, 10*GU);
-
-      this.ctx.fillStyle = this.bgcolor;
-      this.ctx.fillRect(0, 0, 10*GU, 10*GU);
+      this.ctx.fillRect(0, 0, 16*GU, 9*GU);
       this.ctx.fillStyle = this.colorNIN;
-      this.ctx.fillText('NIN', 20, 230);
-      this.ctx.font = 'bold ' + (1 * GU) + 'pt outrun';
+      this.ctx.font = 'bold ' + (1.5 * GU) + 'pt outrun';
+      this.ctx.textBaseline = 'middle';
+
+      this.ctx.fillText('NIN', 1.3 * GU, 4.5 * GU);
 
       this.ctx.fillStyle = this.colorJA;
-      this.ctx.fillText('JA', 3.6*GU, 230);
+      this.ctx.fillText('JA', 5.8 * GU, 4.5 * GU);
 
       this.ctx.fillStyle = this.colorDEV;
-      this.ctx.fillText('DEV', 5.8*GU, 230);
+      this.ctx.fillText('DEV', 9.2 * GU, 4.5 * GU);
 
       this.output.needsUpdate = true;
       this.outputs.render.setValue(this.output);
