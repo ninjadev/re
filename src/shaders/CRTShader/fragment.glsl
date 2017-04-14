@@ -41,11 +41,11 @@ vec4 scene(vec2 uv) {
 void main() {
     vec2 uv = vUv;
     vec4 color = vec4(
-        scene(vUv + 0.002 * vec2(cos(PI / 2. + uv.x * PI * 0.5),
+        0.1 + scene( vUv + 0.002 * vec2(cos(PI / 2. + uv.x * PI * 0.5),
                                 0)).r,
         scene(vUv + 0.002 * vec2(cos(uv.x * PI * 0.5),
                                 -cos(uv.y * PI * 0.5)) / 1.414).g,
-        scene(vUv + 0.002 * vec2(cos(uv.x * PI * 0.5),
+        0.1 + scene(vUv + 0.002 * vec2(cos(uv.x * PI * 0.5),
                                 cos(uv.y * PI * 0.5)) / 1.414).b,
         1.);
     gl_FragColor = color;

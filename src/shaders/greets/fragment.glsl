@@ -9,7 +9,8 @@ void main() {
     color = clamp(color, 0.2, 1.);
     color += pow(uv.x, 8.) * 0.2;
     color += pow(uv.y, 8.) * 0.2;
-    color *= vec4(1., 162. / 255., 1., 1.);
-    color *= 1.3;
-    gl_FragColor = vec4(color.rgb, color.r);
+    color *= 1.6;
+    float opacity = color.r;
+    color *= vec4(.4, 0.5725, 0.866, 1.);
+    gl_FragColor = vec4(color.rgb, opacity);
 }

@@ -148,6 +148,7 @@
       this.cameraDDY = 0;
       this.shakeThrob = 0;
 
+      this.zerothShakeFrame = FRAME_FOR_BEAN(12 * 4 * 65);
       this.firstShakeFrame = FRAME_FOR_BEAN(12 * 4 * 73 + 12 + 6);
       this.secondShakeFrame = FRAME_FOR_BEAN(12 * 4 * 73.75);
       this.thirdShakeFrame = FRAME_FOR_BEAN(12 * 4 * 74);
@@ -241,7 +242,14 @@
 
       this.frame = frame;
 
-      this.shakeThrob *= 0.9;
+      if(frame < 7600) {
+        this.shakeThrob *= 0.95;
+      } else {
+        this.shakeThrob *= 0.9;
+      }
+      if(frame == this.zerothShakeFrame + 1) {
+        this.shakeThrob = 2;
+      }
       if(frame == this.firstShakeFrame) {
         this.shakeThrob = -1;
       }
@@ -418,16 +426,11 @@
         this.ctx.fillRect(0, 2 * GU, easeIn(0, 16, (this.frame - this.thirdShakeFrame + 20) / 20) * GU, 5 * GU);
       }
 
-      if(this.frame < 7360) {
+      if(this.frame < 7560) {
         this.ctx.save();
         this.ctx.fillStyle = 'white';
         this.ctx.globalCompositeOperation = 'lighter';
-
-        if (this.frame < 7250) {
-          this.ctx.globalAlpha = easeOut(0.4, 0, (this.frame - 7199) / 50);
-          this.ctx.drawImage(this.outracksTexture.image, 4.1 * GU, 3.45 * GU, 1.5 * GU, 1.5 * GU);
-        }
-        this.ctx.globalAlpha = easeOut(0.5, 0, (this.frame - 7210) / 170);
+        this.ctx.globalAlpha = easeOut(.6, 0, (this.frame - 7210) / 250);
         this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
         this.ctx.restore();
       }

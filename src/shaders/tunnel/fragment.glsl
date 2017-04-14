@@ -8,9 +8,9 @@ varying vec2 vUv;
 
 
 vec4 pattern(vec2 uv) {
-    vec4 colorA = vec4(150. / 255., 8. / 255., 52. / 255., 1.);
-    vec4 colorB =  vec4(86. / 255., 15. / 255., 20. / 255., 1.);
-    return mix(colorA, colorB, sin(uv.y));
+    vec4 colorA = vec4(1., 0., 0.635, 1.);
+    vec4 colorB =  vec4(0., 0.5725, 0.866, 1.);
+    return mix(colorA, colorB, .5 + sign(sin(uv.y * 2. * PI)) / 2.);
 }
 
 float dots(vec2 uv, float radius) {
@@ -28,6 +28,7 @@ void main(void) {
     vec2 uv = vUv;
 
     vec2 windowCoords = uv * 3. / 2.;
+
 
     uv = windowCoords;
 
@@ -52,7 +53,7 @@ void main(void) {
     
     vec2 r = mod(uv * tiles, 1.0);
     r = vec2(pow(r.x - 0.5, 2.0), pow(r.y - 0.5, 2.0));
-    p *= 1.5 - pow(min(1.0, 12.0 * dot(r, r)), 2.0);
+    p *= 1.1 - pow(min(1.0, 12.0 * dot(r, r)), 4.0);
     wallDiffuse *= p;
     wallDiffuse *= throb;
     wallDiffuse *= 1. + 0.5 * sin(PI * 2. * (uv.y * 100. - throb * 200.) * 0.005);
@@ -67,10 +68,10 @@ void main(void) {
 
     centerDarkener = sqrt(centerDarkener);
 
-    vec4 black = vec4(vec3(0.), 1);
+    vec4 black = vec4(vec3(0.1, 0., 0.1), 1);
 
-    vec4 outp = diffuse * p + wallDiffuse * centerDarkener;
-    outp += vec4(86. / 255., 15. / 255., 80. / 255., 0.) / 4.;
+    vec4 outp = wallDiffuse * centerDarkener;
+    //outp += vec4(86. / 255., 15. / 255., 80. / 255., 0.) / 4.;
 
     vec4 content = texture2D(tDiffuse, windowCoords - vec2(0., .1));
 
@@ -80,10 +81,12 @@ void main(void) {
         outp = mix(outp, content, content.a);
     }
 
+    float dotFadeInAmount = smoothstep(0., 1., (frame - 6310.) / 24.);
     float dotAmount = clamp(((vUv.x - 0.05) / 0.05), 0., 1.);
     dotAmount *= clamp(((2./ 3. - 0.05 - vUv.x) / 0.05), 0., 1.);
     dotAmount *= clamp(((0.80 - vUv.y  + 0.15 * vUv.x) / 0.1), 0., 1.);
     dotAmount *= clamp(((vUv.y - 0.05  - vUv.x * 0.15) / 0.1), 0., 1.);
+    dotAmount *= dotFadeInAmount;
     float dotPattern = dots(vec2(frame * 0.003, frame * 0.006) + vUv * vec2(16. / 9., 1.) * 3., 1.5 * dotAmount);
     //dotPattern *= 1.5 + 1.5 * sin(frame / 60. / 60. * 130.);
     outp = mix(outp, vec4(0.05, 0., 0.05, 1.), dotPattern);

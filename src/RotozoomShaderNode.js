@@ -49,9 +49,9 @@
         if(BEAN < 12 * 4 * (77.75 + 8) + 3) {
           this.uniforms.zoom.value += 1;  
         } else if(BEAN < 12 * 4 * (77.75 + 8) + 6) {
-          this.uniforms.zoom.value += 2;
+          this.uniforms.zoom.value += 0;
         } else if(BEAN < 12 * 4 * (77.75 + 8) + 9) {
-          this.uniforms.zoom.value += 3;
+          this.uniforms.zoom.value += 1;
         }
       }
     }

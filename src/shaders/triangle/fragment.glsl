@@ -50,7 +50,7 @@ vec3 shade(vec4 color, vec2 uv, vec3 rd, vec3 ro, float multiplier) {
     vec2 point = vec2(refd.x + cam.x, refd.y + cam.y);
     vec4 col = texture2D(A, mod(0.35*point+.5,1.));
 
-    col = vec4(.3*diffusion) + .7*col;
+    col = vec4(vec3(.5, 0.4, .5) * diffusion, 1.) * .7 + .5*col;
 
     col = max(vec4(0.15), col);
 

@@ -30,6 +30,7 @@
       this.inputs.D.enabled = false;
       this.inputs.F.enabled = false;
       this.inputs.H.enabled = false;
+      this.inputs.H_and_a_half.enabled = false;
       this.inputs.I.enabled = false;
       this.inputs.J.enabled = false;
       this.inputs.K.enabled = false;
