@@ -12,6 +12,7 @@
 
       let radius;
       if(BEAN < 12 * 4 * 49 - 12 - 6) {
+        radius = 10;
       } else if(BEAN < 12 * 4 * 49 - 12 - 4) {
         radius = 1.875;
       } else if(BEAN < 12 * 4 * 49 - 12 - 2) {
