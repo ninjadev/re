@@ -18,6 +18,16 @@
       this.uniforms.frame.value = frame;
       this.uniforms.A.value = this.inputs.A.getValue();
       this.uniforms.B.value = this.inputs.B.getValue();
+      if(BEAN < 12 * 4 * 15) {
+        this.inputs.A.enabled = true;
+        this.inputs.B.enabled = false;
+      } else if (BEAN < 12 * 4 * 17) {
+        this.inputs.A.enabled = true;
+        this.inputs.B.enabled = true;
+      } else {
+        this.inputs.A.enabled = false;
+        this.inputs.B.enabled = true;
+      }
     }
 
     render(renderer) {
