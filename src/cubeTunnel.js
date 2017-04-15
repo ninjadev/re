@@ -32,6 +32,8 @@
         }
       });
 
+      this.blinkThrob = 0;
+
       this.scene = new THREE.Scene();
       this.addLights(this.scene);
       this.renderTarget = new THREE.WebGLRenderTarget(640, 360, {
@@ -81,6 +83,11 @@
 
     update(frame) {
       var startBEAN = 4224;
+
+      this.blinkThrob *= 0.95;
+      if(BEAN >= 12 * 4 * 92 && (BEAT && BEAN % 12 == 0)) {
+        this.blinkThrob = 1;
+      }
 
       this.background.material.uniforms.frame.value = frame;
       this.background.material.uniforms.amount.value = easeOut(
@@ -166,6 +173,24 @@
         this.spawningCubes[8].position.y = easeIn(100, 12, (frame - FRAME_FOR_BEAN(startBEAN + 66) + cornerSlideDuration)/ cornerSlideDuration);
         this.spawningCubes[11].position.x = easeIn(-100, -12, (frame - FRAME_FOR_BEAN(startBEAN + 90) + cornerSlideDuration)/ cornerSlideDuration);
         this.spawningCubes[11].position.y = -12;
+
+        if(BEAT) {
+          switch(BEAN - startBEAN) {
+            case 0:
+            case 9:
+            case 18:
+            case 24:
+            case 33:
+            case 42:
+            case 48:
+            case 57:
+            case 66:
+            case 72:
+            case 84:
+            case 90:
+              this.blinkThrob = 0.5;
+          }
+        }
       
       } else if (BEAN < switch_time2) {
 
@@ -181,6 +206,7 @@
 
         var beats2 = [0, 9, 18, 27, 36,      48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68];
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[0])) {
+          this.blinkThrob = 1;
           this.scene = new THREE.Scene();
           this.addLights(this.scene);
           this.create_layer_first_layer(0); 
@@ -189,47 +215,61 @@
           this.background.position.y = 16;
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[1])) {
+          this.blinkThrob = 1;
           this.create_layer_first_layer(1);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[2])) {
+          this.blinkThrob = 1;
           this.create_layer_first_layer(2);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[3])) {
+          this.blinkThrob = 1;
           this.create_layer_first_layer(3);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[4])) {
+          this.blinkThrob = 1;
           this.create_layer_first_layer(4);
           this.create_layer_first_layer(5);
         }
 
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[5])) {
+          this.blinkThrob = 1;
           this.create_layer(-20);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[6])) {
+          this.blinkThrob = 1;
           this.create_layer(-40);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[8])) {
+          this.blinkThrob = 1;
           this.create_layer(-60);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[9])) {
+          this.blinkThrob = 1;
           this.create_layer(-80);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[10])) {
+          this.blinkThrob = 1;
           this.create_layer(-100);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[11])) {
+          this.blinkThrob = 1;
           this.create_layer(-120);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[12])) {
+          this.blinkThrob = 1;
           this.create_layer(-140);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[13])) {
+          this.blinkThrob = 1;
           this.create_layer(-160);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[14])) {
+          this.blinkThrob = 1;
           this.create_layer(-180);
         }
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[15])) {
+          this.blinkThrob = 1;
           this.create_layer(-200);
           this.create_layer(-220);
           this.create_layer(-240);
@@ -402,6 +442,7 @@
       var passed_2 = -1;
       var passed_3 = -1;
       var passed_4 = -1;
+
       //Figure out the last two passed time stamps (for ring spawning).
       for (var i = 0; i < beats.length; i++) {
         if(BEAN > startBEAN + beats[beats.length - 1 - i]) {
@@ -486,6 +527,9 @@
         this.wall_material.uniforms.g.value = 160/256;
         this.wall_material.uniforms.b.value = 133/256;
       }
+
+
+      demo.nm.nodes.add.opacity = 2 * this.blinkThrob;
     }
 
     render(renderer) {
