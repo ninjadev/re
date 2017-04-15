@@ -90,7 +90,7 @@
       const drawText = () => {
         this.textCtx.font = '40pt vcr';
         this.textCtx.fillStyle = 'white';
-        this.textCtx.fillText('NINJADEV PRESENTS: A DEMO CALLED ~~~ TURQUOISE ~~~', 0, this.textCanvas.height / 2);
+        this.textCtx.fillText('NINJADEV PRESENTS: A DEMO CALLED «WHAT ARE YOU SYNCING ABOUT?»', 0, this.textCanvas.height / 2);
         texture.needsUpdate = true;
         nameOfDemoMaterial.needsUpdate = true;
       };
