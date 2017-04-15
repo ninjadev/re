@@ -17,7 +17,13 @@ void main() {
 
     if (frame < 6202.) {
         if (length(uv) > radius) {
-            bg = vec4(0.125, 0.859, 0.478, 1.0);
+            vec4 green = vec4(0.125, 0.859, 0.478, 1.0);
+            vec4 pink = vec4(1., 0., 0.635, 1.0);
+
+            float mixer = max(min((frame - 5409.) / (5425. - 5409.), 1.0), 0.0);
+
+            bg = mix(green, pink, mixer);
+
             vec3 c = mix(vec3(0.0), bg.xyz, 2.0 - length(uv));
             bg = vec4(c, 1.);
         }
