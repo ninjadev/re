@@ -46,7 +46,7 @@
 
     update(frame, isFiring) {
 
-      demo.nm.nodes.add.opacity = 1.4;
+      demo.nm.nodes.add.opacity = 1.5;
 
       let neighborIsFiring;
 
