@@ -56,7 +56,7 @@
     "id": "sceneselector",
     "type": "TextureMultiplexerNode",
     "connected": {
-      "A": "intro_add.render",
+      "A": "intro.render",
       "C": "LaneSwipeTransition.render",
       "F": "SphereTransitionShader.render",
       "H": "CircleOverlayShader.render",
@@ -153,17 +153,6 @@
     "type": "cubeTunnel",
     "options": {
       "shader": "zigzug"
-    }
-  },
-  {
-    "id": "intro_add",
-    "type": "AddNode",
-    "options": {
-      "opacity": 1,
-      "shader": "Add"
-    },
-    "connected": {
-      "B": "intro.render"
     }
   },
   {
