@@ -40,7 +40,7 @@ void main() {
     int y = int((vUv.y * 90.0) - 45.0);
     vec2 pos = vec2(x, y);
 
-    vec4 white = vec4(.5, .8, .9, 1.);
+    vec4 white = vec4(0.5411764705882353, 0.8470588235294118, 1.0, 1.0);
     vec4 blue = vec4(0.0, 0.0, 0.1, 1.);
 
     vec4 star;
@@ -75,7 +75,7 @@ void main() {
         animationStage = 10;
     }
 
-    if (stage > 12. || frame >= starfreeze - 30.) {
+    if (stage >= 12. || frame >= starfreeze - 30.) {
         s = max(insideStar(pos, vec2(40 + 3 * int(sin(frame)), -15), animationStage), s);
         s = max(insideStar(pos, vec2(-10, 30 + 4 * int(sin(frame))), animationStage), s);
         s = max(insideStar(pos, vec2(-70 + 3 * int(sin(frame)), 5), animationStage), s);
@@ -85,12 +85,13 @@ void main() {
         s = max(insideStar(pos, vec2(-30, 10 + 3 * int(sin(frame))), animationStage), s);
     }
 
-    if (stage <= 12. || frame >= starfreeze - 30.) {
+    if (stage < 12. || frame >= starfreeze - 30.) {
         s = max(insideStar(pos, vec2(-20, 40), animationStage), s);
         s = max(insideStar(pos, vec2( 40, 0), animationStage), s);
         s = max(insideStar(pos, vec2( 20, 30), animationStage), s);
         s = max(insideStar(pos, vec2( 50, 20), animationStage), s);
         s = max(insideStar(pos, vec2( 0,  10), animationStage), s);
+        s = max(insideStar(pos, vec2(60 + 3 * int(sin(frame)), -20), animationStage), s);
     }
 
     if (s == 1.) {
