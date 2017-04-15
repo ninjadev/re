@@ -59,10 +59,7 @@
       this.pink = '#ff00a2';
       this.blue = '#0092dd';
       this.green = '#20db7a';
-      this.bgcolor = this.white;
-      this.colorNIN = this.white;
-      this.colorJA = this.white;
-      this.colorDEV = this.white;
+      this.initiate();
       this.resize();
     }
 
@@ -75,22 +72,33 @@
     update(frame) {
       this.frame = frame;
       var startFrame = FRAME_FOR_BEAN(12 * 4 * 99);
-
+      
+      if (BEAN <= 12 * 4 * 98) this.initiate();
       if (BEAT) {
-        //if (BEAN == 12 * 4 * 97 + 32) this.colorNIN = this.black;
-        //if (BEAN == 12 * 4 * 97 + 32 + 5) this.colorJA = this.black;
-        //if (BEAN == 12 * 4 * 97 + 32 + 5 + 5) this.colorDEV = this.black;
-        if (BEAN == 12 * 4 * 98+1 || BEAN == 4849) {
+        if (BEAN == 12 * 4 * 98 + 24) {
+          this.bgcolor = this.black;
+          this.colorNIN = this.pink;
+          this.colorJA = this.black;
+          this.colorDEV = this.black;
+        }
+        if (BEAN == 12 * 4 * 98 + 24 + 9) {
+          this.bgcolor = this.white;
+          this.colorJA = this.blue;
+          this.colorDEV = this.white;
+        }
+        if (BEAN == 12 * 4 * 98 + 24 + 9 + 8) {
+          this.bgcolor = this.black;
+          this.colorDEV = this.green;
+        }
+        if (BEAN == 12 * 4 * 101) {
           this.colorNIN = this.black;
           this.colorJA = this.black;
           this.colorDEV = this.black;
         }
-        if (BEAN == 12 * 4 * 98 + 24 || BEAN == 12 * 4 * 98 + 24 + 9 || BEAN == 12 * 4 * 98 + 24 + 9 + 8) {
-          this.flippState();
-        }
       }
-      this.cameraDDX += -this.cameraDX * 0.9 + (Math.random() - 0.5) * smoothstep(0, 1, (frame-startFrame)/100);
-      this.cameraDDY += -this.cameraDY * 0.9 + (Math.random() - 0.5) * smoothstep(0, 1, (frame-startFrame)/100);
+
+      this.cameraDDX += -this.cameraDX * 0.9 + (Math.random() - 0.5) * smoothstep(0, 1, (frame-startFrame)/100)/4;
+      this.cameraDDY += -this.cameraDY * 0.9 + (Math.random() - 0.5) * smoothstep(0, 1, (frame-startFrame)/100)/4;
       this.cameraDX = - this.cameraX * 0.5;
       this.cameraDY = - this.cameraY * 0.5;
       this.cameraDX *= 0.5;
@@ -128,11 +136,11 @@
       this.outputs.render.setValue(this.output);
     }
 
-    flippState() {
-      this.bgcolor = this.bgcolor == this.black ? this.white : this.black;
-      this.colorNIN = this.colorNIN == this.black ? this.pink : this.black;
-      this.colorJA = this.colorJA == this.black ? this.blue : this.black;
-      this.colorDEV = this.colorDEV == this.black ? this.green : this.black;
+    initiate() {
+      this.bgcolor = this.white;
+      this.colorNIN = this.white;
+      this.colorJA = this.white;
+      this.colorDEV = this.white;
     }
   }
 
