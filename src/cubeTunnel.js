@@ -109,7 +109,7 @@
 
         }
         // Spawning the first "ring" of cubes.
-        this.camera.position.z = 100;
+        this.camera.position.z = 50 + (frame - FRAME_FOR_BEAN(startBEAN)) / 3;
         this.camera.position.y = 0;
         this.camera.lookAt(new THREE.Vector3(0,0,0));
 
@@ -173,7 +173,11 @@
         this.camera.position.z = 0;
         this.camera.position.y = 16;
 
+
         this.camera.lookAt(new THREE.Vector3(0,0,0));
+        if(BEAN >= 12 * 4 * 92) { 
+          this.camera.rotation.z = frame * Math.PI * 2 / 60 / 60 * 130 / 8;
+        }
 
         var beats2 = [0, 9, 18, 27, 36,      48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68];
         if (frame == FRAME_FOR_BEAN(switch_time + beats2[0])) {
