@@ -1,4 +1,5 @@
 {
     "tDiffuse": { "type": "t", "value": null },
+    "amount": { "type": "f", "value": 0.0 },
     "frame": { "type": "f", "value": 0.0 }
 }
