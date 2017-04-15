@@ -40,7 +40,7 @@ void main() {
     int y = int((vUv.y * 90.0) - 45.0);
     vec2 pos = vec2(x, y);
 
-    vec4 white = vec4(.5, .8, .9, 1.);
+    vec4 white = vec4(0.5411764705882353, 0.8470588235294118, 1.0, 1.0);
     vec4 blue = vec4(0.0, 0.0, 0.1, 1.);
 
     vec4 star;
