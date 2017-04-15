@@ -108,6 +108,7 @@
     }
 
     update(frame) {
+      demo.nm.nodes.add.opacity = .5;
       this.frame = frame;
       this.kickThrob *= 0.95;
       if(this.kickThrob < 0.01) {
