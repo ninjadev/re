@@ -17,6 +17,16 @@
       this.uniforms.B.value = this.inputs.B.getValue();
       this.uniforms.mixer.value = easeIn(1.0, 0.0,
         (frame - this.startFrame) / (this.endFrame - this.startFrame));
+      if(BEAN < 12 * 4 * 32.8) {
+        this.inputs.A.enabled = true;
+        this.inputs.B.enabled = false;
+      } else if(BEAN < 12 * 4 * 33.0) {
+        this.inputs.A.enabled = true;
+        this.inputs.B.enabled = true;
+      } else {
+        this.inputs.A.enabled = false;
+        this.inputs.B.enabled = true;
+      }
     }
 
     render(renderer) {

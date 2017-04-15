@@ -11,12 +11,12 @@
     update(frame) {
       this.uniforms.frame.value = frame;
       if(BEAN >= 12 * 4 * 84) {
-        this.inputs.tDiffuse.node.active = false;
-        this.inputs.tDiffuse2.node.active = true;
+        this.inputs.tDiffuse.enabled = true;
+        this.inputs.tDiffuse2.enabled = false;
         this.uniforms.tDiffuse.value = this.inputs.tDiffuse.getValue();
       } else {
-        this.inputs.tDiffuse.node.active = true;
-        this.inputs.tDiffuse2.node.active = false;
+        this.inputs.tDiffuse.enabled = false;
+        this.inputs.tDiffuse2.enabled = true;
         this.uniforms.tDiffuse.value = this.inputs.tDiffuse2.getValue();
       }
       this.uniforms.amount.value = smoothstep(0, 1.5, (frame - FRAME_FOR_BEAN(12 * 4 * 83.5)) / 50);
