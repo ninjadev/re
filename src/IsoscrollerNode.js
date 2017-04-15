@@ -82,18 +82,11 @@
 
       this.textCtx = this.textCanvas.getContext('2d');
 
-      const texture = new THREE.Texture(this.textCanvas);
-      const nameOfDemoMaterial = new THREE.MeshBasicMaterial({
-        map: texture,
+      this.nameOfDemoTexture = new THREE.Texture(this.textCanvas);
+      this.nameOfDemoMaterial = new THREE.MeshBasicMaterial({
+        map: this.nameOfDemoTexture,
         transparent: true,
       });
-      const drawText = () => {
-        this.textCtx.font = '40pt vcr';
-        this.textCtx.fillStyle = 'white';
-        this.textCtx.fillText('NINJADEV PRESENTS: A DEMO CALLED «WHAT ARE YOU SYNCING ABOUT?»', 0, this.textCanvas.height / 2);
-        texture.needsUpdate = true;
-        nameOfDemoMaterial.needsUpdate = true;
-      };
 
       if (!document.getElementById('vcr-font')) {
         var s = document.createElement('style');
@@ -105,19 +98,12 @@
             'src: url(data:application/x-font-opentype;charset=utf-8;base64,' + response + ') format("opentype");',
             '}'
           ].join('\n');
-          if (window.FILES) {
-            drawText();
-          } else {
-            setTimeout(drawText, 2000);
-          }
         });
         document.body.appendChild(s);
-      } else {
-        drawText();
       }
       this.nameOfDemo = new THREE.Mesh(
         new THREE.BoxGeometry(0, 4, 64),
-        nameOfDemoMaterial
+        this.nameOfDemoMaterial
       );
       this.nameOfDemo.position.x = -4;
       this.nameOfDemo.position.z = -60;
@@ -221,6 +207,13 @@
     }
 
     render(renderer) {
+      this.textCtx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
+      this.textCtx.font = '40pt vcr';
+      this.textCtx.fillStyle = 'white';
+      this.textCtx.fillText('NINJADEV PRESENTS: A DEMO CALLED «WHAT ARE YOU SYNCING ABOUT?»', 0, this.textCanvas.height / 2);
+      this.nameOfDemoTexture.needsUpdate = true;
+      this.nameOfDemoMaterial.needsUpdate = true;
+
       renderer.render(this.scene, this.camera, this.renderTarget, true);
       this.outputs.render.setValue(this.renderTarget.texture);
     }
