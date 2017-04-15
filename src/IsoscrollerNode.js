@@ -116,6 +116,7 @@
     }
 
     update(frame) {
+      demo.nm.nodes.add.opacity = .5;
       this.nameOfDemo.position.z = (frame - 1000) / 10 - 50 +
         easeOut(0, 10, (frame - 999) / 60) +
         easeIn(0, 10, (frame - 1585) / 60);

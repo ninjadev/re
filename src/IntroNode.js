@@ -41,6 +41,7 @@
     }
 
     update(frame) {
+      demo.nm.nodes.add.opacity = .5;
       const beat = 12;
       const bar = 12 * 4;
 

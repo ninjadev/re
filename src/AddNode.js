@@ -10,16 +10,7 @@
     }
 
     update(frame) {
-      if (typeof this.opacity == 'number') {
-        this.uniforms.opacity.value = this.opacity;
-      } else {
-        if (frame >= this.opacity.from && frame < this.opacity.to) {
-          this.uniforms.opacity.value = this.opacity.value;
-        } else {
-          this.uniforms.opacity.value = this.opacity.default;
-        }
-      }
-
+      this.uniforms.opacity.value = this.opacity;
       this.uniforms.A.value = this.inputs.A.getValue();
       this.uniforms.B.value = this.inputs.B.getValue();
     }
