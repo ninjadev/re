@@ -33,6 +33,14 @@
       this.scene = new THREE.Scene();
       this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 10000);
 
+      this.cameraX = 0;
+      this.cameraY = 0;
+      this.cameraDX = 0;
+      this.cameraDY = 0;
+      this.cameraDDX = 0;
+      this.cameraDDY = 0;
+
+
       var light = new THREE.PointLight( 0xffffff, 1, 100 );
       light.position.set( -50, -50, -50 );
       this.scene.add(light);
@@ -66,12 +74,13 @@
 
     update(frame) {
       this.frame = frame;
+      var startFrame = FRAME_FOR_BEAN(12 * 4 * 99);
 
       if (BEAT) {
         //if (BEAN == 12 * 4 * 97 + 32) this.colorNIN = this.black;
         //if (BEAN == 12 * 4 * 97 + 32 + 5) this.colorJA = this.black;
         //if (BEAN == 12 * 4 * 97 + 32 + 5 + 5) this.colorDEV = this.black;
-        if (BEAN == 12 * 4 * 98 || BEAN == 4849) {
+        if (BEAN == 12 * 4 * 98+1 || BEAN == 4849) {
           this.colorNIN = this.black;
           this.colorJA = this.black;
           this.colorDEV = this.black;
@@ -80,16 +89,26 @@
           this.flippState();
         }
       }
+      this.cameraDDX += -this.cameraDX * 0.9 + (Math.random() - 0.5) * smoothstep(0, 1, (frame-startFrame)/100);
+      this.cameraDDY += -this.cameraDY * 0.9 + (Math.random() - 0.5) * smoothstep(0, 1, (frame-startFrame)/100);
+      this.cameraDX = - this.cameraX * 0.5;
+      this.cameraDY = - this.cameraY * 0.5;
+      this.cameraDX *= 0.5;
+      this.cameraDY *= 0.5;
+      this.cameraDX += this.cameraDDX;
+      this.cameraDY += this.cameraDDY;
+      this.cameraX += this.cameraDX;
+      this.cameraY += this.cameraDY;
+      this.cameraX *= 0.5;
+      this.cameraY *= 0.5;
     }
 
     render() {
-      var startFrame = FRAME_FOR_BEAN(12 * 4 * 99);
-      
       this.ctx.fillStyle = this.bgcolor;
       this.ctx.fillRect(0, 0, 16*GU, 9*GU);
      
       this.ctx.save();
-      this.ctx.translate(-0.5 * GU + 0.8 * GU * Math.random() * smoothstep(0, 1, (this.frame - startFrame)/100), -0.5 * GU + 0.8 * GU * Math.random() * smoothstep(0, 1, (this.frame - startFrame)/100));
+      this.ctx.translate(this.cameraX * GU, this.cameraY * GU);
       
       this.ctx.fillStyle = this.colorNIN;
       this.ctx.font = 'bold ' + (1.5 * GU) + 'pt outrun';
