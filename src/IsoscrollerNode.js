@@ -130,7 +130,9 @@
     }
 
     update(frame) {
-      this.nameOfDemo.position.z = (frame - 1000) / 8 - 50;
+      this.nameOfDemo.position.z = (frame - 1000) / 10 - 50 +
+        easeOut(0, 10, (frame - 999) / 60) +
+        easeIn(0, 10, (frame - 1585) / 60);
 
       this.cube.scale.x = 1 + 0.02 * this.leadAnalysis.getValue(frame);
       this.background.material.uniforms.frame.value = frame;
