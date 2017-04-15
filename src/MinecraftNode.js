@@ -501,7 +501,7 @@
         this.minecraftIsland.mesh.visible = true;
       }
 
-      let stageBean = BEAN - 2 + 5 * 3;
+      let stageBean = BEAN  + 5 * 3;
       if (frame < 8810) {
         stageBean = stageBean / 2;
       }
