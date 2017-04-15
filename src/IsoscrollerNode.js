@@ -95,7 +95,7 @@
       this.textCanvas.height = 128;
 
       this.textCtx = this.textCanvas.getContext('2d');
-      this.textCtx.font = '40pt vcr';
+      this.textCtx.fontFamily = '40pt vcr';
       this.textCtx.fillStyle = 'white';
       this.textCtx.fillText('NINJADEV PRESENTS: A DEMO CALLED ~~~ TURQUOISE ~~~', 0, this.textCanvas.height / 2);
 
