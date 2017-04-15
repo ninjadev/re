@@ -529,7 +529,10 @@
       }
 
 
-      demo.nm.nodes.add.opacity = 2 * this.blinkThrob;
+      demo.nm.nodes.add.opacity = easeOut(
+          20.,
+          2 * this.blinkThrob,
+          (frame - FRAME_FOR_BEAN(startBEAN)) / 30);
     }
 
     render(renderer) {

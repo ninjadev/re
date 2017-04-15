@@ -1,0 +1,8 @@
+{
+    "tDiffuse": { "type": "t", "value": null },
+    "frame": { "type": "f", "value": 0.0 },
+    "displacement0": { "type": "f", "value": 0.0 },
+    "displacement1": { "type": "f", "value": 0.0 },
+    "displacement2": { "type": "f", "value": 0.0 },
+    "displacement3": { "type": "f", "value": 0.0 }
+}

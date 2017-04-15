@@ -64,7 +64,7 @@
       "I": "piano.render",
       "J": "BitGlitchShader.render",
       "K": "BitGlitchShader.render",
-      "L": "cubeTunnel.render",
+      "L": "displacement.render",
       "M": "ninEnd.render"
     }
   },
@@ -289,5 +289,15 @@
   {
     "id": "ninEnd",
     "type": "ninEnd"
+  },
+  {
+    "id": "displacement",
+    "type": "displacementNode",
+    "options": {
+      "shader": "displacement"
+    },
+    "connected": {
+      "tDiffuse": "cubeTunnel.render"
+    }
   }
 ]
