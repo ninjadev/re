@@ -24,7 +24,7 @@
       if(BEAN > 12 * 4 * 51) {
         frameOffset = this.analysis.getValue(frame) * 32 * (BEAN >= 12 * 4 * 49) * (BEAN % 12 == 0 ? 1 : -1);
         if(BEAN < 12 * 4 * 54) {
-          frameOffset = this.analysis.getValue(frame) * 87 * (BEAN >= 12 * 4 * 49) * (BEAN % 12 == 0 ? 1 : -1);
+          frameOffset = this.analysis.getValue(frame) * 87 * (BEAN >= 12 * 4 * 49) * (BEAN % 12 == 0 ? 1 : -0.8) + Math.sin(frame/1000);
         }
       }
 
@@ -44,6 +44,16 @@
           this.uniforms.frame.value = 300;
         }
       }
+
+      if (frame > 6202) {
+        if (frame < 6257.) {
+          this.uniforms.frame.value = 1337;
+        } else if (frame < 6278.) {
+          this.uniforms.frame.value = -1133;
+        } else if (frame < 6299.) {
+          this.uniforms.frame.value = 1337;
+        }
+      } 
     }
   }
 

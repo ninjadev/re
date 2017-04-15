@@ -34,11 +34,8 @@ void main() {
             bg = blackground;
         }
     } else {
-        if (2.*abs(uv.x) + abs(uv.y) > 0.53) {
-            bg = blackground;
-        }
+        bg = blackground;
     }
-
 
     gl_FragColor = bg;
 }
