@@ -12,7 +12,7 @@
     }
 
     update(frame) {
-      const amount = smoothstep(
+      const amount = easeOut(
         0,
         1,
         (frame - this.amountStartTime) / (this.amountStartTime - this.startTime) / 8);

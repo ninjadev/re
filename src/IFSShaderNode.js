@@ -8,6 +8,7 @@
     }
 
     update(frame) {
+      demo.nm.nodes.add.opacity = 1.5;
       if(frame < 9410) {
         this.modulator = 0;
       }
