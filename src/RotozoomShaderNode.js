@@ -47,11 +47,13 @@
 
       if(BEAN >= 12 * 4 * (77.75 + 8)) {
         if(BEAN < 12 * 4 * (77.75 + 8) + 3) {
-          this.uniforms.zoom.value += 1;  
+          this.uniforms.angle.value += Math.PI / 4;
         } else if(BEAN < 12 * 4 * (77.75 + 8) + 6) {
-          this.uniforms.zoom.value += 0;
+          this.uniforms.angle.value += Math.PI / 4 * 2
         } else if(BEAN < 12 * 4 * (77.75 + 8) + 9) {
-          this.uniforms.zoom.value += 1;
+          this.uniforms.angle.value += Math.PI / 4 * 3;
+        } else {
+          this.uniforms.angle.value += Math.PI;
         }
       }
     }
