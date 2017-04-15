@@ -22,15 +22,28 @@ void main() {
             bg = vec4(c, 1.);
         }
     } else if (frame < 6257.) {
-        if (abs(uv.x) + 2.*abs(uv.y) > 2.1) {
+        float multiplier = 0.2;
+        if (abs(uv.x) + 2.*abs(uv.y) > 2.9 -
+                floor(frame/6216.) * multiplier -
+                floor(frame/6221.) * multiplier -
+                floor(frame/6225.) * multiplier -
+                floor(frame/6230.) * multiplier -
+                floor(frame/6244.) * multiplier -
+                floor(frame/6248.) * multiplier -
+                floor(frame/6253.) * multiplier) {
             bg = blackground;
         }
     } else if (frame < 6278.) {
-        if (2.*abs(uv.x) + abs(uv.y) > 1.6) {
+        float multiplier = 0.6;
+        if (2.*abs(uv.x) + abs(uv.y) > 1.8 -
+                floor(frame/6271.) * multiplier) {
             bg = blackground;
         }
-    } else if (frame < 6299.) {
-        if (abs(uv.x) + 2.*abs(uv.y) > 1.3) {
+    } else if (frame < 6313.) {
+        if (abs(uv.x) + 2.*abs(uv.y) > 1.3 -
+                floor(frame/6292.) * 0.4 -
+                floor(frame/6296.) * 0.4 -
+                floor(frame/6306.) * 0.3) {
             bg = blackground;
         }
     } else {
