@@ -21,6 +21,18 @@
       }
       this.uniforms.amount.value = smoothstep(0, 1.5, (frame - FRAME_FOR_BEAN(12 * 4 * 83.5)) / 50);
       this.uniforms.amount.value = smoothstep(this.uniforms.amount.value, 1, (frame - FRAME_FOR_BEAN(12 * 4 * 83.75)) / 30);
+
+      if(BEAN >= 12 * 4 * (77.75 + 8)) {
+        if(BEAN < 12 * 4 * (77.75 + 8) + 3) {
+          this.uniforms.amount.value = 2;
+        } else if(BEAN < 12 * 4 * (77.75 + 8) + 6) {
+          this.uniforms.amount.value = 1;
+        } else if(BEAN < 12 * 4 * (77.75 + 8) + 9) {
+          this.uniforms.amount.value = 2;
+        } else {
+          this.uniforms.amount.value = 1;
+        }
+      }
     }
   }
 

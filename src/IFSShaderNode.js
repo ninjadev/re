@@ -24,6 +24,19 @@
       if(BEAN >= 12 * 4 * (8 + 78.5)) {
         this.uniforms.frame.value -= 300;
       }
+
+      this.uniforms.colorSwitch.value = 0;
+      if(BEAN >= 12 * 4 * (77.75 + 8)) {
+        if(BEAN < 12 * 4 * (77.75 + 8) + 3) {
+          this.uniforms.colorSwitch.value = 1;
+        } else if(BEAN < 12 * 4 * (77.75 + 8) + 6) {
+          this.uniforms.colorSwitch.value = 0;
+        } else if(BEAN < 12 * 4 * (77.75 + 8) + 9) {
+          this.uniforms.colorSwitch.value = 1;
+        } else {
+          this.uniforms.colorSwitch.value = 0;
+        }
+      }
     }
   }
 
