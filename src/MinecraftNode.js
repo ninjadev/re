@@ -477,6 +477,7 @@
 
     update(frame) {
       super.update(frame);
+      demo.nm.nodes.add.opacity = 0.5;
 
       const baseFrame = 8200;
 

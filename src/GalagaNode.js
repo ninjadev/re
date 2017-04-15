@@ -273,6 +273,7 @@
     }
 
     update(frame) {
+      demo.nm.nodes.add.opacity = .5;
       this.frame = frame;
       if(frame == 4542) {
         this.currentNote = 0;

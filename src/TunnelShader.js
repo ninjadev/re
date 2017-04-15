@@ -43,6 +43,7 @@
     }
 
     update(frame) {
+      demo.nm.nodes.add.opacity = 1;
       this.throb *= 0.95;
       if(this.throb < 0.01) {
         this.throb = 0;

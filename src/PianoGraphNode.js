@@ -239,6 +239,7 @@
     }
 
     update(frame) {
+      demo.nm.nodes.add.opacity = 0.5;
 
       this.frame = frame;
 
