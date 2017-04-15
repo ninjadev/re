@@ -1,6 +1,6 @@
 (function(global) {
   class IsoscrollerNode extends NIN.Node {
-    constructor(id, options) {
+    constructor(id) {
       super(id, {
         inputs: {
           percolator: new NIN.Input()
@@ -76,38 +76,49 @@
         this.scene.add(boxShadow);
       }
 
+      this.textCanvas = document.createElement('canvas');
+      this.textCanvas.width = 2048;
+      this.textCanvas.height = 128;
+
+      this.textCtx = this.textCanvas.getContext('2d');
+
+      const texture = new THREE.Texture(this.textCanvas);
+      const nameOfDemoMaterial = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+      });
+      const drawText = () => {
+        this.textCtx.font = '40pt vcr';
+        this.textCtx.fillStyle = 'white';
+        this.textCtx.fillText('NINJADEV PRESENTS: A DEMO CALLED «WHAT ARE YOU SYNCING ABOUT?»', 0, this.textCanvas.height / 2);
+        texture.needsUpdate = true;
+        nameOfDemoMaterial.needsUpdate = true;
+      };
+
       if (!document.getElementById('vcr-font')) {
         var s = document.createElement('style');
         s.setAttribute('id', 'vcr-font');
-        Loader.loadAjax('res/vcr.otf.base64', function(response) {
+        Loader.loadAjax('res/vcr.otf.base64', response => {
           s.innerHTML = [
             '@font-face {',
             'font-family: "vcr";',
             'src: url(data:application/x-font-opentype;charset=utf-8;base64,' + response + ') format("opentype");',
             '}'
           ].join('\n');
+          if (window.FILES) {
+            drawText();
+          } else {
+            setTimeout(drawText, 2000);
+          }
         });
         document.body.appendChild(s);
+      } else {
+        drawText();
       }
-
-      this.textCanvas = document.createElement('canvas');
-      this.textCanvas.width = 2048;
-      this.textCanvas.height = 128;
-
-      this.textCtx = this.textCanvas.getContext('2d');
-      this.textCtx.font = '40pt vcr';
-      this.textCtx.fillStyle = 'white';
-      this.textCtx.fillText('NINJADEV PRESENTS: A DEMO CALLED ~~~ TURQUOISE ~~~', 0, this.textCanvas.height / 2);
-
-      const texture = new THREE.Texture(this.textCanvas);
-      texture.needsUpdate = true;
-
       this.nameOfDemo = new THREE.Mesh(
         new THREE.BoxGeometry(0, 4, 64),
-        new THREE.MeshBasicMaterial({
-          map: texture,
-          transparent: true,
-        }));
+        nameOfDemoMaterial
+      );
       this.nameOfDemo.position.x = -4;
       this.nameOfDemo.position.z = -60;
       this.nameOfDemo.rotation.z= Math.PI / 2;
@@ -119,7 +130,9 @@
     }
 
     update(frame) {
-      this.nameOfDemo.position.z = ((BEAN - 440 + 6) / 12 | 0) * 3 - 60;
+      this.nameOfDemo.position.z = (frame - 1000) / 10 - 50 +
+        easeOut(0, 10, (frame - 999) / 60) +
+        easeIn(0, 10, (frame - 1585) / 60);
 
       this.cube.scale.x = 1 + 0.02 * this.leadAnalysis.getValue(frame);
       this.background.material.uniforms.frame.value = frame;

@@ -1,4 +1,5 @@
 uniform float frame;
+uniform float colorSwitch;
 uniform sampler2D tDiffuse;
 
 #define PI 3.14159265358979323846
@@ -33,6 +34,9 @@ void main(void) {
     uv /= scale;
     //uv += translate / scale;
     float center = mandelbrot(uv, vec2(-0.70176 + time * 0.12, -0.3842 - time * 0.1));
-    vec4 color = vec4(center * 0.9, center * 0.2, center * .4, 1.);
+    vec4 color = vec4(vec3(center), 1.) * mix(
+            vec4(0.9, 0.2, 0.4, 1.),
+            vec4(0.1, 0.63, .8, 1.),
+            colorSwitch);
     gl_FragColor = color; 
 }

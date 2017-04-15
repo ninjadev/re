@@ -1,5 +1,5 @@
 {
-  "title": "re",
+  "title": "What Are You Syncing About?",
   "authors": [
     "capitalism",
     "cristea",
@@ -9,8 +9,8 @@
     "sigveseb",
     "stiaje"
   ],
-  "description": "Glorious Ninjadev Revision Submission",
-  "previewImage": "https://raw.githubusercontent.com/ninjadev/nin/master/nin/frontend/app/images/nin-dark.png",
+  "description": "Ninjadev entry for Revision 2017",
+  "previewImage": "https://raw.githubusercontent.com/ninjadev/re/master/whatareyousyncingabout.png",
   "music": {
     "path": "res/music.mp3",
     "bpm": 130,

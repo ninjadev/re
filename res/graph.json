@@ -62,7 +62,7 @@
       "H": "CircleOverlayShader.render",
       "H_and_a_half": "tunnel.render",
       "I": "piano.render",
-      "J": "MinecraftTransitionShader.render",
+      "J": "BitGlitchShader.render",
       "K": "BitGlitchShader.render",
       "L": "cubeTunnel.render",
       "M": "ninEnd.render"
@@ -201,7 +201,8 @@
       "shader": "CRTShader"
     },
     "connected": {
-      "tDiffuse": "IFSShader.render"
+      "tDiffuse": "IFSShader.render",
+      "tDiffuse2": "MinecraftTransitionShader.render"
     }
   },
   {

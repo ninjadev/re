@@ -242,10 +242,10 @@
           this.create_layer(-380);
         }
         
-        if (frame > 10185 && frame <10206 ) {
+        if (frame > 10185 && frame <10223 ) {
           // 10185 camera starts moving.
           // 10206 første camera const speed frame
-          this.camera.position.y = 16;// + easeIn(0, 10, (frame - 10185)/(10206 - 10185));
+          this.camera.position.y = 16 - easeIn(0, 16-3.56, (frame - 10185)/(10223 - 10185));
         } else if (frame > FRAME_FOR_BEAN(4414)) {
           this.camera.position.y = Math.max( 16 + 15 - (20 * (frame - FRAME_FOR_BEAN(camera_move_start)) / 60 / 60 * 130),
                                              16 + 22.5 - (20 * (FRAME_FOR_BEAN(switch_time2) - FRAME_FOR_BEAN(camera_move_start)) / 60 / 60 * 130)
