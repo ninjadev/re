@@ -74,7 +74,7 @@
       this.frame = frame;
       var startFrame = FRAME_FOR_BEAN(12 * 4 * 99);
 
-      if (BEAN < 12 * 4 * 97 + 37) {
+      if (frame < FRAME_FOR_BEAN(12 * 4 * 97) + 1) {
         this.initiate();
       }
       let t = 0;
@@ -89,7 +89,7 @@
       }
       this.sizer = lerp(1, 1.2, t / 60);
       if (BEAT) {
-        if (BEAN == 12 * 4 * 97 + 37) {
+        if (BEAN == 12 * 4 * 97 + 24 + 1) {
           this.bgcolor = this.pink;
           this.colorNIN = this.pink;
           this.colorJA = this.pink;
@@ -97,7 +97,7 @@
           this.colorN = this.white;
           this.colorI = this.blank;
         }
-        if (BEAN == 12 * 4 * 97 + 42) {
+        if (BEAN == 12 * 4 * 98 - 12) {
           this.bgcolor = this.blue;
           this.colorNIN = this.blue;
           this.colorJA = this.blue;
@@ -105,7 +105,7 @@
           this.colorN = this.blank;
           this.colorI = this.white;
         }
-        if (BEAN == 12 * 4 * 97 + 45) {
+        if (BEAN == 12 * 4 * 98) {
           this.bgcolor = this.green;
           this.colorNIN = this.green;
           this.colorJA = this.green;

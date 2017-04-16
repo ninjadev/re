@@ -62,7 +62,7 @@
       } else if(BEAN < offset + bar * (79 + 8)) {
         this.inputs.K.enabled = true;
         this.outputs.selected.setValue(this.inputs.K.getValue());
-      } else if (BEAN < offset + bar * 96 + 36) {
+      } else if (BEAN < offset + bar * 96 + 24) {
         this.inputs.L.enabled = true;
         this.outputs.selected.setValue(this.inputs.L.getValue());
       } else {
