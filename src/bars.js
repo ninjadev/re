@@ -132,9 +132,7 @@
       light.shadow.camera.top = 300;
       light.shadow.camera.position.set(150, 200, 100);
       light.shadow.camera.lookAt(new THREE.Vector3(0, 0, 0));
-      let helper = new THREE.CameraHelper(light.shadow.camera);
       this.scene.add(light);
-      //this.scene.add(helper);
 
       this.chordFrames = [];
       for (let i = 0; i < 8; i++) {

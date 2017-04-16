@@ -42,7 +42,6 @@
 
     update(frame) {
       demo.nm.nodes.add.opacity = .5;
-      const beat = 12;
       const bar = 12 * 4;
 
       this.hihatThrob *= 0.9;
@@ -97,7 +96,6 @@
     }
 
     render(renderer) {
-      const x = this.noteCount / 20 * 16;
       this.ctx.globalCompositeOperation = 'xor';
       this.ctx.clearRect(0, 0, 16 * GU, 9 * GU);
       for(let i = 0; i < this.squares.length; i++) {
@@ -114,7 +112,6 @@
         this.ctx.restore();
       }
       this.ctx.fillStyle = '#ff00a2';
-      const step = clamp(0, (this.noteCount - 12) / 6, 1);
 
       if(BEAN >= 12 * 4 * 4 && BEAN < 12 * 4 * 7) {
         this.ctx.save();

@@ -430,7 +430,6 @@
       light.shadow.camera.top = 30;
       light.shadow.camera.position.set(10, 10, 10);
       light.shadow.camera.lookAt(new THREE.Vector3(0, 0, 0));
-      let helper = new THREE.CameraHelper(light.shadow.camera);
       this.scene.add(light);
       //this.scene.add(helper);
       var hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.5);
