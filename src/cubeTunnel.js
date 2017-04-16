@@ -96,11 +96,9 @@
         (frame - 968 + 10 ) / (1051 - 968)
       );
 
-      var relativeBEAN = BEAN - startBEAN;
       var switch_time = 4320;
       var switch_time2 = 4584;
       var camera_move_start = 4414;
-      var camera_speed = frame / 20 / 60 / 60 * 130;
 
       if (BEAN < switch_time) {
         if (frame == FRAME_FOR_BEAN(startBEAN) + 1) {
@@ -491,23 +489,7 @@
       } else {        
         this.top_material.uniforms.tiles.value = 4;
       }
-/*
-      var divider = 24;
-      if ( Math.floor((BEAN / divider) % 4) == 0) {
-        this.wall_material.color.setRGB(0.9, 0.2 , 0.4);
-      } else  if ( Math.floor((BEAN / divider) % 4) == 1) {
-        this.wall_material.color.setHex(0x00a2ff);
 
-        this.wall_material.color.setRGB(0.9, 0.2 , 0.4);
-      } else if ( Math.floor((BEAN / divider) % 4) == 2) {
-        this.wall_material.color.setHex(0xff00a2);
-
-        this.wall_material.color.setRGB(0.9, 0.2 , 0.4);
-      } else if ( Math.floor((BEAN / divider) % 4) == 3) {
-        this.wall_material.color.setHex(0x00a2ff);
-
-        this.wall_material.color.setRGB(0.9, 0.2 , 0.4);
-      }*/
       var divider = 24;
       if ( Math.floor((BEAN / divider) % 4) == 0) {
         this.wall_material.uniforms.r.value = 0/256;
@@ -541,13 +523,7 @@
 
     resize() {
       this.renderTarget.setSize(16 * GU, 9 * GU);
-     }
-
-
-
-
-
-
+    }
 
     create_layer_first_layer(beat) {
       var distance = 8.485; // sqrt(6^2 + 6^2)
@@ -809,18 +785,7 @@
       this.small_outer_side_geom = new THREE.PlaneGeometry( 4, 4 );
       this.large_inner_side_geom = new THREE.PlaneGeometry( 6, 6 );
       this.large_outer_side_geom = new THREE.PlaneGeometry( 8, 8 );
-
-    };
-
-
-
-
-
-
-
-
-
-
+    }
   }
 
   global.cubeTunnel = cubeTunnel;
