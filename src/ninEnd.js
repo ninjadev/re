@@ -78,14 +78,14 @@
         this.initiate();
       }
       let t = 0;
-      if (BEAN >= 12 * 4 * 97 + 37) {
-        t = frame - FRAME_FOR_BEAN(12 * 4 * 97 + 37);
+      if (BEAN >= 12 * 4 * 97 + 24 + 1) {
+        t = frame - FRAME_FOR_BEAN(12 * 4 * 97 + 24 + 1);
       }
-      if (BEAN >= 12 * 4 * 97 + 42) {
-        t = frame - FRAME_FOR_BEAN(12 * 4 * 97 + 42);
+      if (BEAN >= 12 * 4 * 98 - 12) {
+        t = frame - FRAME_FOR_BEAN(12 * 4 * 98 - 12);
       }
-      if (BEAN >= 12 * 4 * 97 + 45) {
-        t = frame - FRAME_FOR_BEAN(12 * 4 * 97 + 45);
+      if (BEAN >= 12 * 4 * 98) {
+        t = frame - FRAME_FOR_BEAN(12 * 4 * 98);
       }
       this.sizer = lerp(1, 1.2, t / 60);
       if (BEAT) {
