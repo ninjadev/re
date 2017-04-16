@@ -54,11 +54,12 @@
       this.camera.position.z = 100;
       this.frame = 0;
 
-      this.black = '#000000';
+      this.black = '#190019';
       this.white = '#ffffff';
       this.pink = '#ff00a2';
       this.blue = '#0092dd';
       this.green = '#20db7a';
+      this.blank = 'rgba(0,0,0,0)';
       this.initiate();
       this.resize();
     }
@@ -72,14 +73,56 @@
     update(frame) {
       this.frame = frame;
       var startFrame = FRAME_FOR_BEAN(12 * 4 * 99);
-      
-      if (BEAN <= 12 * 4 * 98) this.initiate();
+
+      if (BEAN < 12 * 4 * 97 + 37) {
+        this.initiate();
+      }
+      let t = 0;
+      if (BEAN >= 12 * 4 * 97 + 37) {
+        t = frame - FRAME_FOR_BEAN(12 * 4 * 97 + 37);
+      }
+      if (BEAN >= 12 * 4 * 97 + 42) {
+        t = frame - FRAME_FOR_BEAN(12 * 4 * 97 + 42);
+      }
+      if (BEAN >= 12 * 4 * 97 + 45) {
+        t = frame - FRAME_FOR_BEAN(12 * 4 * 97 + 45);
+      }
+      this.sizer = lerp(1, 1.2, t / 60);
       if (BEAT) {
+        if (BEAN == 12 * 4 * 97 + 37) {
+          this.bgcolor = this.pink;
+          this.colorNIN = this.pink;
+          this.colorJA = this.pink;
+          this.colorDEV = this.pink;
+          this.colorN = this.white;
+          this.colorI = this.blank;
+        }
+        if (BEAN == 12 * 4 * 97 + 42) {
+          this.bgcolor = this.blue;
+          this.colorNIN = this.blue;
+          this.colorJA = this.blue;
+          this.colorDEV = this.blue;
+          this.colorN = this.blank;
+          this.colorI = this.white;
+        }
+        if (BEAN == 12 * 4 * 97 + 45) {
+          this.bgcolor = this.green;
+          this.colorNIN = this.green;
+          this.colorJA = this.green;
+          this.colorDEV = this.green;
+          this.colorN = this.white;
+          this.colorI = this.blank;
+        }
+        if (BEAN == 12 * 4 * 98 + 12) {
+          this.initiate();
+        }
         if (BEAN == 12 * 4 * 98 + 24) {
           this.bgcolor = this.black;
           this.colorNIN = this.pink;
           this.colorJA = this.black;
           this.colorDEV = this.black;
+          this.colorN = this.blank;
+          this.colorI = this.blank;
         }
         if (BEAN == 12 * 4 * 98 + 24 + 9) {
           this.bgcolor = this.white;
@@ -91,11 +134,13 @@
           this.colorDEV = this.green;
         }
         if (BEAN == 12 * 4 * 101) {
-          this.colorNIN = this.black;
-          this.colorJA = this.black;
-          this.colorDEV = this.black;
+          this.colorNIN = this.blank;
+          this.colorJA = this.blank;
+          this.colorDEV = this.blank;
         }
       }
+      this.overlayAlpha = lerp(0, 1, (frame - FRAME_FOR_BEAN(12 * 4 * 100 + 30)) / 50);
+      this.rotator = smoothstep(0, -.2, (frame - FRAME_FOR_BEAN(12 * 4 * 98 + 24)) / 200);
 
       this.cameraDDX += -this.cameraDX * 0.9 + (Math.random() - 0.5) * smoothstep(0, 1, (frame-startFrame)/100)/4;
       this.cameraDDY += -this.cameraDY * 0.9 + (Math.random() - 0.5) * smoothstep(0, 1, (frame-startFrame)/100)/4;
@@ -114,12 +159,17 @@
     render() {
       this.ctx.fillStyle = this.bgcolor;
       this.ctx.fillRect(0, 0, 16*GU, 9*GU);
-     
+
       this.ctx.save();
+      this.ctx.translate(8*GU, 4.5*GU);
+      this.ctx.rotate(this.rotator);
+      this.ctx.translate(-8*GU, -4.5*GU);
+
       this.ctx.translate(this.cameraX * GU, this.cameraY * GU);
-      
+
       this.ctx.fillStyle = this.colorNIN;
       this.ctx.font = 'bold ' + (1.5 * GU) + 'pt outrun';
+      this.ctx.textAlign = 'left';
       this.ctx.textBaseline = 'middle';
 
       this.ctx.fillText('NIN', 1.3 * GU, 4.5 * GU);
@@ -129,8 +179,27 @@
 
       this.ctx.fillStyle = this.colorDEV;
       this.ctx.fillText('DEV', 9.2 * GU, 4.5 * GU);
-      
+
       this.ctx.restore();
+      this.ctx.save();
+
+      this.ctx.translate(8*GU, 4.5*GU);
+      this.ctx.scale(this.sizer, this.sizer);
+      this.ctx.translate(-8*GU, -4.5*GU);
+
+      this.ctx.font = 'bold ' + (3 * GU) + 'pt outrun';
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.fillStyle = this.colorN;
+      this.ctx.fillText('N', 7.5 * GU, 4.5 * GU);
+
+      this.ctx.fillStyle = this.colorI;
+      this.ctx.fillText('I', 7.5 * GU, 4.5 * GU);
+
+      this.ctx.restore();
+
+      this.ctx.fillStyle = `rgba(0,0,0,${this.overlayAlpha})`;
+      this.ctx.fillRect(0, 0, 16 * GU, 9 * GU);
 
       this.output.needsUpdate = true;
       this.outputs.render.setValue(this.output);
@@ -138,9 +207,12 @@
 
     initiate() {
       this.bgcolor = this.white;
-      this.colorNIN = this.white;
-      this.colorJA = this.white;
-      this.colorDEV = this.white;
+      this.colorNIN = this.blank;
+      this.colorJA = this.blank;
+      this.colorDEV = this.blank;
+      this.colorN = this.blank;
+      this.colorI = this.blank;
+      this.sizer = 1;
     }
   }
 
