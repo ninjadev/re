@@ -298,7 +298,6 @@
 
         this.camera.lookAt(new THREE.Vector3(0,-2000,0));
         this.camera.position.y = 16 + 22.5 - (20 * (FRAME_FOR_BEAN(switch_time2) - FRAME_FOR_BEAN(camera_move_start)) / 60 / 60 * 130);
-        console.log(this.camera.position.y);
 
         var elevation = 1;
         var beats3 = [24, 36, 48, 60, 72, 94];
