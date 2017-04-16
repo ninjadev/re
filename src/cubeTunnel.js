@@ -146,24 +146,24 @@
 
         // Grow the cubes at the BEAN number in the FRAME_FOR_BEAN call.
         this.spawningCubes[0].scale.x = 
-        this.spawningCubes[0].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 0) + slideDuration)/ slideDuration);
+        this.spawningCubes[0].scale.y = easeIn(0.00001, 1, (frame - FRAME_FOR_BEAN(startBEAN + 0) + slideDuration)/ slideDuration);
         this.spawningCubes[1].scale.x = 
-        this.spawningCubes[1].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 9) + slideDuration)/ slideDuration);
+        this.spawningCubes[1].scale.y = easeIn(0.00001, 1, (frame - FRAME_FOR_BEAN(startBEAN + 9) + slideDuration)/ slideDuration);
 
         this.spawningCubes[3].scale.x =
-        this.spawningCubes[3].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 24) + slideDuration)/ slideDuration);
+        this.spawningCubes[3].scale.y = easeIn(0.00001, 1, (frame - FRAME_FOR_BEAN(startBEAN + 24) + slideDuration)/ slideDuration);
         this.spawningCubes[4].scale.x =
-        this.spawningCubes[4].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 33) + slideDuration)/ slideDuration);
+        this.spawningCubes[4].scale.y = easeIn(0.00001, 1, (frame - FRAME_FOR_BEAN(startBEAN + 33) + slideDuration)/ slideDuration);
 
         this.spawningCubes[6].scale.x =
-        this.spawningCubes[6].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 48) + slideDuration)/ slideDuration);
+        this.spawningCubes[6].scale.y = easeIn(0.00001, 1, (frame - FRAME_FOR_BEAN(startBEAN + 48) + slideDuration)/ slideDuration);
         this.spawningCubes[7].scale.x =
-        this.spawningCubes[7].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 57) + slideDuration)/ slideDuration);
+        this.spawningCubes[7].scale.y = easeIn(0.00001, 1, (frame - FRAME_FOR_BEAN(startBEAN + 57) + slideDuration)/ slideDuration);
    
         this.spawningCubes[9].scale.x =
-        this.spawningCubes[9].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 72) + slideDuration)/ slideDuration);
+        this.spawningCubes[9].scale.y = easeIn(0.00001, 1, (frame - FRAME_FOR_BEAN(startBEAN + 72) + slideDuration)/ slideDuration);
         this.spawningCubes[10].scale.x =
-        this.spawningCubes[10].scale.y = easeIn(0, 1, (frame - FRAME_FOR_BEAN(startBEAN + 84) + slideDuration)/ slideDuration);
+        this.spawningCubes[10].scale.y = easeIn(0.00001, 1, (frame - FRAME_FOR_BEAN(startBEAN + 84) + slideDuration)/ slideDuration);
 
         this.spawningCubes[2].position.x = 12;
         this.spawningCubes[2].position.y = easeIn(-100, -12, (frame - FRAME_FOR_BEAN(startBEAN + 18) + cornerSlideDuration)/ cornerSlideDuration);
@@ -298,7 +298,6 @@
 
         this.camera.lookAt(new THREE.Vector3(0,-2000,0));
         this.camera.position.y = 16 + 22.5 - (20 * (FRAME_FOR_BEAN(switch_time2) - FRAME_FOR_BEAN(camera_move_start)) / 60 / 60 * 130);
-        console.log(this.camera.position.y);
 
         var elevation = 1;
         var beats3 = [24, 36, 48, 60, 72, 94];
