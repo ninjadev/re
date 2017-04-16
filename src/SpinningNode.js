@@ -118,8 +118,6 @@
         }
       });
 
-      this.analysis = new audioAnalysisSanitizer('stem_flute.wav', 'spectral_energy', 1.0);
-
       this.background = new THREE.Mesh(
           new THREE.BoxGeometry(1000, 1000, 1000),
           new THREE.MeshToonMaterial({
