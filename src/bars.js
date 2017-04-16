@@ -207,11 +207,11 @@
             cube.position.x = 10 + 20 * (i - 8);
             if (frame > endStartFrameTwo) {
               if (j !== 5 || i !== 8) {
-                cube.scale.x = lerp(1, 0, (frame - endStartFrameTwo - 0) / 20);
-                cube.scale.z = lerp(1, 0, (frame - endStartFrameTwo - 0) / 20);
+                cube.scale.x = lerp(1, 0.0001, (frame - endStartFrameTwo - 0) / 20);
+                cube.scale.z = lerp(1, 0.0001, (frame - endStartFrameTwo - 0) / 20);
               } else {
-                cube.scale.x = lerp(1, 0, (frame - endStartFrameTwo - 30) / 10);
-                cube.scale.z = lerp(1, 0, (frame - endStartFrameTwo - 30) / 10);
+                cube.scale.x = lerp(1, 0.0001, (frame - endStartFrameTwo - 30) / 10);
+                cube.scale.z = lerp(1, 0.0001, (frame - endStartFrameTwo - 30) / 10);
               }
             } else {
               cube.scale.x = 1;
