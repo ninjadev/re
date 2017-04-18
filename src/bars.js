@@ -9,6 +9,8 @@
         camera: options.camera,
       });
 
+      window.fftCache = {};
+
       //this.scene.background = new THREE.Color(0x1a001a);
       this.scene.background = new THREE.Color(0x1a001a);
       this.background = new THREE.Mesh(
@@ -143,6 +145,9 @@
     }
 
     update(frame) {
+      if (!window.fftCache[frame]) {
+        window.fftCache[frame] = [];
+      }
       this.frame = frame;
       if (frame >= 2549 && frame <= 2800) {
         this.camera.up = new THREE.Vector3(1, 0, 0);
@@ -168,18 +173,24 @@
           : currentRingBufferIndex - 1
       );
       for (let i = 0; i < this.numBars; i++) {
-        const fraction = i / this.numBars;
-        const mel = this.maxMel * fraction;
-        const nextMel = mel + this.maxMel / this.numBars;
-        const lowerFreqBound = 700 * (Math.pow(10, mel / 2595) - 1);
-        const upperFreqBound = 700 * (Math.pow(10, nextMel / 2595) - 1);
-        const lowerBin = 0 | Math.round(lowerFreqBound / this.freqPerBin);
-        const upperBin = 0 | Math.round(upperFreqBound / this.freqPerBin);
-        const numBins = upperBin - lowerBin;
-        const fftSlice = fft.slice(lowerBin, upperBin);
-        const fftAvgDb = fftSlice.reduce((a, b) => a + b, 0) / numBins;
-        const linearAvg = Math.pow(10, fftAvgDb / 20);  // ranges from 0 to 1
-        const height = clamp(0.01, 1.337 * Math.pow(linearAvg / this.avgBarPower[i], 2), 5.5);
+        let height;
+        if (window.fftCache[frame].length == this.numBars) {
+          height = window.fftCache[frame][i];
+        } else {
+          const fraction = i / this.numBars;
+          const mel = this.maxMel * fraction;
+          const nextMel = mel + this.maxMel / this.numBars;
+          const lowerFreqBound = 700 * (Math.pow(10, mel / 2595) - 1);
+          const upperFreqBound = 700 * (Math.pow(10, nextMel / 2595) - 1);
+          const lowerBin = 0 | Math.round(lowerFreqBound / this.freqPerBin);
+          const upperBin = 0 | Math.round(upperFreqBound / this.freqPerBin);
+          const numBins = upperBin - lowerBin;
+          const fftSlice = fft.slice(lowerBin, upperBin);
+          const fftAvgDb = fftSlice.reduce((a, b) => a + b, 0) / numBins;
+          const linearAvg = Math.pow(10, fftAvgDb / 20);  // ranges from 0 to 1
+          height = clamp(0.01, 1.337 * Math.pow(linearAvg / this.avgBarPower[i], 2), 5.5);
+          window.fftCache[frame][i] = height;
+        }
         this.fftRingBuffer[currentRingBufferIndex][i] = this.fftRingBuffer[previousRingBufferIndex][i] * 0.99 - 0.1;
         if (height > this.fftRingBuffer[previousRingBufferIndex][i]) {
           this.fftRingBuffer[currentRingBufferIndex][i] = height;
