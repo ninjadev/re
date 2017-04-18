@@ -23,8 +23,8 @@
 
 "What Are You Syncing About?" is Ninjadev's entry for PC compo at Revision 2017.
 It is a single-file compiled web demo. To run it, simply open the .png.html file
-in your favorite modern, performant mp3-supporting browser (such as Chrome). No
---allow-file-access-from-files required!
+in your favorite modern, performant mp3-supporting browser (such as Chrome).
+Remember --allow-file-access-from-files if running from disk!
 
 This demo is made using our open-source in-browser demo tool called nin. It's
 the first demo we create after migrating to a node-based system for our tool.
