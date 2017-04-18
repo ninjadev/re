@@ -40,5 +40,5 @@ Both the demo and the tool are open source, check it out at
 http://github.com/ninjadev. Thanks to everyone at Revision 2017 great party!
 
 "What Are You Syncing About?" was made by run, capitalism, sigveseb, cristea,
-stiaje, jules and iverjo.
+stiaje, lulle and iverjo.
 ```
