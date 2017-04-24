@@ -19,20 +19,6 @@
       this.particleSprite = document.createElement('canvas');
       this.maskCanvas = document.createElement('canvas');
 
-      if (!document.getElementById('vcr-font')) {
-        var s = document.createElement('style');
-        s.setAttribute('id', 'vcr-font');
-        Loader.loadAjax('res/vcr.otf.base64', function(response) {
-          s.innerHTML = [
-            "@font-face {",
-            "font-family: 'vcr';",
-            "src: url(data:application/x-font-opentype;charset=utf-8;base64," + response + ") format('opentype');",
-            "}"
-          ].join('\n');
-        })
-        document.body.appendChild(s);
-      }
-
       this.bassAnalysis = new audioAnalysisSanitizer('stem_kick.wav', 'spectral_energy', 0.2);
 
       this.kickThrob = 0;

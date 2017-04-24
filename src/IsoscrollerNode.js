@@ -88,19 +88,6 @@
         transparent: true,
       });
 
-      if (!document.getElementById('vcr-font')) {
-        var s = document.createElement('style');
-        s.setAttribute('id', 'vcr-font');
-        Loader.loadAjax('res/vcr.otf.base64', response => {
-          s.innerHTML = [
-            '@font-face {',
-            'font-family: "vcr";',
-            'src: url(data:application/x-font-opentype;charset=utf-8;base64,' + response + ') format("opentype");',
-            '}'
-          ].join('\n');
-        });
-        document.body.appendChild(s);
-      }
       this.nameOfDemo = new THREE.Mesh(
         new THREE.BoxGeometry(0, 4, 64),
         this.nameOfDemoMaterial
