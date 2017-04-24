@@ -14,7 +14,8 @@
   "music": {
     "path": "res/music.mp3",
     "bpm": 130,
-    "subdivision": 12
+    "subdivision": 12,
+    "BEANOffset": 48
   },
   "googleAnalyticsID": "UA-97441881-1"
 }
