@@ -19,9 +19,9 @@
       };
       super(id, options);
       if(options.direction == 'x') {
-        this.uniforms.uImageIncrement.value = THREE.BloomPass.blurX;
+        this.uniforms.uImageIncrement.value = new THREE.Vector2(0.001953125, 0.0);
       } else {
-        this.uniforms.uImageIncrement.value = THREE.BloomPass.blurY;
+        this.uniforms.uImageIncrement.value = new THREE.Vector2(0.0, 0.001953125);
       }
       this.uniforms.cKernel.value = THREE.ConvolutionShader.buildKernel(sigma);
       this.resize();
